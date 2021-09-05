@@ -1,56 +1,23 @@
+<div id="mySidebar" class="sidebar">
+  <a href="javascript:void(0)" id="close" class="closebtn" (click)="closeNav()">&times;</a>
+  <h3>All Files</h3>
+  <a href="#">Services</a>
+  <a href="#">Clients</a>
+  <a href="#">Contact</a>
+  <button (click)="add()">click</button>
+</div>
 
-
-<mat-sidenav-container class="tp-container">
-  <mat-sidenav mode="side" opened class="sideview">
-    <section class="tp-section">
-      <h3><strong>All Files</strong></h3>
-    </section>
-    <section class="tp-section">
-      <button id="File1" (click)="addFile()">File1</button>
-    </section>
-    <section class="tp-section">
-      <input multiple type="file" accept=".pdf" (change)="onFileChange($event)" />
-    </section>
-    <section class="tp-section">
-    <table>
-
-      <tr *ngFor="let x of myFiles; let i=index">
-        <td><a target="_blank" [href]="geturl(i)"> {{myFiles[i]?.name}} </a></td>  
-      </tr>
-  
-    </table>
-  </section>
-  </mat-sidenav>
-  <mat-sidenav-content>
-    <mat-tab-group>
-      <ng-container *ngFor="let tab of tabs; let index = index">
-        <mat-tab *ngIf="closedTabs.indexOf(index) < 0">
-          <ng-template mat-tab-label>
-            <div class="col" style="margin-left: 20px; ">{{tab.name}}</div>
-            <button *ngIf="tab.name" style="color:black; border: whitesmoke;background: rgb(238, 225, 225);"
-              mat-icon-button (click)="closeTab(index)">
-              <mat-icon>X</mat-icon>
-            </button>
-          </ng-template>
-
-          <span [ngSwitch]="tab.tabType">
-            <div *ngSwitchCase="0" style="height: calc(100% - 30px);">
-              Case 2
-            </div>
-            <div *ngSwitchCase="1" style="height: calc(100% - 8px);">
-              Case 1
-            </div>
-            <div *ngSwitchDefault>
-              Default
-            </div>
-          </span>
-
-        </mat-tab>
+<div id="main">
+  <button class="openbtn" id="open" (click)="openNav()">&#9776;</button>
+  <div class="card">
+    <p-tabView id="closableTabView">
+      <ng-container *ngFor="let tab of tabs; let i = index">
+      <p-tabPanel [closable]="true" >
+        <ng-template pTemplate="header">{{tab.header}}</ng-template>
+          <div>{{tab.content}}</div>
+      </p-tabPanel>
       </ng-container>
-    </mat-tab-group>
-  </mat-sidenav-content>
-</mat-sidenav-container>
-
-
-
+    </p-tabView>
+  </div>
+</div>
 

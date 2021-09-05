@@ -1,6 +1,6 @@
-import {Component, QueryList, ViewChildren, ViewChild } from '@angular/core';
-import { MatTab, MatTabGroup } from '@angular/material/tabs';
-import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
+import {Component} from '@angular/core';
+import { PrimeNGConfig } from 'primeng/api';
+import { TabPanel,TabView } from 'primeng/tabview';
 
 @Component({
   selector: 'app-root',
@@ -8,58 +8,53 @@ import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
   styleUrls: ['./app.component.css']
 })
 export class AppComponent {
+  
   title = 'pdfeditor';
-  @ViewChild(MatTabGroup, {read: MatTabGroup})
-  public tabGroup: MatTabGroup;
-  @ViewChildren(MatTab, {read: MatTab})
-  public tabNodes: QueryList<MatTab>;
-  myFiles: File[] = [];
-  fileSrc: string[] = [];
-  public closedTabs = [];
-  public tabs = [{
-    tabType: 0,
-    name: 'File1'
+  activeIndex: number = 0;
+  opened = false;
+  filterStatus = false;
+  public tabs: any[] = [{
+    header: 'Tab 1',
+    content : 'PDF1'
   }, {
-    tabType: 1,
-    name: 'File2'
-  },{
-    tabType: 2,
-    name: 'File3'
-  }];
+   
+    header: 'Tab 2',
+    content:'PDF2'
+   } ];
+ 
 
-  closeTab(index: number) {
-    event.stopPropagation();
-    this.closedTabs.push(index);
-    this.tabGroup.selectedIndex = this.tabNodes.length - 1;
+constructor(private primengConfig: PrimeNGConfig) {}
+
+    ngOnInit() {
+        this.primengConfig.ripple = true;
+        document.getElementById("mySidebar").style.width = "250px";
+        document.getElementById("main").style.marginLeft = "250px";
+        document.getElementById("open").hidden=true;
   }
-
-  addFile(){
-    this.tabs.push({tabType: 3,
-      name: 'Main'})
     
+  add(){
+  
+    this.tabs.push({
+      header: 'Tab 1',
+      content : 'PDF1'
+    })
   }
 
-  onFileChange(event) {
-    this.myFiles = []
-    this.fileSrc = []
-    for (var i = 0; i < event.target.files.length; i++) {
-      this.myFiles.push(event.target.files[i]);
-      this.fileSrc.push(URL.createObjectURL(this.myFiles[i]))
-
+    openNav() {
+      document.getElementById("mySidebar").style.width = "250px";
+      document.getElementById("main").style.marginLeft = "250px";
+      document.getElementById("open").hidden=true;
     }
 
+    
+    
+    /* Set the width of the sidebar to 0 and the left margin of the page content to 0 */
+    closeNav() {
 
-  }
-
-  geturl(i) {
-
-    return this.sanitizer.bypassSecurityTrustUrl(this.fileSrc[i])
-  }
-
-  constructor(private sanitizer: DomSanitizer) {
-
-
-  }
+      document.getElementById("open").hidden=false;
+      document.getElementById("mySidebar").style.width = "0";
+      document.getElementById("main").style.marginLeft = "0";
+    }
 
 
 

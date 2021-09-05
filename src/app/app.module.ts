@@ -3,9 +3,11 @@ import { NgModule } from '@angular/core';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import {MatSidenavModule} from '@angular/material/sidenav';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
-import {MatTabsModule} from '@angular/material/tabs';
+import {SidebarModule} from 'primeng/sidebar';
+import { ButtonModule } from 'primeng/button';
+import {TabViewModule} from 'primeng/tabview';
+
 @NgModule({
   declarations: [
     AppComponent
@@ -14,10 +16,11 @@ import {MatTabsModule} from '@angular/material/tabs';
     BrowserModule,
     AppRoutingModule,
     BrowserAnimationsModule,
-    MatSidenavModule,
     FormsModule,
     ReactiveFormsModule,
-    MatTabsModule
+    SidebarModule,
+    ButtonModule,
+    TabViewModule
   ],
   providers: [],
   bootstrap: [AppComponent]
