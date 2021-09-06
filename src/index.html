@@ -8,8 +8,19 @@
   <link rel="icon" type="image/x-icon" href="favicon.ico">
   <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500&display=swap" rel="stylesheet">
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  
 </head>
 <body class="mat-typography">
+  <script>
+    
+    const { ipcRenderer } = require('electron')
+console.log(ipcRenderer.sendSync('synchronous-message', 'ping')) // prints "pong"
+
+ipcRenderer.on('asynchronous-reply', (event, arg) => {
+  console.log(arg) // prints "pong"
+})
+ipcRenderer.send('asynchronous-message', 'ping')
+  </script>
   <app-root></app-root>
 </body>
 </html>

@@ -1,10 +1,8 @@
 <div id="mySidebar" class="sidebar">
   <a href="javascript:void(0)" id="close" class="closebtn" (click)="closeNav()">&times;</a>
   <h3>All Files</h3>
-  <a href="#">Services</a>
-  <a href="#">Clients</a>
-  <a href="#">Contact</a>
-  <button (click)="add()">click</button>
+  <p-tree selectionMode="single"  (onNodeSelect)="nodeSelect($event)" [value]="files1"></p-tree>
+ 
 </div>
 
 <div id="main">
@@ -12,12 +10,11 @@
   <div class="card">
     <p-tabView id="closableTabView">
       <ng-container *ngFor="let tab of tabs; let i = index">
-      <p-tabPanel [closable]="true" >
-        <ng-template pTemplate="header">{{tab.header}}</ng-template>
+        <p-tabPanel [closable]="true">
+          <ng-template pTemplate="header">{{tab.header}}</ng-template>
           <div>{{tab.content}}</div>
-      </p-tabPanel>
+        </p-tabPanel>
       </ng-container>
     </p-tabView>
   </div>
 </div>
-
