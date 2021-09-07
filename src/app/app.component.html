@@ -1,20 +1,4 @@
-<div id="mySidebar" class="sidebar">
-  <a href="javascript:void(0)" id="close" class="closebtn" (click)="closeNav()">&times;</a>
-  <h3>All Files</h3>
-  <p-tree selectionMode="single"  (onNodeSelect)="nodeSelect($event)" [value]="files1"></p-tree>
- 
-</div>
 
-<div id="main">
-  <button class="openbtn" id="open" (click)="openNav()">&#9776;</button>
-  <div class="card">
-    <p-tabView id="closableTabView">
-      <ng-container *ngFor="let tab of tabs; let i = index">
-        <p-tabPanel [closable]="true">
-          <ng-template pTemplate="header">{{tab.header}}</ng-template>
-          <div>{{tab.content}}</div>
-        </p-tabPanel>
-      </ng-container>
-    </p-tabView>
-  </div>
-</div>
+
+<app-sidebar></app-sidebar>
+<router-outlet></router-outlet>

@@ -25,7 +25,8 @@ function createWindow() {
     height: 600,
     webPreferences: {
       nodeIntegration: true,
-      plugins: true
+      plugins: true,
+      enableRemoteModule: true,
     }
   })
 

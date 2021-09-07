@@ -10,10 +10,18 @@ import { TabViewModule } from 'primeng/tabview';
 import {TreeModule} from 'primeng/tree';
 import { HttpClientModule } from '@angular/common/http';
 import { NodeService } from './node.service';
+import { SidebarComponent } from './sidebar/sidebar.component';
+import { FiletreeComponent } from './filetree/filetree.component';
+import { TabsComponent } from './tabs/tabs.component';
+import { EditorComponent } from './editor/editor.component';
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
+    SidebarComponent,
+    FiletreeComponent,
+    TabsComponent,
+    EditorComponent
   ],
   imports: [
     BrowserModule,
