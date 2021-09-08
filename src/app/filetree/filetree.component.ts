@@ -74,7 +74,7 @@ export class FiletreeComponent implements OnInit {
       'H&R block/Self attested/Marklists.pdf',
       'H&R block/Self attested/Pan.pdf',
       'H&R block/Self attested/Passport.pdf',
-      'h&r_joinee.txt'
+      'sanjump.pdf'
     ];
 
     this.files1 = f.reduce(this.reducePath, []);

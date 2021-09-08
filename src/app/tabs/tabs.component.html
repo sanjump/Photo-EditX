@@ -1,7 +1,7 @@
 <div class="card">
-  <p-tabView id="closableTabView">
+  <p-tabView id="closableTabView" [style]="{'background-color':'#111'}">
     <ng-container *ngFor="let tab of tabs; let i = index">
-      <p-tabPanel [closable]="true" [header]="tab.header" style="height: auto;">
+      <p-tabPanel [closable]="true" [header]="tab.header">
         <app-editor></app-editor>
       </p-tabPanel>
     </ng-container>
