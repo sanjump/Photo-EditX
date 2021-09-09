@@ -14,6 +14,10 @@ import { SidebarComponent } from './sidebar/sidebar.component';
 import { FiletreeComponent } from './filetree/filetree.component';
 import { TabsComponent } from './tabs/tabs.component';
 import { EditorComponent } from './editor/editor.component';
+import { AnnotComponent } from './annot/annot.component';
+import {ToolbarModule} from 'primeng/toolbar';
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import {DragDropModule} from '@angular/cdk/drag-drop';
 
 @NgModule({
   declarations: [
@@ -21,7 +25,8 @@ import { EditorComponent } from './editor/editor.component';
     SidebarComponent,
     FiletreeComponent,
     TabsComponent,
-    EditorComponent
+    EditorComponent,
+    AnnotComponent
   ],
   imports: [
     BrowserModule,
@@ -33,7 +38,10 @@ import { EditorComponent } from './editor/editor.component';
     ButtonModule,
     TabViewModule,
     TreeModule,
-    HttpClientModule
+    HttpClientModule,
+    ToolbarModule,
+    FontAwesomeModule,
+    DragDropModule
   ],
   providers: [NodeService],
   bootstrap: [AppComponent]

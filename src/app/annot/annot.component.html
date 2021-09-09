@@ -1,0 +1,45 @@
+<head>
+    
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>jQuery UI Draggable - Default functionality</title>
+        <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+        <link rel="stylesheet" href="/resources/demos/style.css">
+        <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+        <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+        <script>
+        $( function() {
+          $( ".overlay" ).draggable();
+        } );
+        </script>
+    
+</head>
+<div>
+    <p-toolbar>
+        <div class="p-toolbar-group-left">
+            <button (click)="add()">
+                <fa-icon [icon]="faCommentAlt"></fa-icon>
+            </button>
+
+        </div>
+
+        <div class="p-toolbar-group-right">
+            <button id="save" (click)="save()">Save</button>
+        </div>
+    </p-toolbar>
+</div>
+
+<body>
+    <div class="container">
+        <div class="box">
+            <img src="https://i.ytimg.com/vi/4jPkZau_ylU/maxresdefault.jpg" height="100%" width="100%" />
+        </div>
+        
+        <div class="box overlay" cdkDragBoundary=".box" cdkDrag>
+
+            <!-- <div></div>
+        <div>Load: <input type="file" id="load"></div> -->
+
+        </div>
+    </div>
+</body>

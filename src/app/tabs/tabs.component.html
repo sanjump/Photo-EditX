@@ -2,7 +2,7 @@
   <p-tabView id="closableTabView" [style]="{'background-color':'#111'}">
     <ng-container *ngFor="let tab of tabs; let i = index">
       <p-tabPanel [closable]="true" [header]="tab.header">
-        <app-editor></app-editor>
+        <app-annot></app-annot>
       </p-tabPanel>
     </ng-container>
   </p-tabView>
