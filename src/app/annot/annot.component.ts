@@ -8,24 +8,28 @@ import { faCommentAlt } from '@fortawesome/free-solid-svg-icons';
 })
 
 export class AnnotComponent implements OnInit {
-   
+
     constructor() { }
 
     faCommentAlt = faCommentAlt;
     json: any[] = [];
-    i: number;
+    i: number = 0;
     l: number;
     v = document.getElementsByTagName('input')
-    B = document.getElementsByTagName('button')
- 
+    pos: any;
+    parent: any;
+    item: any[] = []
 
     add() {
 
-        let text = document.createElement('input');
-        text.className = 'InputText';
-        text.type = 'text';
-        text.style.width = "80px"
-        document.querySelector('.overlay').appendChild(text);
+        // let text = document.createElement('input');
+        // text.type = 'text';
+        // text.style.width = "100px"
+        // text.style.height="30px"
+        this.item.push(this.i)
+        this.i += 1
+        // document.querySelector('.my').appendChild(text);
+
 
         // let row = document.createElement('div');
         // row.className = 'row';
@@ -35,16 +39,32 @@ export class AnnotComponent implements OnInit {
         // document.querySelector('.overlay').appendChild(row);
     }
 
-    save() {
+    remove(id) {
+        console.log(id)
+        var cont = document.querySelector('#cont' + id)
+        cont.removeChild(document.getElementById('text' + id))
+        cont.removeChild(document.getElementById('btn' + id))
+        cont.removeChild(document.getElementById('cont' + id))
+    }
 
+    save() {
+        this.json = []
+        this.pos = document.querySelectorAll('.my')
+        this.parent = document.querySelector('.overlay').getBoundingClientRect()
+        console.log(this.pos)
+        console.log(this.v)
         this.l = this.v.length;
         while (this.l--) {
             this.json.push({
                 type: this.v[this.l].type,
+                id: this.v[this.l].id,
                 value: this.v[this.l].value,
                 width: this.v[this.l].style.width,
                 height: this.v[this.l].style.height,
-                position: { left: this.v[this.l].offsetLeft, top: this.v[this.l].offsetTop }
+                position: {
+                    left: (this.pos[this.l] as HTMLElement).getBoundingClientRect().left - this.parent.left,
+                    top: (this.pos[this.l] as HTMLElement).getBoundingClientRect().top - this.parent.top
+                }
             });
             console.log(this.json)
         }
@@ -55,7 +75,6 @@ export class AnnotComponent implements OnInit {
         A.href = 'data:application/json;base64,' +
             window.btoa(unescape(encodeURIComponent(JSON.stringify(this.json))))
         document.body.appendChild(A);
-
         A.click();
         document.body.removeChild(A);
 
