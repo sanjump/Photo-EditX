@@ -1,10 +1,11 @@
 <div id="mySidebar" class="sidebar">
   <a href="javascript:void(0)" id="close" class="closebtn" (click)="closeNav()">&times;</a>
+  <input type="file" accept=".jpg,.jpeg,.png"  multiple (change)="SelectedFile($event)">
   <h3>All Files</h3>
-  <app-filetree></app-filetree>
+  <app-filetree [myFiles]="myFiles" (newItemEvent)="addItem($event)"></app-filetree>
 </div>
 
 <div id="main">
   <button class="openbtn" id="open" (click)="openNav()">&#9776;</button>
-  <app-tabs></app-tabs>
+  <app-tabs [tabs]="tabs"></app-tabs>
 </div>

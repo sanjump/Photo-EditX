@@ -1,23 +1,45 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { TreeNode } from 'primeng/api';
+import { BehaviorSubject } from 'rxjs';
+import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
 export class NodeService {
 
-  constructor(private http: HttpClient) { }
+  constructor() { }
+
+
+  private data = [];
+
+  public tabs: any[] = [];
+
+  private tab: BehaviorSubject<any> = new BehaviorSubject<any>(this.tabs);
+  tab$: Observable<any> = this.tab.asObservable();
+
+
+
+  setFiles(value) {
+  
+    for (var i = 0; i < value.length; i++) {
+     this.data.push(value[i]);
+  }
+}
 
   getFiles() {
-    return this.http.get<any>('assets/files.json')
-      .toPromise()
-      .then(res => <TreeNode[]>res.data);
-    }
+    return this.data;
+  }
 
-    getLazyFiles() {
-    return this.http.get<any>('assets/files-lazy.json')
-      .toPromise()
-      .then(res => <TreeNode[]>res.data);
-    }
+  gettabs() {
+    return this.tabs
+  }
+
+  settabs(hvalue,cvalue) {
+
+    this.tabs.push({
+      header: hvalue,
+      content : cvalue
+    })
+
+  }
 }

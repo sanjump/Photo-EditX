@@ -1,30 +1,45 @@
-import { Component, OnInit, ViewEncapsulation } from '@angular/core';
+import { Component, OnInit, ViewEncapsulation, Input, OnChanges } from '@angular/core';
+import { NodeService } from '../node.service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-tabs',
   templateUrl: './tabs.component.html',
   styleUrls: ['./tabs.component.css'],
-  encapsulation:ViewEncapsulation.None
+  encapsulation: ViewEncapsulation.None
 })
-export class TabsComponent implements OnInit {
+export class TabsComponent implements OnInit, OnChanges {
 
-  constructor() { }
+  constructor(private service: NodeService) { }
+  @Input() tabs: any[]
+  // subscription:Subscription
+  tabindex=0
+  tabss: any[] = []
+  //public tabs: any[] 
  
-  ngOnInit(): void {
+  ngOnChanges() {
+
+    
+    this.tabss = this.tabs
+    this.tabindex += 1
+    console.log(this.tabss)
+    console.log(this.tabindex)
   }
 
-  public tabs: any[] = [{
-    header: 'Tab 1',
-    content: 'PDF1'
-  }, {
+  ngOnInit(): void {
 
-    header: 'Tab 2',
-    content: 'PDF2'
-  }, {
 
-    header: 'Tab 3',
-    content: 'PDF3'
-  }];
+    //   this.tabs = this.service.gettabs()
 
+  }
+
+  handleChange(e) {
+
+    console.log(e)
+  }
+
+  clos(e){
+    console.log(e)
+  }
 
 }

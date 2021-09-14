@@ -16,7 +16,7 @@
 <body>
     <div class="container">
         <div class="box">
-            <img src="https://i.ytimg.com/vi/4jPkZau_ylU/maxresdefault.jpg" height="100%" width="100%" />
+            <img [src]="url" height="100%" width="100%" />
         </div>
 
         <div id="new" class="box overlay">
@@ -24,7 +24,7 @@
             <ng-container *ngFor="let i of item">
                 <div id="cont{{i}}" class="my" style="width: 125px;height: 30px; display:flex;"
                     cdkDragBoundary=".overlay" cdkDrag>
-                    <input id="text{{i}}" class="InpuText" style="width: 100px;height: 30px;" type="text" />
+                    <input id="text{{i}}" class="InputText" style="width: 100px;height: 30px;" type="text" />
 
                     <button id="btn{{i}}" (click)="remove(i)">X</button>
 

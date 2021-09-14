@@ -1,9 +1,11 @@
 <div class="card">
-  <p-tabView id="closableTabView" [style]="{'background-color':'#111'}">
-    <ng-container *ngFor="let tab of tabs; let i = index">
-      <p-tabPanel [closable]="true" [header]="tab.header">
-        <app-annot></app-annot>
+  <!-- <ng-container  *ngFor="let tab of tabss; let i = index" > -->
+  <p-tabView id="" [activeIndex]="tabindex"  (onchange)="handleChange($event)"  [style]="{'background-color':'#111'}">
+
+      <p-tabPanel [closable]="true" *ngFor="let tab of tabss; let i = index"  (onclose)="clos($event)" [header]="tab.header" [selected]="i==0">
+        <app-annot [tabcontent]="tab.content"></app-annot>
       </p-tabPanel>
-    </ng-container>
+   
   </p-tabView>
+<!-- </ng-container> -->
 </div>

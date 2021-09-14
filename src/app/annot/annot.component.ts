@@ -1,5 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit,Input,OnChanges } from '@angular/core';
 import { faCommentAlt } from '@fortawesome/free-solid-svg-icons';
+import { NodeService } from '../node.service';
 
 @Component({
     selector: 'app-annot',
@@ -7,18 +8,21 @@ import { faCommentAlt } from '@fortawesome/free-solid-svg-icons';
     styleUrls: ['./annot.component.css']
 })
 
-export class AnnotComponent implements OnInit {
+export class AnnotComponent implements OnInit,OnChanges {
 
-    constructor() { }
+    constructor(private service:NodeService) { }
 
+    @Input() tabcontent : string
     faCommentAlt = faCommentAlt;
     json: any[] = [];
     i: number = 0;
     l: number;
-    v = document.getElementsByTagName('input')
+    v :any 
     pos: any;
     parent: any;
     item: any[] = []
+    url = ""
+    
 
     add() {
 
@@ -28,6 +32,18 @@ export class AnnotComponent implements OnInit {
         // text.style.height="30px"
         this.item.push(this.i)
         this.i += 1
+        
+        // this.data = this.service.getFiles()
+        // console.log(this.data)
+        // if(this.data){
+        //     var reader = new FileReader()
+        //     reader.readAsDataURL(this.data[0])
+        //     reader.onload=(event:any)=>{
+        //         this.url=event.target.result
+
+        //     }
+        // }
+        
         // document.querySelector('.my').appendChild(text);
 
 
@@ -50,7 +66,8 @@ export class AnnotComponent implements OnInit {
     save() {
         this.json = []
         this.pos = document.querySelectorAll('.my')
-        this.parent = document.querySelector('.overlay').getBoundingClientRect()
+        this.parent = document.querySelector('.box').getBoundingClientRect()
+        this.v=document.getElementsByClassName("InputText")
         console.log(this.pos)
         console.log(this.v)
         this.l = this.v.length;
@@ -67,6 +84,7 @@ export class AnnotComponent implements OnInit {
                 }
             });
             console.log(this.json)
+            console.log(this.parent.left)
         }
 
         var A = document.createElement('a');
@@ -80,10 +98,14 @@ export class AnnotComponent implements OnInit {
 
     }
 
+ngOnChanges(){
+    
+    this.url=this.tabcontent
 
+}
     ngOnInit() {
 
-
+        
         // document.getElementById('save').addEventListener('click', function () {
         //     // retrieve the canvas data
         //     var canvasContents = canvas.toDataURL(); // a data URL of the current canvas image
@@ -124,5 +146,7 @@ export class AnnotComponent implements OnInit {
         // };
 
     }
+
+  
 
 }
