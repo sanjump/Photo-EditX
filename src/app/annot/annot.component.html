@@ -8,7 +8,7 @@
         </div>
 
         <div class="p-toolbar-group-right">
-            <button id="save" (click)="save()">Save</button>
+            <button [id]="tabheader" (click)="save($event)">Save</button>
         </div>
     </p-toolbar>
 </div>
@@ -19,12 +19,12 @@
             <img [src]="url" height="100%" width="100%" />
         </div>
 
-        <div id="new" class="box overlay">
+        <div [id]="overlay" class="box overlay">
 
             <ng-container *ngFor="let i of item">
-                <div id="cont{{i}}" class="my" style="width: 125px;height: 30px; display:flex;"
+                <div id="cont{{i}}" [class]="divname" style="width: 125px;height: 30px; display:flex;"
                     cdkDragBoundary=".overlay" cdkDrag>
-                    <input id="text{{i}}" class="InputText" style="width: 100px;height: 30px;" type="text" />
+                    <input id="text{{i}}" [class]="inputname" style="width: 100px;height: 30px;" type="text" />
 
                     <button id="btn{{i}}" (click)="remove(i)">X</button>
 

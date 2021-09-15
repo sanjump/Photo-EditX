@@ -2,10 +2,10 @@
   <a href="javascript:void(0)" id="close" class="closebtn" (click)="closeNav()">&times;</a>
   <input type="file" accept=".jpg,.jpeg,.png"  multiple (change)="SelectedFile($event)">
   <h3>All Files</h3>
-  <app-filetree [myFiles]="myFiles" (newItemEvent)="addItem($event)"></app-filetree>
+  <app-filetree [myFiles]="myFiles" (newItemEvent)="addItem($event)" (tabindex)="tindex($event)"></app-filetree>
 </div>
 
 <div id="main">
   <button class="openbtn" id="open" (click)="openNav()">&#9776;</button>
-  <app-tabs [tabs]="tabs"></app-tabs>
+  <app-tabs [tabs]="tabs" [tabindex]="tabindex"></app-tabs>
 </div>

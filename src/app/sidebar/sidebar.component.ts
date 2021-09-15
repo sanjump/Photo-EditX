@@ -11,6 +11,7 @@ export class SidebarComponent implements OnInit {
 
   myFiles: File[] = [];
   tabs:any=[]
+  tabindex:any
   
   ngOnInit(): void {
     document.getElementById("mySidebar").style.width = "250px";
@@ -36,6 +37,12 @@ export class SidebarComponent implements OnInit {
     this.tabs = newItem;
     console.log(this.tabs)
   }
+
+  tindex(newItem: any) {
+    this.tabindex = newItem;
+    console.log(this.tabs)
+  }
+
 
   SelectedFile(event){
 

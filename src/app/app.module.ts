@@ -18,6 +18,7 @@ import { AnnotComponent } from './annot/annot.component';
 import {ToolbarModule} from 'primeng/toolbar';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import {DragDropModule} from '@angular/cdk/drag-drop';
+import { ContainerComponent } from './container/container.component';
 
 @NgModule({
   declarations: [
@@ -26,7 +27,8 @@ import {DragDropModule} from '@angular/cdk/drag-drop';
     FiletreeComponent,
     TabsComponent,
     EditorComponent,
-    AnnotComponent
+    AnnotComponent,
+    ContainerComponent
   ],
   imports: [
     BrowserModule,

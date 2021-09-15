@@ -13,6 +13,11 @@ export class AnnotComponent implements OnInit,OnChanges {
     constructor(private service:NodeService) { }
 
     @Input() tabcontent : string
+    @Input() tabheader : string
+    inputname:string=""
+    divname:string=""
+    overlay:string=""
+
     faCommentAlt = faCommentAlt;
     json: any[] = [];
     i: number = 0;
@@ -56,6 +61,7 @@ export class AnnotComponent implements OnInit,OnChanges {
     }
 
     remove(id) {
+
         console.log(id)
         var cont = document.querySelector('#cont' + id)
         cont.removeChild(document.getElementById('text' + id))
@@ -63,11 +69,12 @@ export class AnnotComponent implements OnInit,OnChanges {
         cont.removeChild(document.getElementById('cont' + id))
     }
 
-    save() {
+    save(e) {
+
         this.json = []
-        this.pos = document.querySelectorAll('.my')
-        this.parent = document.querySelector('.box').getBoundingClientRect()
-        this.v=document.getElementsByClassName("InputText")
+        this.pos = document.getElementsByClassName("cdk-drag div"+e.target.id)
+        this.parent = document.getElementById('overlay'+e.target.id).getBoundingClientRect()
+        this.v=document.getElementsByClassName("input"+e.target.id)
         console.log(this.pos)
         console.log(this.v)
         this.l = this.v.length;
@@ -85,6 +92,7 @@ export class AnnotComponent implements OnInit,OnChanges {
             });
             console.log(this.json)
             console.log(this.parent.left)
+            console.log(this.parent.top)
         }
 
         var A = document.createElement('a');
@@ -101,6 +109,9 @@ export class AnnotComponent implements OnInit,OnChanges {
 ngOnChanges(){
     
     this.url=this.tabcontent
+    this.inputname = "input"+this.tabheader
+    this.divname = "div"+this.tabheader
+    this.overlay = "overlay" + this.tabheader
 
 }
     ngOnInit() {

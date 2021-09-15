@@ -10,12 +10,15 @@ import { Output, EventEmitter } from '@angular/core';
   styleUrls: ['./filetree.component.css']
 
 })
-export class FiletreeComponent implements OnInit,OnChanges {
+export class FiletreeComponent implements OnInit, OnChanges {
 
   subscription: Subscription
-  @Input() myFiles : File[]
+  @Input() myFiles: File[]
   @Output() newItemEvent = new EventEmitter<any>();
-  data:any[]=[]
+  @Output() tabindex = new EventEmitter<any>();
+  data: any[] = []
+  addedTabs: any[] = []
+  gettabs: any[] = []
   public files
   public url = ""
   constructor(private service: NodeService) {
@@ -25,7 +28,11 @@ export class FiletreeComponent implements OnInit,OnChanges {
   addNewItem(value: any) {
     this.newItemEvent.emit(value);
   }
- 
+
+  tindex(value: any) {
+    this.tabindex.emit(value);
+  }
+
 
   files1: TreeNode[];
   f: string[] = [
@@ -53,7 +60,7 @@ export class FiletreeComponent implements OnInit,OnChanges {
 
   ];
 
-  ngOnChanges(){
+  ngOnChanges() {
 
     for (var i = 0; i < this.myFiles.length; i++) {
       this.data.push(this.myFiles[i].name);
@@ -61,8 +68,9 @@ export class FiletreeComponent implements OnInit,OnChanges {
     }
     this.files1 = this.data.reduce(this.reducePath, [])
 
+
   }
- 
+
 
   reducePath = (nodes: TreeNode[], path: string) => {
     const split = path.split('/');
@@ -146,29 +154,43 @@ export class FiletreeComponent implements OnInit,OnChanges {
 
   nodeSelect(e) {
 
+   
     this.files = this.service.getFiles()
+    this.gettabs = this.service.gettabs()
+    this.addedTabs = []
+    for (var i = 0; i < this.gettabs.length; i++) {
+      this.addedTabs.push(this.gettabs[i].header)
+    }
+   
+    if (this.files && !this.addedTabs.includes(e.node.label)) {
 
-    if (this.files) {
 
+      
       for (var i = 0; i < this.files.length; i++) {
 
         if (this.files[i].name == e.node.label) {
+         
           var reader = new FileReader()
           reader.readAsDataURL(this.files[i])
           reader.onload = (event: any) => {
 
             this.url = event.target.result
             this.service.settabs(e.node.label, this.url);
+            console.log(this.addedTabs)
           }
 
           break
         }
 
       }
+      
+      this.addNewItem(this.service.gettabs())
+      
     }
-
-this.addNewItem(this.service.gettabs())
   
+
+
+ this.tindex(e.node.label)
 
 
   }
