@@ -14,8 +14,8 @@ export class FiletreeComponent implements OnInit, OnChanges {
 
   subscription: Subscription
   @Input() myFiles: File[]
-  @Output() newItemEvent = new EventEmitter<any>();
-  @Output() tabindex = new EventEmitter<any>();
+  @Output() tabs = new EventEmitter<any>();
+  @Output() node = new EventEmitter<any>();
   data: any[] = []
   addedTabs: any[] = []
   gettabs: any[] = []
@@ -25,12 +25,12 @@ export class FiletreeComponent implements OnInit, OnChanges {
 
   }
 
-  addNewItem(value: any) {
-    this.newItemEvent.emit(value);
+  getTabs(value: any) {
+    this.tabs.emit(value);
   }
 
-  tindex(value: any) {
-    this.tabindex.emit(value);
+  selectedNode(value: any) {
+    this.node.emit(value);
   }
 
 
@@ -184,13 +184,13 @@ export class FiletreeComponent implements OnInit, OnChanges {
 
       }
       
-      this.addNewItem(this.service.gettabs())
+      this.getTabs(this.service.gettabs())
       
     }
   
 
 
- this.tindex(e.node.label)
+ this.selectedNode(e.node.label)
 
 
   }

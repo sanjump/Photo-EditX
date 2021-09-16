@@ -19,6 +19,7 @@ import {ToolbarModule} from 'primeng/toolbar';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import {DragDropModule} from '@angular/cdk/drag-drop';
 import { ContainerComponent } from './container/container.component';
+import { MainbodyComponent } from './mainbody/mainbody.component';
 
 @NgModule({
   declarations: [
@@ -28,7 +29,8 @@ import { ContainerComponent } from './container/container.component';
     TabsComponent,
     EditorComponent,
     AnnotComponent,
-    ContainerComponent
+    ContainerComponent,
+    MainbodyComponent
   ],
   imports: [
     BrowserModule,

@@ -2,6 +2,7 @@ import { Component, OnInit, ViewEncapsulation, Input, OnChanges } from '@angular
 import { NodeService } from '../node.service';
 import { Subscription } from 'rxjs';
 import { Output, EventEmitter } from '@angular/core';
+
 @Component({
   selector: 'app-tabs',
   templateUrl: './tabs.component.html',
@@ -12,8 +13,8 @@ export class TabsComponent implements OnInit, OnChanges {
 
   constructor(private service: NodeService) { }
   @Input() tabs: any[]
-  @Input() tabindex: any
-  // subscription:Subscription
+  @Input() node: any
+ // subscription:Subscription
   tabind=-2
   allTabs: any[] = []
   //public tabs: any[] 
@@ -25,7 +26,7 @@ export class TabsComponent implements OnInit, OnChanges {
    
     for(var i=0;i<this.allTabs.length;i++){
       console.log(this.allTabs[i].header)
-      if(this.allTabs[i].header==this.tabindex){
+      if(this.allTabs[i].header==this.node){
        
         this.tabind=i
         break
@@ -38,7 +39,7 @@ export class TabsComponent implements OnInit, OnChanges {
 
   ngOnInit(): void {
 
-        
+    //    this.subscription=this.service.tab$.subscribe(tab=>this.allTabs=tab)
     //   this.tabs = this.service.gettabs()
 
   }
