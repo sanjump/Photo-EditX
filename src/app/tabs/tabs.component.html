@@ -1,15 +1,11 @@
 <div class="card">
-  <!-- <ng-container  *ngFor="let tab of tabss; let i = index" > -->
-  
-    <p-tabView id="closable" *ngIf="allTabs.length!=0;else templateName" [controlClose]="true" (onClose)="close($event)"  [(activeIndex)]="tabind"  (onchange)="handleChange($event)"  [style]="{'background-color':'#111'}">
-
-      <p-tabPanel id="{{tab.header}}" [closable]="true" *ngFor="let tab of allTabs; let i = index"   [header]="tab.header">
-        <app-annot [tabcontent]="tab.content" [tabheader]="tab.header"></app-annot>
-      </p-tabPanel>
-  
+  <p-tabView id="closable" *ngIf="allTabs.length!=0;else welcome" [controlClose]="true" (onClose)="close($event)"
+    [(activeIndex)]="tabind" (onchange)="handleChange($event)" [style]="{'background-color':'#111'}">
+    <p-tabPanel id="{{tab.header}}" [closable]="true" *ngFor="let tab of allTabs; let i = index" [header]="tab.header">
+      <app-editor [tabcontent]="tab.content" [tabheader]="tab.header"></app-editor>
+    </p-tabPanel>
   </p-tabView>
-  <ng-template #templateName>
-    <img src="../../assets/welcome.jpg" height="600px" alt="welcome image">
-</ng-template>
-<!-- </ng-container> -->
+  <ng-template #welcome>
+    <img src="../src/assets/welcome.jpg" height="600px" alt="welcome image"> 
+  </ng-template>
 </div>

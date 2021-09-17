@@ -1,0 +1,15 @@
+<div>
+    <p-toolbar>
+        <div class="p-toolbar-group-left">
+            <button (click)="add()">
+                <fa-icon [icon]="faCommentAlt"></fa-icon>
+            </button>
+           
+
+        </div>
+
+        <div class="p-toolbar-group-right">
+            <button [id]="tabheader" (click)="save($event)">Save</button>
+        </div>
+    </p-toolbar>
+</div>

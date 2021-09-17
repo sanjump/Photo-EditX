@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { AnnotComponent } from './annot.component';
+import { EditingpanelComponent } from './editingpanel.component';
 
-describe('AnnotComponent', () => {
-  let component: AnnotComponent;
-  let fixture: ComponentFixture<AnnotComponent>;
+describe('EditingpanelComponent', () => {
+  let component: EditingpanelComponent;
+  let fixture: ComponentFixture<EditingpanelComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ AnnotComponent ]
+      declarations: [ EditingpanelComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(AnnotComponent);
+    fixture = TestBed.createComponent(EditingpanelComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

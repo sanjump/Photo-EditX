@@ -14,12 +14,13 @@ import { SidebarComponent } from './sidebar/sidebar.component';
 import { FiletreeComponent } from './filetree/filetree.component';
 import { TabsComponent } from './tabs/tabs.component';
 import { EditorComponent } from './editor/editor.component';
-import { AnnotComponent } from './annot/annot.component';
 import {ToolbarModule} from 'primeng/toolbar';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import {DragDropModule} from '@angular/cdk/drag-drop';
 import { ContainerComponent } from './container/container.component';
 import { MainbodyComponent } from './mainbody/mainbody.component';
+import { ToolbarComponent } from './toolbar/toolbar.component';
+import { EditingpanelComponent } from './editingpanel/editingpanel.component';
 
 @NgModule({
   declarations: [
@@ -28,9 +29,10 @@ import { MainbodyComponent } from './mainbody/mainbody.component';
     FiletreeComponent,
     TabsComponent,
     EditorComponent,
-    AnnotComponent,
     ContainerComponent,
-    MainbodyComponent
+    MainbodyComponent,
+    ToolbarComponent,
+    EditingpanelComponent
   ],
   imports: [
     BrowserModule,

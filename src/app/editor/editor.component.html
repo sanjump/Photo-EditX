@@ -1,2 +1,4 @@
-<!-- <input multiple id="open" type="file" accept=".pdf" (change)="onFileChange($event)" /> -->
-<div #viewer class="webviewer"></div>
+
+<app-toolbar [tabheader]="tabheader" (items)="setItems($event)"></app-toolbar>
+
+<app-editingpanel [tabheader]="tabheader" [items]="item" [tabcontent]="tabcontent"></app-editingpanel>

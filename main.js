@@ -1,4 +1,5 @@
 const { app, BrowserWindow, Menu, dialog, ipcMain } = require('electron')
+
 const url = require("url");
 const path = require("path");
 const fs = require('fs');
@@ -6,16 +7,40 @@ const glob = require('glob');
 
 let files = [];
 directory = 'C:\\Users\\mpsan\\OneDrive\\Desktop\\Career\\H&R block'
-ipcMain.on('asynchronous-message', (event, arg) => {
-  console.log(arg) // prints "ping"
-  event.reply('asynchronous-reply', 'pong')
+
+
+ipcMain.on('file', (event, arg) => {
+  
+  saveFile(arg)
+
 })
 
-ipcMain.on('synchronous-message', (event, arg) => {
-  console.log(arg) // prints "ping"
-  event.returnValue = 'pong'
-})
+function saveFile(arg){
 
+  fs.access('D:\\jsons\\'+arg[0].file, (err) => {
+    if (err) {
+
+       
+        fs.writeFile('D:\\jsons\\'+arg[0].file, JSON.stringify(arg), function(err) {
+          if(err) {
+              return console.log(err);
+          }
+          
+      }); 
+      } 
+      
+      
+      else {
+      
+        fs.writeFile('D:\\jsons\\'+arg[0].file, JSON.stringify(arg), function(err) {
+          if(err) {
+              return console.log(err);
+          }
+         
+      }); 
+      }
+  })
+}
 
 let mainWindow
 
@@ -27,6 +52,7 @@ function createWindow() {
       nodeIntegration: true,
       plugins: true,
       enableRemoteModule: true,
+      contextIsolation: false
     }
   })
 
