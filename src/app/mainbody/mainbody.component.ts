@@ -10,9 +10,10 @@ export class MainbodyComponent implements OnInit,OnChanges {
   constructor() { }
   @Input() settabs: any[]
   @Input() setnodes: any
+  @Input() setvalue: any
   tabs:any=[]
-  node:any
-
+  node:any=[]
+  value:any=[]
 
   ngOnInit(): void {
   }
@@ -21,6 +22,8 @@ export class MainbodyComponent implements OnInit,OnChanges {
   ngOnChanges(){
      this.tabs=this.settabs
      this.node=this.setnodes
+     this.value=this.setvalue
+    
   }
 
   openNav() {

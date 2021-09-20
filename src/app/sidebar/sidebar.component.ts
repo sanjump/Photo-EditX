@@ -11,9 +11,11 @@ export class SidebarComponent implements OnInit {
   constructor(private service:NodeService) { }
   @Output() settabs = new EventEmitter<any>();
   @Output() setnodes = new EventEmitter<any>();
+  @Output() setvalue = new EventEmitter<any>();
   myFiles: File[] = [];
   tabs:any=[]
   node:any
+  value:any
   
   ngOnInit(): void {
     document.getElementById("mySidebar").style.width = "250px";
@@ -36,18 +38,28 @@ export class SidebarComponent implements OnInit {
     this.setnodes.emit(value);
   }
 
+  setData(value: any) {
+    this.setvalue.emit(value);
+  }
+
   
 
   getTabs(tabs: any) {
     this.tabs = tabs;
     this.setTabs(tabs)
-    console.log(this.tabs)
+    
   }
 
   getSelectedNode(node: any) {
     this.node = node;
     this.setSelectedNode(node)
-    console.log(this.node)
+    
+  }
+
+  getData(value: any) {
+    this.value = value;
+    this.setData(value)
+    
   }
 
 
@@ -67,7 +79,7 @@ export class SidebarComponent implements OnInit {
         }
     }
     this.service.setFiles(this.myFiles)
-    console.log(this.myFiles)
+  
 }
 
   

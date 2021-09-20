@@ -42,6 +42,43 @@ function saveFile(arg){
   })
 }
 
+ipcMain.on('selectedNode', (event, arg) => {
+  
+  checkFile(arg,event)
+
+})
+
+function checkFile(arg,event){
+
+  fs.access('D:\\jsons\\'+arg.slice(0, -3) + 'json', (err) => {
+    if (err) {
+
+      
+      event.sender.send('data','No')
+      
+        
+      } 
+      
+      
+      else {
+      
+        fs.readFile('D:\\jsons\\'+arg.slice(0, -3) + 'json', function(err,data) {
+          if(err) {
+              return console.log(err);
+          }
+          else{
+            if(data.length!=0){
+            event.sender.send('data',JSON.parse(data))
+            console.log(JSON.parse(data))
+            }
+          }
+         
+      }); 
+       
+      }
+  })
+}
+
 let mainWindow
 
 function createWindow() {

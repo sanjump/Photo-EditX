@@ -2,6 +2,6 @@
   <a href="javascript:void(0)" id="close" class="closebtn" (click)="closeNav()">&times;</a>
   <input type="file" accept=".jpg,.jpeg,.png"  multiple (change)="SelectedFile($event)">
   <h3>All Files</h3>
-  <app-filetree [myFiles]="myFiles" (tabs)="getTabs($event)" (node)=" getSelectedNode($event)"></app-filetree>
+  <app-filetree [myFiles]="myFiles" (tabs)="getTabs($event)" (node)=" getSelectedNode($event)" (value)=" getData($event)"></app-filetree>
 </div>
 

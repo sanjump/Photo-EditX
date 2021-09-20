@@ -1,4 +1,4 @@
-import { Component, OnInit,Input } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import { faCommentAlt } from '@fortawesome/free-solid-svg-icons';
 import { Output, EventEmitter } from '@angular/core';
 import { IpcRenderer } from 'electron';
@@ -12,26 +12,26 @@ export class ToolbarComponent implements OnInit {
 
   private ipc: IpcRenderer
 
-      constructor(){
-       
-      }
+  constructor() {
 
-      openModal(){
-        this.ipc = (<any>window).require('electron').ipcRenderer;
-        console.log("Open a modal");
-        this.ipc.send("openModal","dasdasd");
-      }
-  @Input() tabheader : string
+  }
+
+  openModal() {
+    this.ipc = (<any>window).require('electron').ipcRenderer;
+    console.log("Open a modal");
+    this.ipc.send("openModal", "dasdasd");
+  }
+  @Input() tabheader: string
   @Output() items = new EventEmitter<any>();
   faCommentAlt = faCommentAlt;
   json: any[] = [];
   i: number = 0;
   l: number;
-  v :any 
+  v: any
   pos: any;
   parent: any;
   item: any[] = []
-  
+
   ngOnInit(): void {
   }
 
@@ -45,10 +45,10 @@ export class ToolbarComponent implements OnInit {
     // text.type = 'text';
     // text.style.width = "100px"
     // text.style.height="30px"
-    this.item.push(this.tabheader + this.i)
+    this.item.push(this.i + this.tabheader)
     this.setItems(this.item)
     this.i += 1
-    
+
     // this.data = this.service.getFiles()
     // console.log(this.data)
     // if(this.data){
@@ -59,7 +59,7 @@ export class ToolbarComponent implements OnInit {
 
     //     }
     // }
-    
+
     // document.querySelector('.my').appendChild(text);
 
 
@@ -69,40 +69,42 @@ export class ToolbarComponent implements OnInit {
     //   <br>
     //   <input type="text" style="width: 100px;"/>`;
     // document.querySelector('.overlay').appendChild(row);
-}
+  }
 
 
-save(e) {
+  save(e) {
 
     this.json = []
-   // this.pos = document.getElementsByClassName("cdk-drag div"+e.target.id)
-    this.parent = document.getElementById('overlay'+e.target.id).getBoundingClientRect()
-    this.v=document.getElementsByClassName("input"+e.target.id)
-    console.log(this.pos)
-    console.log(this.v)
+    // this.pos = document.getElementsByClassName("cdk-drag div"+e.target.id)
+    this.parent = document.getElementById('overlay' + e.target.id).getBoundingClientRect()
+    this.v = document.getElementsByClassName("input" + e.target.id)
+   
     this.l = this.v.length;
     while (this.l--) {
-        this.json.push({
-            file : this.tabheader.slice(0,-3) + 'json',
-            type: this.v[this.l].type,
-            id: this.v[this.l].id,
-            value: this.v[this.l].value,
-            width: this.v[this.l].style.width,
-            height: this.v[this.l].style.height,
-            position: {
-                left: (this.v[this.l] as HTMLElement).getBoundingClientRect().left - this.parent.left,
-                top: (this.v[this.l] as HTMLElement).getBoundingClientRect().top - this.parent.top
-            }
-        });
-        console.log(this.json)
-        console.log(this.parent.left)
-        console.log(this.parent.top)
+      this.json.push({
+        file: this.tabheader.slice(0, -3) + 'json',
+        type: this.v[this.l].type,
+        id: this.v[this.l].id,
+        class:this.v[this.l].className,
+        value: this.v[this.l].value,
+        width: this.v[this.l].style.width,
+        height: this.v[this.l].style.height,
+        position: {
+          left: (this.v[this.l] as HTMLElement).getBoundingClientRect().left - this.parent.left,
+          top: (this.v[this.l] as HTMLElement).getBoundingClientRect().top - this.parent.top
+        }
+      });
+     
     }
 
-    this.ipc = (<any>window).require('electron').ipcRenderer;
-    this.ipc.send("file",this.json);
+    if(this.json.length>0){
+      this.ipc = (<any>window).require('electron').ipcRenderer;
+      this.ipc.send("file", this.json);
+  
+    }
 
-}
+   
+  }
 
 
 }

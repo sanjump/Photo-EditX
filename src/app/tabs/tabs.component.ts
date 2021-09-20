@@ -14,25 +14,29 @@ export class TabsComponent implements OnInit, OnChanges {
   constructor(private service: NodeService) { }
   @Input() tabs: any[]
   @Input() node: any
+  @Input() value: any
  // subscription:Subscription
   tabind=-2
   allTabs: any[] = []
+  data:any
   //public tabs: any[] 
  
   ngOnChanges() {
 
+    this.data=this.value
+    
     this.allTabs = this.tabs
     this.tabind+=1
    
     for(var i=0;i<this.allTabs.length;i++){
-      console.log(this.allTabs[i].header)
+   
       if(this.allTabs[i].header==this.node){
        
         this.tabind=i
         break
       }
     }
-    console.log(this.tabind)   
+     
   }
 
 
@@ -52,10 +56,10 @@ export class TabsComponent implements OnInit, OnChanges {
   close(e){
 
     e.close()
-    console.log(this.service.gettabs())
+   
     this.service.gettabs().splice(e.index,1)
  //   this.allTabs.splice(e.index,1)
-    console.log(this.service.gettabs())
+   
    
     
   }

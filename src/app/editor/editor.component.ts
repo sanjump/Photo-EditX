@@ -14,7 +14,8 @@ export class EditorComponent implements OnInit {
 
     @Input() tabcontent : string
     @Input() tabheader : string
-   
+    @Input() data : any
+
     item: any[] = []
    
     

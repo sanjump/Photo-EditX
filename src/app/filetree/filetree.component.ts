@@ -1,8 +1,8 @@
 import { Component, OnInit, Input, OnChanges } from '@angular/core';
 import { TreeNode } from 'primeng/api';
 import { NodeService } from '../node.service';
-import { Subscription } from 'rxjs';
 import { Output, EventEmitter } from '@angular/core';
+import { IpcRenderer } from 'electron';
 
 @Component({
   selector: 'app-filetree',
@@ -12,25 +12,34 @@ import { Output, EventEmitter } from '@angular/core';
 })
 export class FiletreeComponent implements OnInit, OnChanges {
 
-  subscription: Subscription
+  private ipc: IpcRenderer
   @Input() myFiles: File[]
   @Output() tabs = new EventEmitter<any>();
   @Output() node = new EventEmitter<any>();
+  @Output() value = new EventEmitter<any>();
   data: any[] = []
   addedTabs: any[] = []
   gettabs: any[] = []
   public files
   public url = ""
+  datavalue:any=[]
   constructor(private service: NodeService) {
 
   }
 
   getTabs(value: any) {
     this.tabs.emit(value);
+    
   }
 
   selectedNode(value: any) {
     this.node.emit(value);
+    
+  }
+
+  setData(value: any) {
+    this.value.emit(value);
+    
   }
 
 
@@ -154,44 +163,52 @@ export class FiletreeComponent implements OnInit, OnChanges {
 
   nodeSelect(e) {
 
-   
+
+    this.ipc = (<any>window).require('electron').ipcRenderer;
+    this.ipc.send("selectedNode", e.node.label);
+    this.ipc.on('data', (event, args) => {
+     
+     this.datavalue=args
+
+    });
     this.files = this.service.getFiles()
     this.gettabs = this.service.gettabs()
     this.addedTabs = []
     for (var i = 0; i < this.gettabs.length; i++) {
       this.addedTabs.push(this.gettabs[i].header)
     }
-   
+
     if (this.files && !this.addedTabs.includes(e.node.label)) {
 
 
-      
+
       for (var i = 0; i < this.files.length; i++) {
 
         if (this.files[i].name == e.node.label) {
-         
+
           var reader = new FileReader()
           reader.readAsDataURL(this.files[i])
           reader.onload = (event: any) => {
 
             this.url = event.target.result
             this.service.settabs(e.node.label, this.url);
-            console.log(this.addedTabs)
+           
           }
 
           break
         }
 
       }
-      
+
       this.getTabs(this.service.gettabs())
-      
+
     }
-  
 
 
- this.selectedNode(e.node.label)
 
+    this.selectedNode(e.node.label)
+    this.setData(this.datavalue)
+    
 
   }
 

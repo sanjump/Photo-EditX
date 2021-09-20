@@ -9,18 +9,24 @@ export class ContainerComponent implements OnInit {
 
   constructor() { }
   settabs:any=[]
-  setnodes:any
+  setnodes:any=[]
+  setvalue:any=[]
   ngOnInit(): void {
   }
 
   setTabs(settabs: any) {
     this.settabs = settabs;
-    console.log(this.settabs)
+    
   }
 
   setSelectedNode(setnodes: any) {
     this.setnodes = setnodes;
-    console.log(this.setnodes)
+    
+  }
+
+  setValue(setvalue: any) {
+    this.setvalue = setvalue;
+    
   }
 
   

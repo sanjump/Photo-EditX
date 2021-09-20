@@ -2,10 +2,10 @@
   <p-tabView id="closable" *ngIf="allTabs.length!=0;else welcome" [controlClose]="true" (onClose)="close($event)"
     [(activeIndex)]="tabind" (onchange)="handleChange($event)" [style]="{'background-color':'#111'}">
     <p-tabPanel id="{{tab.header}}" [closable]="true" *ngFor="let tab of allTabs; let i = index" [header]="tab.header">
-      <app-editor [tabcontent]="tab.content" [tabheader]="tab.header"></app-editor>
+      <app-editor [tabcontent]="tab.content" [tabheader]="tab.header" [data]="data"></app-editor>
     </p-tabPanel>
   </p-tabView>
   <ng-template #welcome>
-    <img src="../src/assets/welcome.jpg" height="600px" alt="welcome image"> 
+    <img src="../../assets/welcome.jpg" height="100%" alt="welcome image"> 
   </ng-template>
 </div>
