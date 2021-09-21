@@ -61,8 +61,6 @@ export class ToolbarComponent implements OnInit {
     // }
 
     // document.querySelector('.my').appendChild(text);
-
-
     // let row = document.createElement('div');
     // row.className = 'row';
     // row.innerHTML = `
@@ -82,7 +80,7 @@ export class ToolbarComponent implements OnInit {
     this.l = this.v.length;
     while (this.l--) {
       this.json.push({
-        file: this.tabheader.slice(0, -3) + 'json',
+        file: this.tabheader.substring(0,this.tabheader.lastIndexOf(".")+1) + "json",
         type: this.v[this.l].type,
         id: this.v[this.l].id,
         class:this.v[this.l].className,

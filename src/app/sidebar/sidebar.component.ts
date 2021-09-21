@@ -9,10 +9,11 @@ import { Output, EventEmitter } from '@angular/core';
 export class SidebarComponent implements OnInit {
 
   constructor(private service:NodeService) { }
+
   @Output() settabs = new EventEmitter<any>();
   @Output() setnodes = new EventEmitter<any>();
   @Output() setvalue = new EventEmitter<any>();
-  myFiles: File[] = [];
+ 
   tabs:any=[]
   node:any
   value:any
@@ -61,28 +62,5 @@ export class SidebarComponent implements OnInit {
     this.setData(value)
     
   }
-
-
-  SelectedFile(event){
-
-    
-    if(event.target.files){
-        // var reader = new FileReader()
-        // reader.readAsDataURL(event.target.files[0])
-        // reader.onload=(event:any)=>{
-        //     this.url=event.target.result
-        // }
-        this.myFiles=[]
-        for (var i = 0; i < event.target.files.length; i++) {
-          this.myFiles.push(event.target.files[i]);
-         
-        }
-    }
-    this.service.setFiles(this.myFiles)
-  
-}
-
-  
-  
 
 }

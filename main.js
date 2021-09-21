@@ -4,9 +4,12 @@ const url = require("url");
 const path = require("path");
 const fs = require('fs');
 const glob = require('glob');
+const read = require('fs-readdir-recursive')
 
 let files = [];
-directory = 'C:\\Users\\mpsan\\OneDrive\\Desktop\\Career\\H&R block'
+let folderFiles=[];
+let imgfiles=[];
+//directory = 'C:\\Users\\mpsan\\OneDrive\\Desktop\\Career\\H&R block'
 
 
 ipcMain.on('file', (event, arg) => {
@@ -93,13 +96,6 @@ function createWindow() {
     }
   })
 
-  mainWindow.loadURL(
-    url.format({
-      pathname: path.join(__dirname, `/dist/index.html`),
-      protocol: "file:",
-      slashes: true
-    })
-  );
 
   mainWindow.webContents.openDevTools()
 
@@ -111,25 +107,42 @@ function createWindow() {
 
   Menu.setApplicationMenu(mainMenu);
 
-  var getDirectories = function (src, callback) {
-    glob(src + '/**/*', callback);
-  };
-  getDirectories(directory, function (err, res) {
-    if (err) {
-      console.log('Error', err);
-    }
-    else {
-      console.log(res);
-    }
-  });
+  mainWindow.loadURL(
+    url.format({
+      pathname: path.join(__dirname, `/dist/index.html`),
+      protocol: "file:",
+      slashes: true
+    })
+  );
+
 
 
 }
 
 app.on('ready', createWindow)
 
+
+
+// var getDirectories = function (src, callback) {
+//   glob(src + '/*/*', callback);
+// };
+
+// const getFilesRecursively = (directory) => {
+//   const filesInDirectory = fs.readdirSync(directory);
+//   for (const file of filesInDirectory) {
+//     const absolute = path.join(directory, file);
+//     if (fs.statSync(absolute).isDirectory()) {
+//         getFilesRecursively(absolute);
+//     } else {
+//         files.push(absolute);
+//     }
+//   }
+// };
+
+
+
 let types = [
-  { name: 'PDF', extensions: ['pdf'] }
+  { name: 'Images', extensions: ['jpg','jpeg','png'] }
 ]
 
 const mainMenuTemplate = [
@@ -138,14 +151,24 @@ const mainMenuTemplate = [
     submenu: [
       {
         label: 'Open file',
-        click(mainWindow) {
+        click() {
           dialog.showOpenDialog({ filters: types, properties: ['openFile', 'multiSelections'] })
             .then(function (fileObj) {
 
               if (!fileObj.canceled) {
-                console.log(fileObj)
-                // mainWindow.webContents.send('printfile', fileObj.filePaths[0].toString())
+                
+                 files=[]
+                 for(var i =0;i<fileObj.filePaths.length;i++){
+                   files.push(fileObj.filePaths[i].toString())
+                
+                 }
 
+                mainWindow.webContents.send("getfile", files)
+                console.log(files)
+                
+              
+                
+      
               }
 
             }).catch(function (err) {
@@ -157,12 +180,27 @@ const mainMenuTemplate = [
       {
         label: 'Open folder',
         click() {
-          dialog.showOpenDialog({ properties: ['openDirectory', 'multiSelections'] })
+          dialog.showOpenDialog({ filters: types,properties: ['openDirectory'] })
             .then(function (fileObj) {
 
               if (!fileObj.canceled) {
-                console.log(fileObj)
-                // mainWindow.webContents.send('printfile', fileObj.filePaths[0].toString())
+                folderFiles=[]
+                folderFiles.push(fileObj.filePaths[0].toString())
+               for(var i =0;i<types[0].extensions.length;i++){
+                var foundFiles = read(fileObj.filePaths[0].toString()).filter(item => item.endsWith("."+types[0].extensions[i]));
+                imgfiles.push(foundFiles)
+                }
+                folderFiles.push(imgfiles)
+                console.log(folderFiles);
+                mainWindow.webContents.send('getfolder', folderFiles)
+                // getFilesRecursively(fileObj.filePaths[0].toString())
+                // 
+                // 
+                    
+                  
+             //   getDirectories(fileObj.filePaths[0].toString())
+                
+                
 
               }
 

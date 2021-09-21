@@ -1,8 +1,9 @@
-import { Component, OnInit, Input, OnChanges } from '@angular/core';
+import { Component, OnInit, Input, OnChanges,ChangeDetectorRef, NgZone } from '@angular/core';
 import { TreeNode } from 'primeng/api';
 import { NodeService } from '../node.service';
 import { Output, EventEmitter } from '@angular/core';
 import { IpcRenderer } from 'electron';
+import { DomSanitizer,SafeUrl } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-filetree',
@@ -10,20 +11,27 @@ import { IpcRenderer } from 'electron';
   styleUrls: ['./filetree.component.css']
 
 })
-export class FiletreeComponent implements OnInit, OnChanges {
+export class FiletreeComponent implements OnInit {
 
   private ipc: IpcRenderer
-  @Input() myFiles: File[]
+  changeDetector = ChangeDetectorRef
+  
   @Output() tabs = new EventEmitter<any>();
   @Output() node = new EventEmitter<any>();
   @Output() value = new EventEmitter<any>();
+
+
+  files : any[]=[]
   data: any[] = []
   addedTabs: any[] = []
   gettabs: any[] = []
-  public files
-  public url = ""
+  myfiles: any[] = []
+  url:SafeUrl
   datavalue:any=[]
-  constructor(private service: NodeService) {
+  filetree: TreeNode[];
+
+  
+  constructor(private service: NodeService,private zone:NgZone,private sanitizer:DomSanitizer) {
 
   }
 
@@ -43,46 +51,10 @@ export class FiletreeComponent implements OnInit, OnChanges {
   }
 
 
-  files1: TreeNode[];
-  f: string[] = [
-    'H&R block/Appointment Letter_Sanju M P-HRB India (1).pdf',
-    'H&R block/h&r_joinee.txt',
-    'H&R block/joining/10.Background verification form.doc',
-    'H&R block/joining/11.Copy of GMC-Addition Format- Dependant inclusion.xls',
-    'H&R block/joining/1Personal Data Form_ HR Block_ ver 1_ (004).docx',
-    'H&R block/joining/2Joining Report.doc',
-    'H&R block/joining/3Network ID Access Request Form.docx',
-    'H&R block/joining/4Access _ ID request form.docx',
-    'H&R block/joining/5HRB GTC India _Employee Consent Form.docx',
-    'H&R block/joining/6.PFFormword.docx',
-    'H&R block/joining/7.Form No.1 (word).pdf.docx',
-    'H&R block/joining/8.Gratuity Form F nomination word.docx',
-    'H&R block/joining/9.Service Record.docx',
-    'H&R block/photo.png',
-    'H&R block/sanjump.pdf',
-    'H&R block/Self attested/Aadhaar.pdf',
-    'H&R block/Self attested/Appointment Letter_Sanju M P-HRB India.pdf',
-    'H&R block/Self attested/Marklists.pdf',
-    'H&R block/Self attested/Pan.pdf',
-    'H&R block/Self attested/Passport.pdf',
-    'sanjump.pdf'
-
-  ];
-
-  ngOnChanges() {
-
-    for (var i = 0; i < this.myFiles.length; i++) {
-      this.data.push(this.myFiles[i].name);
-
-    }
-    this.files1 = this.data.reduce(this.reducePath, [])
-
-
-  }
-
+  
 
   reducePath = (nodes: TreeNode[], path: string) => {
-    const split = path.split('/');
+    const split = path.split('\\');
 
     // 2.1
     if (split.length === 1) {
@@ -102,7 +74,7 @@ export class FiletreeComponent implements OnInit, OnChanges {
         {
           label: split[0],
           icon: 'fa-folder',
-          children: this.reducePath([], split.slice(1).join('/'))
+          children: this.reducePath([], split.slice(1).join('\\'))
         }
       ];
     }
@@ -114,56 +86,55 @@ export class FiletreeComponent implements OnInit, OnChanges {
       }
 
       return Object.assign({}, n, {
-        children: this.reducePath(n.children, split.slice(1).join('/'))
+        children: this.reducePath(n.children, split.slice(1).join('\\'))
       });
     });
   }
 
 
 
-  ngOnInit(): void {
+  ngOnInit(){
 
+   
+    this.ipc = (<any>window).require('electron').ipcRenderer;
+    this.ipc.on('getfile', (event, args) => {
+    this.zone.run(() => {
 
+        for (var i = 0; i < args.length; i++) {
+        this.data.push(args[i].substring(args[i].lastIndexOf("\\")+1,args[i].length));
+        this.myfiles.push(args[i])
+        }
+        this.filetree = this.data.reduce(this.reducePath, [])
+        console.log(this.myfiles)
+        this.service.setFiles(this.myfiles)
+    
+      });
+    
+    });
 
-    // var f = this.myFiles
-    // console.log(f)
-    // [
-    //   'H&R block/Appointment Letter_Sanju M P-HRB India (1).pdf',
-    //   'H&R block/h&r_joinee.txt',
-    //   'H&R block/joining/10.Background verification form.doc',
-    //   'H&R block/joining/11.Copy of GMC-Addition Format- Dependant inclusion.xls',
-    //   'H&R block/joining/1Personal Data Form_ HR Block_ ver 1_ (004).docx',
-    //   'H&R block/joining/2Joining Report.doc',
-    //   'H&R block/joining/3Network ID Access Request Form.docx',
-    //   'H&R block/joining/4Access _ ID request form.docx',
-    //   'H&R block/joining/5HRB GTC India _Employee Consent Form.docx',
-    //   'H&R block/joining/6.PFFormword.docx',
-    //   'H&R block/joining/7.Form No.1 (word).pdf.docx',
-    //   'H&R block/joining/8.Gratuity Form F nomination word.docx',
-    //   'H&R block/joining/9.Service Record.docx',
-    //   'H&R block/photo.png',
-    //   'H&R block/sanjump.pdf',
-    //   'H&R block/Self attested/Aadhaar.pdf',
-    //   'H&R block/Self attested/Appointment Letter_Sanju M P-HRB India.pdf',
-    //   'H&R block/Self attested/Marklists.pdf',
-    //   'H&R block/Self attested/Pan.pdf',
-    //   'H&R block/Self attested/Passport.pdf',
-    //   'sanjump.pdf'
-    // ];
+    this.ipc.on('getfolder', (event, args) => {
+    this.zone.run(() => {
 
+        for (var i = 0; i < args[1].length; i++) {
 
-    // for (var i = 0; i < this.myFiles.length; i++) {
-    //  // f.push(this.myFiles[i].name);
-    //   console.log(this.myFiles[i].name)
-    // }
+          this.data.push(args[0].substring(args[0].lastIndexOf("\\")+1,args[0].length)  + "\\" +  args[1][i])
+          this.myfiles.push(args[0] + "\\" + args[1][i])
+        }
+        this.filetree = this.data.reduce(this.reducePath, [])
+        console.log(this.myfiles)
+        this.service.setFiles(this.myfiles)
+    });
+    
+    });
 
-
-    // this.nodeService.getFiles().then(files => this.files1 = files);
   }
 
   nodeSelect(e) {
 
 
+    if(!(e.node.icon == "fa-folder")){
+    
+    
     this.ipc = (<any>window).require('electron').ipcRenderer;
     this.ipc.send("selectedNode", e.node.label);
     this.ipc.on('data', (event, args) => {
@@ -171,6 +142,7 @@ export class FiletreeComponent implements OnInit, OnChanges {
      this.datavalue=args
 
     });
+    
     this.files = this.service.getFiles()
     this.gettabs = this.service.gettabs()
     this.addedTabs = []
@@ -181,26 +153,24 @@ export class FiletreeComponent implements OnInit, OnChanges {
     if (this.files && !this.addedTabs.includes(e.node.label)) {
 
 
-
       for (var i = 0; i < this.files.length; i++) {
 
-        if (this.files[i].name == e.node.label) {
+        if (this.files[i].includes(e.node.label) ) {
 
-          var reader = new FileReader()
-          reader.readAsDataURL(this.files[i])
-          reader.onload = (event: any) => {
+        
 
-            this.url = event.target.result
+            this.url =  this.sanitizer.bypassSecurityTrustUrl(this.files[i])
             this.service.settabs(e.node.label, this.url);
-           
-          }
+            break
+          
 
-          break
+          
         }
 
       }
 
       this.getTabs(this.service.gettabs())
+      console.log(this.service.gettabs())
 
     }
 
@@ -214,5 +184,5 @@ export class FiletreeComponent implements OnInit, OnChanges {
 
 
 
-
+  }
 }

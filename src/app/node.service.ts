@@ -21,9 +21,8 @@ export class NodeService {
 
   setFiles(value) {
   
-    for (var i = 0; i < value.length; i++) {
-     this.data.push(value[i]);
-  }
+   this.data=value
+   
 }
 
   getFiles() {
