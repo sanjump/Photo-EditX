@@ -80,7 +80,7 @@ export class ToolbarComponent implements OnInit {
     this.l = this.v.length;
     while (this.l--) {
       this.json.push({
-        file: this.tabheader.substring(0,this.tabheader.lastIndexOf(".")+1) + "json",
+        file: this.tabheader, //.substring(0,this.tabheader.lastIndexOf(".")+1) + "json"
         type: this.v[this.l].type,
         id: this.v[this.l].id,
         class:this.v[this.l].className,
@@ -88,8 +88,8 @@ export class ToolbarComponent implements OnInit {
         width: this.v[this.l].style.width,
         height: this.v[this.l].style.height,
         position: {
-          left: (this.v[this.l] as HTMLElement).getBoundingClientRect().left - this.parent.left,
-          top: (this.v[this.l] as HTMLElement).getBoundingClientRect().top - this.parent.top
+          left: (this.v[this.l] as HTMLElement).getBoundingClientRect().left,
+          top: (this.v[this.l] as HTMLElement).getBoundingClientRect().top
         }
       });
      

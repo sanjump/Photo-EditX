@@ -1,4 +1,5 @@
-import { Component, OnInit, OnChanges, Input } from '@angular/core';
+import { Component, OnInit, OnChanges, Input, NgZone } from '@angular/core';
+import { IpcRenderer } from 'electron';
 
 @Component({
   selector: 'app-editingpanel',
@@ -7,11 +8,14 @@ import { Component, OnInit, OnChanges, Input } from '@angular/core';
 })
 export class EditingpanelComponent implements OnInit, OnChanges {
 
-  constructor() { }
+  constructor(private zone:NgZone) { }
+
+  private ipc: IpcRenderer
+
   @Input() tabheader: string
   @Input() tabcontent: string
   @Input() items: any
-  @Input() data: any
+  data : any
   item: any[] = []
   display=[]
   url = ""
@@ -19,7 +23,54 @@ export class EditingpanelComponent implements OnInit, OnChanges {
   divname: string = ""
   overlay: string = ""
 
-  ngOnInit(): void {
+  ngOnInit() {
+
+    this.ipc = (<any>window).require('electron').ipcRenderer;
+    this.ipc.once('data', (event, args) => {
+    this.zone.run(() => {
+
+     
+      this.data=args
+      if(this.data!="No file" && this.data.length>0)
+   {
+     
+     
+     if(!this.display.includes(this.data[0].file)){
+
+        this.display.push(this.data[0].file)
+
+        for (var i = 0; i < this.data.length; i++) {
+
+          // var div = document.createElement('div')
+          // div.id = "cont"+i+this.data[i].file
+          // div.className = "div"+this.data[i].file
+          // div.style.width = "100px"
+          // div.style.height = "30px"
+          var text = document.createElement('input')
+          text.id = this.data[i].id
+          text.className = this.data[i].class
+          text.value = this.data[i].value
+          text.style.width = this.data[i].width
+          text.style.height = this.data[i].height
+          text.style.position = 'fixed'
+          text.style.left = this.data[i].position.left + "px"
+          text.style.top = this.data[i].position.top + "px"
+          text.disabled=true
+          // div.appendChild(text)
+         
+          document.getElementById('overlay' + this.data[i].file).appendChild(text)
+    
+        }
+      }
+    }
+
+
+      });
+      
+ 
+     });
+
+ 
   }
 
   remove(id) {
@@ -38,36 +89,10 @@ export class EditingpanelComponent implements OnInit, OnChanges {
     this.divname = "div" + this.tabheader
     this.overlay = "overlay" + this.tabheader
     this.item = this.items
-    this.setdisplay(this.data)
+   
     
   }
 
-  setdisplay(data){
-
-    if(this.data!="No" && this.data.length>0)
-   {
-     
-      if(!this.display.includes(data[0].file)){
-        this.display.push(data[0].file)
-        for (var i = 0; i < this.data.length; i++) {
-          var div = document.createElement('div')
-          div.id = "cont"+i+this.data[i].file.slice(0, -4) + 'jpg'
-          div.className = "div"+this.data[i].file.slice(0, -4) + 'jpg'
-          var text = document.createElement('input')
-          text.id = this.data[i].id
-          text.className = this.data[i].class
-          text.value = this.data[i].value
-          text.style.width = this.data[i].width
-          text.style.height = this.data[i].height
-          text.style.left = this.data[i].position.left
-          text.style.top = this.data[i].position.top
-          text.style.position = 'relative'
-          document.getElementById('overlay' + this.data[i].file.slice(0, -4) + 'jpg').appendChild(text)
-    
-        }
-      }
-    }
-  }
 
 }
 

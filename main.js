@@ -3,82 +3,83 @@ const { app, BrowserWindow, Menu, dialog, ipcMain } = require('electron')
 const url = require("url");
 const path = require("path");
 const fs = require('fs');
-const glob = require('glob');
 const read = require('fs-readdir-recursive')
 
 let files = [];
-let folderFiles=[];
-let imgfiles=[];
-//directory = 'C:\\Users\\mpsan\\OneDrive\\Desktop\\Career\\H&R block'
+let folderFiles = [];
+let imgfiles = [];
+directory = 'D:\\jsons\\'
 
 
 ipcMain.on('file', (event, arg) => {
-  
+
   saveFile(arg)
 
 })
 
-function saveFile(arg){
+function saveFile(arg) {
 
-  fs.access('D:\\jsons\\'+arg[0].file, (err) => {
+  fs.access(directory + arg[0].file.substring(0, arg[0].file.lastIndexOf(".") + 1) + "json", (err) => {
     if (err) {
 
-       
-        fs.writeFile('D:\\jsons\\'+arg[0].file, JSON.stringify(arg), function(err) {
-          if(err) {
-              return console.log(err);
-          }
-          
-      }); 
-      } 
-      
-      
-      else {
-      
-        fs.writeFile('D:\\jsons\\'+arg[0].file, JSON.stringify(arg), function(err) {
-          if(err) {
-              return console.log(err);
-          }
-         
-      }); 
-      }
+
+      fs.writeFile(directory + arg[0].file.substring(0, arg[0].file.lastIndexOf(".") + 1) + "json", JSON.stringify(arg), function (err) {
+        if (err) {
+          return console.log(err);
+        }
+
+      });
+    }
+
+
+    else {
+
+      fs.writeFile(directory + arg[0].file.substring(0, arg[0].file.lastIndexOf(".") + 1) + "json", JSON.stringify(arg), function (err) {
+        if (err) {
+          return console.log(err);
+        }
+
+      });
+    }
   })
 }
 
 ipcMain.on('selectedNode', (event, arg) => {
-  
-  checkFile(arg,event)
+
+  checkFile(arg, event)
 
 })
 
-function checkFile(arg,event){
+function checkFile(arg, event) {
 
-  fs.access('D:\\jsons\\'+arg.slice(0, -3) + 'json', (err) => {
+  fs.access(directory + arg.substring(0, arg.lastIndexOf(".") + 1) + "json", (err) => {
     if (err) {
 
-      
-      event.sender.send('data','No')
-      
-        
-      } 
-      
-      
-      else {
-      
-        fs.readFile('D:\\jsons\\'+arg.slice(0, -3) + 'json', function(err,data) {
-          if(err) {
-              return console.log(err);
+
+      event.sender.send('data', 'No file')
+
+
+    }
+
+
+    else {
+
+      fs.readFile(directory + arg.substring(0, arg.lastIndexOf(".") + 1) + "json", function (err, data) {
+        if (err) {
+          return console.log(err);
+        }
+        else {
+          if (data.length != 0) {
+
+            event.sender.send('data', JSON.parse(data))
+            
+
           }
-          else{
-            if(data.length!=0){
-            event.sender.send('data',JSON.parse(data))
-            console.log(JSON.parse(data))
-            }
-          }
-         
-      }); 
-       
-      }
+        }
+
+      });
+
+    }
   })
 }
 
@@ -122,27 +123,8 @@ function createWindow() {
 app.on('ready', createWindow)
 
 
-
-// var getDirectories = function (src, callback) {
-//   glob(src + '/*/*', callback);
-// };
-
-// const getFilesRecursively = (directory) => {
-//   const filesInDirectory = fs.readdirSync(directory);
-//   for (const file of filesInDirectory) {
-//     const absolute = path.join(directory, file);
-//     if (fs.statSync(absolute).isDirectory()) {
-//         getFilesRecursively(absolute);
-//     } else {
-//         files.push(absolute);
-//     }
-//   }
-// };
-
-
-
 let types = [
-  { name: 'Images', extensions: ['jpg','jpeg','png'] }
+  { name: 'Images', extensions: ['jpg', 'jpeg', 'png'] }
 ]
 
 const mainMenuTemplate = [
@@ -156,19 +138,19 @@ const mainMenuTemplate = [
             .then(function (fileObj) {
 
               if (!fileObj.canceled) {
-                
-                 files=[]
-                 for(var i =0;i<fileObj.filePaths.length;i++){
-                   files.push(fileObj.filePaths[i].toString())
-                
-                 }
+
+                files = []
+                for (var i = 0; i < fileObj.filePaths.length; i++) {
+                  files.push(fileObj.filePaths[i].toString())
+
+                }
 
                 mainWindow.webContents.send("getfile", files)
-                console.log(files)
                 
-              
-                
-      
+
+
+
+
               }
 
             }).catch(function (err) {
@@ -180,27 +162,20 @@ const mainMenuTemplate = [
       {
         label: 'Open folder',
         click() {
-          dialog.showOpenDialog({ filters: types,properties: ['openDirectory'] })
+          dialog.showOpenDialog({ filters: types, properties: ['openDirectory'] })
             .then(function (fileObj) {
 
               if (!fileObj.canceled) {
-                folderFiles=[]
+                folderFiles = []
                 folderFiles.push(fileObj.filePaths[0].toString())
-               for(var i =0;i<types[0].extensions.length;i++){
-                var foundFiles = read(fileObj.filePaths[0].toString()).filter(item => item.endsWith("."+types[0].extensions[i]));
-                imgfiles.push(foundFiles)
+                for (var i = 0; i < types[0].extensions.length; i++) {
+                  var foundFiles = read(fileObj.filePaths[0].toString()).filter(item => item.endsWith("." + types[0].extensions[i]));
+                  imgfiles.push(foundFiles)
                 }
                 folderFiles.push(imgfiles)
-                console.log(folderFiles);
+               
                 mainWindow.webContents.send('getfolder', folderFiles)
-                // getFilesRecursively(fileObj.filePaths[0].toString())
-                // 
-                // 
-                    
-                  
-             //   getDirectories(fileObj.filePaths[0].toString())
-                
-                
+
 
               }
 

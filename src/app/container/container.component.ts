@@ -10,7 +10,7 @@ export class ContainerComponent implements OnInit {
   constructor() { }
   settabs:any=[]
   setnodes:any=[]
-  setvalue:any=[]
+ 
   ngOnInit(): void {
   }
 
@@ -24,11 +24,6 @@ export class ContainerComponent implements OnInit {
     
   }
 
-  setValue(setvalue: any) {
-    this.setvalue = setvalue;
-    
-  }
-
-  
+ 
 
 }

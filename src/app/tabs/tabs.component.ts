@@ -1,7 +1,5 @@
 import { Component, OnInit, ViewEncapsulation, Input, OnChanges } from '@angular/core';
 import { NodeService } from '../node.service';
-import { Subscription } from 'rxjs';
-import { Output, EventEmitter } from '@angular/core';
 
 @Component({
   selector: 'app-tabs',
@@ -14,16 +12,16 @@ export class TabsComponent implements OnInit, OnChanges {
   constructor(private service: NodeService) { }
   @Input() tabs: any[]
   @Input() node: any
-  @Input() value: any
- // subscription:Subscription
+  
+ 
   tabind=-2
   allTabs: any[] = []
   data:any
-  //public tabs: any[] 
+ 
  
   ngOnChanges() {
 
-    this.data=this.value
+    
     
     this.allTabs = this.tabs
     this.tabind+=1

@@ -12,11 +12,11 @@ export class SidebarComponent implements OnInit {
 
   @Output() settabs = new EventEmitter<any>();
   @Output() setnodes = new EventEmitter<any>();
-  @Output() setvalue = new EventEmitter<any>();
+  
  
   tabs:any=[]
   node:any
-  value:any
+  
   
   ngOnInit(): void {
     document.getElementById("mySidebar").style.width = "250px";
@@ -39,9 +39,7 @@ export class SidebarComponent implements OnInit {
     this.setnodes.emit(value);
   }
 
-  setData(value: any) {
-    this.setvalue.emit(value);
-  }
+  
 
   
 
@@ -57,10 +55,6 @@ export class SidebarComponent implements OnInit {
     
   }
 
-  getData(value: any) {
-    this.value = value;
-    this.setData(value)
-    
-  }
+  
 
 }

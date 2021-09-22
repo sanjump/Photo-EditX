@@ -18,7 +18,7 @@ export class FiletreeComponent implements OnInit {
   
   @Output() tabs = new EventEmitter<any>();
   @Output() node = new EventEmitter<any>();
-  @Output() value = new EventEmitter<any>();
+  
 
 
   files : any[]=[]
@@ -27,7 +27,7 @@ export class FiletreeComponent implements OnInit {
   gettabs: any[] = []
   myfiles: any[] = []
   url:SafeUrl
-  datavalue:any=[]
+  
   filetree: TreeNode[];
 
   
@@ -45,11 +45,7 @@ export class FiletreeComponent implements OnInit {
     
   }
 
-  setData(value: any) {
-    this.value.emit(value);
-    
-  }
-
+ 
 
   
 
@@ -105,7 +101,6 @@ export class FiletreeComponent implements OnInit {
         this.myfiles.push(args[i])
         }
         this.filetree = this.data.reduce(this.reducePath, [])
-        console.log(this.myfiles)
         this.service.setFiles(this.myfiles)
     
       });
@@ -135,13 +130,6 @@ export class FiletreeComponent implements OnInit {
     if(!(e.node.icon == "fa-folder")){
     
     
-    this.ipc = (<any>window).require('electron').ipcRenderer;
-    this.ipc.send("selectedNode", e.node.label);
-    this.ipc.on('data', (event, args) => {
-     
-     this.datavalue=args
-
-    });
     
     this.files = this.service.getFiles()
     this.gettabs = this.service.gettabs()
@@ -152,6 +140,9 @@ export class FiletreeComponent implements OnInit {
 
     if (this.files && !this.addedTabs.includes(e.node.label)) {
 
+      this.ipc = (<any>window).require('electron').ipcRenderer;
+      this.ipc.send("selectedNode", e.node.label);
+      
 
       for (var i = 0; i < this.files.length; i++) {
 
@@ -170,14 +161,15 @@ export class FiletreeComponent implements OnInit {
       }
 
       this.getTabs(this.service.gettabs())
-      console.log(this.service.gettabs())
+     
+      
 
     }
 
 
 
     this.selectedNode(e.node.label)
-    this.setData(this.datavalue)
+   
     
 
   }
