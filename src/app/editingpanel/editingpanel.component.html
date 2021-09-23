@@ -1,24 +1,14 @@
-
-    <div class="container">
-        <div class="box">
-            <img [src]="url" height="100%" width="100%" />
-        </div>
-
-        <div [id]="overlay" class="box overlay">
-
-            <ng-container *ngFor="let i of item">
-                <div id="cont{{i}}" [class]="divname" style="width: 100px;height: 30px; display:flex;"
-                    cdkDragBoundary=".overlay" cdkDrag>
-                  
-                    <input id="text{{i}}" [class]="inputname" style="width: 100px;height: 30px;" type="text" />
-
-                    <button id="btn{{i}}" (click)="remove(i)">X</button>
-
-                </div>
-            </ng-container>
-            <!-- <div></div>
-        <div>Load: <input type="file" id="load"></div> -->
-
-        </div>
+<div class="container">
+    <div class="box">
+        <img [src]="url" height="100%" width="100%" />
     </div>
-
+    <div [id]="overlay" class="box overlay">
+        <ng-container *ngFor="let i of textboxes">
+            <div id="cont{{i}}" [class]="divname" style="width: 100px;height: 30px; display:flex;"
+                cdkDragBoundary=".overlay" cdkDrag>
+                <input id="text{{i}}" [class]="inputname" style="width: 100px;height: 30px;" type="text" />
+                <button id="btn{{i}}" (click)="remove(i)">X</button>
+            </div>
+        </ng-container>
+    </div>
+</div>

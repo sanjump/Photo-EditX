@@ -5,30 +5,26 @@
     margin: 30px;
     padding-top: 200px;
     border: solid black 3px;
-  }
-  .box {
+}
+
+.box {
     width: 100%;
     height: 100%;
     position: absolute;
     top: 0;
     left: 0;
     opacity: 1;
-   
-  }
-  .overlay {
+}
+
+.overlay {
     opacity: 1;
     padding: 0px;
     position: absolute;
     overflow:hidden;
-    
+}
   
-  }
   
-
-
-  button{
-
-   
+button {
     margin-bottom:30px;
     margin-left:-10px;
     cursor:pointer;
@@ -41,5 +37,5 @@
     display: inline-block;
     line-height: 0px;
     padding: 6px 1px;     
-  }
+}
   

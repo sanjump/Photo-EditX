@@ -1,89 +1,17 @@
 const { app, BrowserWindow, Menu, dialog, ipcMain } = require('electron')
-
 const url = require("url");
 const path = require("path");
 const fs = require('fs');
 const read = require('fs-readdir-recursive')
 
+
 let files = [];
 let folderFiles = [];
 let imgfiles = [];
-directory = 'D:\\jsons\\'
-
-
-ipcMain.on('file', (event, arg) => {
-
-  saveFile(arg)
-
-})
-
-function saveFile(arg) {
-
-  fs.access(directory + arg[0].file.substring(0, arg[0].file.lastIndexOf(".") + 1) + "json", (err) => {
-    if (err) {
-
-
-      fs.writeFile(directory + arg[0].file.substring(0, arg[0].file.lastIndexOf(".") + 1) + "json", JSON.stringify(arg), function (err) {
-        if (err) {
-          return console.log(err);
-        }
-
-      });
-    }
-
-
-    else {
-
-      fs.writeFile(directory + arg[0].file.substring(0, arg[0].file.lastIndexOf(".") + 1) + "json", JSON.stringify(arg), function (err) {
-        if (err) {
-          return console.log(err);
-        }
-
-      });
-    }
-  })
-}
-
-ipcMain.on('selectedNode', (event, arg) => {
-
-  checkFile(arg, event)
-
-})
-
-function checkFile(arg, event) {
-
-  fs.access(directory + arg.substring(0, arg.lastIndexOf(".") + 1) + "json", (err) => {
-    if (err) {
-
-
-      event.sender.send('data', 'No file')
-
-
-    }
-
-
-    else {
-
-      fs.readFile(directory + arg.substring(0, arg.lastIndexOf(".") + 1) + "json", function (err, data) {
-        if (err) {
-          return console.log(err);
-        }
-        else {
-          if (data.length != 0) {
-
-            event.sender.send('data', JSON.parse(data))
-            
-
-          }
-        }
-
-      });
-
-    }
-  })
-}
-
 let mainWindow
+let types = [{ name: 'Images', extensions: ['jpg', 'jpeg', 'png'] }]
+directory = app.getPath('documents') + "\\";
+
 
 function createWindow() {
   mainWindow = new BrowserWindow({
@@ -96,7 +24,6 @@ function createWindow() {
       contextIsolation: false
     }
   })
-
 
   mainWindow.webContents.openDevTools()
 
@@ -116,16 +43,9 @@ function createWindow() {
     })
   );
 
-
-
 }
 
-app.on('ready', createWindow)
 
-
-let types = [
-  { name: 'Images', extensions: ['jpg', 'jpeg', 'png'] }
-]
 
 const mainMenuTemplate = [
   {
@@ -136,21 +56,12 @@ const mainMenuTemplate = [
         click() {
           dialog.showOpenDialog({ filters: types, properties: ['openFile', 'multiSelections'] })
             .then(function (fileObj) {
-
               if (!fileObj.canceled) {
-
                 files = []
                 for (var i = 0; i < fileObj.filePaths.length; i++) {
                   files.push(fileObj.filePaths[i].toString())
-
                 }
-
                 mainWindow.webContents.send("getfile", files)
-                
-
-
-
-
               }
 
             }).catch(function (err) {
@@ -164,7 +75,6 @@ const mainMenuTemplate = [
         click() {
           dialog.showOpenDialog({ filters: types, properties: ['openDirectory'] })
             .then(function (fileObj) {
-
               if (!fileObj.canceled) {
                 folderFiles = []
                 folderFiles.push(fileObj.filePaths[0].toString())
@@ -173,10 +83,7 @@ const mainMenuTemplate = [
                   imgfiles.push(foundFiles)
                 }
                 folderFiles.push(imgfiles)
-               
                 mainWindow.webContents.send('getfolder', folderFiles)
-
-
               }
 
             }).catch(function (err) {
@@ -194,6 +101,63 @@ const mainMenuTemplate = [
   }
 ];
 
+
+ipcMain.on('file', (event, arg) => {
+  saveFile(arg)
+})
+
+function saveFile(arg) {
+
+  fs.access(directory + arg[0].file.substring(0, arg[0].file.lastIndexOf(".") + 1) + "json", (err) => {
+    if (err) {
+      fs.writeFile(directory + arg[0].file.substring(0, arg[0].file.lastIndexOf(".") + 1) + "json", JSON.stringify(arg), function (err) {
+        if (err) {
+          return console.log(err);
+        }
+      });
+    }
+
+    else {
+      fs.writeFile(directory + arg[0].file.substring(0, arg[0].file.lastIndexOf(".") + 1) + "json", JSON.stringify(arg), function (err) {
+        if (err) {
+          return console.log(err);
+        }
+      });
+    }
+  })
+}
+
+ipcMain.on('selectedNode', (event, arg) => {
+  checkFile(arg, event)
+})
+
+function checkFile(arg, event) {
+
+  fs.access(directory + arg.substring(0, arg.lastIndexOf(".") + 1) + "json", (err) => {
+    if (err) {
+      event.sender.send('data', 'No file')
+    }
+
+    else {
+      fs.readFile(directory + arg.substring(0, arg.lastIndexOf(".") + 1) + "json", function (err, data) {
+        if (err) {
+          return console.log(err);
+        }
+        else {
+          if (data.length != 0) {
+            event.sender.send('data', JSON.parse(data))
+          }
+        }
+
+      });
+
+    }
+  })
+}
+
+
+
+app.on('ready', createWindow)
 
 app.on('window-all-closed', function () {
   if (process.platform !== 'darwin') app.quit()

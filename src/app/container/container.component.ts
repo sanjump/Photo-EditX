@@ -5,25 +5,23 @@ import { Component, OnInit } from '@angular/core';
   templateUrl: './container.component.html',
   styleUrls: ['./container.component.css']
 })
+
 export class ContainerComponent implements OnInit {
 
   constructor() { }
-  settabs:any=[]
-  setnodes:any=[]
+  
+  tabs:any=[]
+  node:any=[]
  
   ngOnInit(): void {
   }
 
-  setTabs(settabs: any) {
-    this.settabs = settabs;
-    
+  setTabs(tabs: any) {
+    this.tabs = tabs;
   }
 
-  setSelectedNode(setnodes: any) {
-    this.setnodes = setnodes;
-    
+  setSelectedNode(node: any) {
+    this.node = node;
   }
-
- 
 
 }

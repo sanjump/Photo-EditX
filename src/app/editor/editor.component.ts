@@ -1,5 +1,4 @@
-import { Component, OnInit,Input,OnChanges } from '@angular/core';
-import { NodeService } from '../node.service';
+import { Component, OnInit, Input } from '@angular/core';
 
 @Component({
     selector: 'app-editor',
@@ -9,26 +8,18 @@ import { NodeService } from '../node.service';
 
 export class EditorComponent implements OnInit {
 
-    constructor(private service:NodeService) { }
+    constructor() { }
 
-    @Input() tabcontent : string
-    @Input() tabheader : string
-  
+    @Input() tabcontent: string
+    @Input() tabheader: string
 
-    item: any[] = []
-   
-    
-    setItems(items: any) {
-        this.item = items;
-      }
+    textboxes: any[] = []
 
-        
     ngOnInit() {
-
-        
-
     }
 
-  
+    setTextboxes(setTextboxes: any) {
+        this.textboxes = setTextboxes;
+    }
 
 }

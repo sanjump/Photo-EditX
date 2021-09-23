@@ -1,23 +1,20 @@
 import { Component, OnInit } from '@angular/core';
-import { NodeService } from '../node.service';
 import { Output, EventEmitter } from '@angular/core';
+
 @Component({
   selector: 'app-sidebar',
   templateUrl: './sidebar.component.html',
   styleUrls: ['./sidebar.component.css']
 })
+
 export class SidebarComponent implements OnInit {
 
-  constructor(private service:NodeService) { }
+  constructor() { }
 
-  @Output() settabs = new EventEmitter<any>();
-  @Output() setnodes = new EventEmitter<any>();
-  
- 
-  tabs:any=[]
-  node:any
-  
-  
+  @Output() tabs = new EventEmitter<any>();
+  @Output() node = new EventEmitter<any>();
+
+
   ngOnInit(): void {
     document.getElementById("mySidebar").style.width = "250px";
     document.getElementById("main").style.marginLeft = "250px";
@@ -25,36 +22,25 @@ export class SidebarComponent implements OnInit {
   }
 
   closeNav() {
-
     document.getElementById("open").hidden = false;
     document.getElementById("mySidebar").style.width = "0";
     document.getElementById("main").style.marginLeft = "0";
   }
 
   setTabs(value: any) {
-    this.settabs.emit(value);
+    this.tabs.emit(value);
   }
 
   setSelectedNode(value: any) {
-    this.setnodes.emit(value);
+    this.node.emit(value);
   }
 
-  
-
-  
-
   getTabs(tabs: any) {
-    this.tabs = tabs;
     this.setTabs(tabs)
-    
   }
 
   getSelectedNode(node: any) {
-    this.node = node;
     this.setSelectedNode(node)
-    
   }
-
-  
 
 }

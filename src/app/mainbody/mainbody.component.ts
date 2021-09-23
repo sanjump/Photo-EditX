@@ -1,29 +1,19 @@
-import { Component, OnInit,Input,OnChanges } from '@angular/core';
+import { Component, OnInit,Input} from '@angular/core';
 
 @Component({
   selector: 'app-mainbody',
   templateUrl: './mainbody.component.html',
   styleUrls: ['./mainbody.component.css']
 })
-export class MainbodyComponent implements OnInit,OnChanges {
+
+export class MainbodyComponent implements OnInit{
 
   constructor() { }
-  @Input() settabs: any[]
-  @Input() setnodes: any
+
+  @Input() tabs: any[]
+  @Input() node: any
   
-  tabs:any=[]
-  node:any=[]
-  value:any=[]
-
   ngOnInit(): void {
-  }
-
-
-  ngOnChanges(){
-     this.tabs=this.settabs
-     this.node=this.setnodes
-     
-    
   }
 
   openNav() {

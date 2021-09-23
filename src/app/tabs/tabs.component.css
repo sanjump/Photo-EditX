@@ -2,13 +2,15 @@
     background: #0b0124;
     border:solid 3px rgb(0, 0, 0);
     color: rgb(198, 198, 212);
-    }
+}
 
 
-.p-tabview .p-tabview-panels{
+.p-tabview .p-tabview-panels {
         background: rgb(88, 49, 55);
         border-color: black;
-      }
-.p-tabview{
+}
+
+
+.p-tabview {
     border-color: black;
 }

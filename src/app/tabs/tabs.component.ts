@@ -7,60 +7,41 @@ import { NodeService } from '../node.service';
   styleUrls: ['./tabs.component.css'],
   encapsulation: ViewEncapsulation.None
 })
+
 export class TabsComponent implements OnInit, OnChanges {
 
   constructor(private service: NodeService) { }
+
   @Input() tabs: any[]
   @Input() node: any
-  
- 
-  tabind=-2
-  allTabs: any[] = []
-  data:any
- 
- 
-  ngOnChanges() {
 
-    
-    
-    this.allTabs = this.tabs
-    this.tabind+=1
-   
-    for(var i=0;i<this.allTabs.length;i++){
-   
-      if(this.allTabs[i].header==this.node){
-       
-        this.tabind=i
-        break
-      }
-    }
-     
-  }
-
-
+  tabIndex=0
 
   ngOnInit(): void {
-
-    //    this.subscription=this.service.tab$.subscribe(tab=>this.allTabs=tab)
-    //   this.tabs = this.service.gettabs()
-
   }
 
-  handleChange(e) {
+  ngOnChanges() {
 
-    console.log(e)
+    setTimeout(() => {
+
+      for(var i=0;i<this.tabs.length;i++){
+   
+        if(this.tabs[i].header==this.node){
+  
+          this.tabIndex=i
+          break
+  
+        }
+      }
+    }, 10);
+  
   }
+
 
   close(e){
 
     e.close()
-   
-    this.service.gettabs().splice(e.index,1)
- //   this.allTabs.splice(e.index,1)
-   
-   
-    
+    this.service.getTabs().splice(e.index,1)
   }
-
-
+  
 }
