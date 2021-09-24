@@ -47,11 +47,12 @@ export class EditingpanelComponent implements OnInit, OnChanges {
               text.value = this.data[i].value
               text.style.width = this.data[i].width
               text.style.height = this.data[i].height
-              text.style.position = 'fixed'
+              text.style.position = 'absolute'
               text.style.left = this.data[i].position.left + "px"
               text.style.top = this.data[i].position.top + "px"
               text.disabled = true
               text.style.backgroundColor = "white"
+              text.style.zIndex = "initial"
               document.getElementById('overlay' + "_" + this.data[i].file).appendChild(text)
 
             }

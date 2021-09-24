@@ -23,6 +23,7 @@ export class ToolbarComponent implements OnInit {
   l: number;
   inputElements: any
   inputTextboxes: any[] = []
+  overlay: any;
   
   
   ngOnInit(): void {
@@ -43,6 +44,7 @@ export class ToolbarComponent implements OnInit {
 
     this.json = []
     this.inputElements = document.getElementsByClassName("input" + "_" + e.target.id)
+    this.overlay = document.getElementById('overlay' + "_" + e.target.id).getBoundingClientRect()
     this.l = this.inputElements.length;
     while (this.l--) {
       this.json.push({
@@ -54,8 +56,8 @@ export class ToolbarComponent implements OnInit {
         width: this.inputElements[this.l].style.width,
         height: this.inputElements[this.l].style.height,
         position: {
-          left: (this.inputElements[this.l] as HTMLElement).getBoundingClientRect().left,
-          top: (this.inputElements[this.l] as HTMLElement).getBoundingClientRect().top
+          left: (this.inputElements[this.l] as HTMLElement).getBoundingClientRect().left - this.overlay.left,
+          top: (this.inputElements[this.l] as HTMLElement).getBoundingClientRect().top - this.overlay.top
         }
       });
      

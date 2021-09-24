@@ -4,10 +4,10 @@
     </div>
     <div [id]="overlay" class="box overlay">
         <ng-container *ngFor="let i of textboxes">
-            <div id="cont{{i}}" [class]="divname" style="width: 100px;height: 30px; display:flex;"
+            <div id="cont{{i}}" [class]="divname" style="width: 100px;height: 30px; display:flex;z-index: 1;position: absolute"
                 cdkDragBoundary=".overlay" cdkDrag>
-                <input id="text{{i}}" [class]="inputname" style="width: 100px;height: 30px;" type="text" />
-                <button id="btn{{i}}" (click)="remove(i)">X</button>
+                <input id="text{{i}}" [class]="inputname" style="width: 100px;height: 30px;z-index: 1;" type="text" />
+                <button id="btn{{i}}" style="z-index: 1;" (click)="remove(i)">X</button>
             </div>
         </ng-container>
     </div>
