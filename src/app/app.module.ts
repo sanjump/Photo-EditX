@@ -9,7 +9,8 @@ import { ButtonModule } from 'primeng/button';
 import { TabViewModule } from 'primeng/tabview';
 import {TreeModule} from 'primeng/tree';
 import { HttpClientModule } from '@angular/common/http';
-import { NodeService } from './node.service';
+import { TabService} from './tab.service'
+import { FileService} from './file.service'
 import { SidebarComponent } from './sidebar/sidebar.component';
 import { FiletreeComponent } from './filetree/filetree.component';
 import { TabsComponent } from './tabs/tabs.component';
@@ -49,7 +50,7 @@ import { EditingpanelComponent } from './editingpanel/editingpanel.component';
     FontAwesomeModule,
     DragDropModule
   ],
-  providers: [NodeService],
+  providers: [TabService,FileService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

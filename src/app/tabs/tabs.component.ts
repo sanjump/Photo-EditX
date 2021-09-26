@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewEncapsulation, Input, OnChanges } from '@angular/core';
-import { NodeService } from '../node.service';
+import { TabService } from '../tab.service';
 
 @Component({
   selector: 'app-tabs',
@@ -10,7 +10,7 @@ import { NodeService } from '../node.service';
 
 export class TabsComponent implements OnInit, OnChanges {
 
-  constructor(private service: NodeService) { }
+  constructor(private tabService: TabService) { }
 
   @Input() tabs: any[]
   @Input() node: any
@@ -41,7 +41,7 @@ export class TabsComponent implements OnInit, OnChanges {
   close(e){
 
     e.close()
-    this.service.getTabs().splice(e.index,1)
+    this.tabService.getTabs().splice(e.index,1)
   }
   
 }

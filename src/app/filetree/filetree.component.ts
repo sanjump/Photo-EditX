@@ -1,9 +1,10 @@
 import { Component, OnInit, NgZone } from '@angular/core';
 import { TreeNode } from 'primeng/api';
-import { NodeService } from '../node.service';
 import { Output, EventEmitter } from '@angular/core';
 import { IpcRenderer } from 'electron';
 import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
+import { TabService } from '../tab.service';
+import { FileService } from '../file.service';
 
 @Component({
   selector: 'app-filetree',
@@ -14,7 +15,7 @@ import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 
 export class FiletreeComponent implements OnInit {
 
-  constructor(private service: NodeService, private zone: NgZone, private sanitizer: DomSanitizer) { }
+  constructor(private tabService: TabService,private fileService: FileService,private zone: NgZone, private sanitizer: DomSanitizer) { }
 
   @Output() tabs = new EventEmitter<any>();
   @Output() node = new EventEmitter<any>();
@@ -41,7 +42,7 @@ export class FiletreeComponent implements OnInit {
           this.myFiles.push(args[i])
         }
         this.fileTree = this.data.reduce(this.reducePath, [])
-        this.service.setFiles(this.myFiles)
+        this.fileService.setFiles(this.myFiles)
 
       });
 
@@ -57,7 +58,7 @@ export class FiletreeComponent implements OnInit {
         }
         this.fileTree = this.data.reduce(this.reducePath, [])
         console.log(this.myFiles)
-        this.service.setFiles(this.myFiles)
+        this.fileService.setFiles(this.myFiles)
       });
 
     });
@@ -69,8 +70,8 @@ export class FiletreeComponent implements OnInit {
 
     if (!(e.node.icon == "fa-folder")) {
 
-      this.files = this.service.getFiles()
-      this.loadedTabs = this.service.getTabs()
+      this.files = this.fileService.getFiles()
+      this.loadedTabs = this.tabService.getTabs()
       this.addedTabs = []
       for (var i = 0; i < this.loadedTabs.length; i++) {
         this.addedTabs.push(this.loadedTabs[i].header)
@@ -86,12 +87,12 @@ export class FiletreeComponent implements OnInit {
           if (this.files[i].includes(e.node.label)) {
 
             this.url = this.sanitizer.bypassSecurityTrustUrl(this.files[i])
-            this.service.setTabs(e.node.label, this.url);
+            this.tabService.setTabs(e.node.label, this.url);
             break
 
           }
         }
-        this.getTabs(this.service.getTabs())
+        this.getTabs(this.tabService.getTabs())
       }
       this.selectedNode(e.node.label)
     }

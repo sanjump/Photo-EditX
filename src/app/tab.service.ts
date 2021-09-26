@@ -4,21 +4,11 @@ import { Injectable } from '@angular/core';
   providedIn: 'root'
 })
 
-export class NodeService {
+export class TabService {
 
   constructor() { }
 
-  data = [];
   tabs: any[] = [];
-
- 
-  setFiles(value) {
-   this.data=value
-  }
-
-  getFiles() {
-    return this.data;
-  }
 
   getTabs() {
     return this.tabs
