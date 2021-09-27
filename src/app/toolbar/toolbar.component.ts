@@ -1,7 +1,10 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { faCommentAlt } from '@fortawesome/free-solid-svg-icons';
+import { faExpandArrowsAlt } from '@fortawesome/free-solid-svg-icons';
 import { Output, EventEmitter } from '@angular/core';
 import { IpcRenderer } from 'electron';
+import { BrowserWindow } from 'electron';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-toolbar',
@@ -11,21 +14,23 @@ import { IpcRenderer } from 'electron';
 
 export class ToolbarComponent implements OnInit {
 
-  constructor() {}
- 
+  constructor(private router: Router) { }
+
   @Input() tabheader: string
   @Output() textboxes = new EventEmitter<any>();
 
   ipc: IpcRenderer
+  win: BrowserWindow
   faCommentAlt = faCommentAlt;
+  faExpandArrowsAlt = faExpandArrowsAlt;
   json: any[] = [];
   i: number = 0;
   l: number;
   inputElements: any
   inputTextboxes: any[] = []
   overlay: any;
-  
-  
+
+
   ngOnInit(): void {
   }
 
@@ -39,6 +44,19 @@ export class ToolbarComponent implements OnInit {
     this.i += 1
   }
 
+  fullScreen() {
+
+    // const host: string =  location.origin;
+    // const url: string = host + '/#/' + String(this.router.createUrlTree(['/main/product'], { queryParams: { key: encryptData } }));
+    window.open('assets/fullscreen.html');
+
+    // this.router.navigate([]).then(result => {  window.open(window.location.href+`assets/fullscreen.html`, '_blank'); });
+    //this.router.navigate([`/editor`])
+    //  window.open('C:\\Program Files\\Angular 10\\pdfeditor\\src\\app\\editor\\editor.component.html')
+    // this.ipc = (<any>window).require('electron').ipcRenderer;
+    // this.ipc.send("fullScreen", this.json);
+  }
+
 
   save(e) {
 
@@ -48,10 +66,11 @@ export class ToolbarComponent implements OnInit {
     this.l = this.inputElements.length;
     while (this.l--) {
       this.json.push({
-        file: this.tabheader, 
+        file: this.tabheader,
+        date: new Date().toLocaleString(),
         type: this.inputElements[this.l].type,
         id: this.inputElements[this.l].id,
-        class:this.inputElements[this.l].className,
+        class: this.inputElements[this.l].className,
         value: this.inputElements[this.l].value,
         width: this.inputElements[this.l].style.width,
         height: this.inputElements[this.l].style.height,
@@ -60,13 +79,13 @@ export class ToolbarComponent implements OnInit {
           top: (this.inputElements[this.l] as HTMLElement).getBoundingClientRect().top - this.overlay.top
         }
       });
-     
+
     }
 
-    if(this.json.length>0){
+    if (this.json.length > 0) {
       this.ipc = (<any>window).require('electron').ipcRenderer;
       this.ipc.send("file", this.json);
-  
+
     }
   }
 }

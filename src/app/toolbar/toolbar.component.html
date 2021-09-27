@@ -1,9 +1,13 @@
 <div>
     <p-toolbar>
         <div class="p-toolbar-group-left">
-            <button (click)="addTextbox()">
+            <button (click)="addTextbox()" style="margin: 5px;">
                 <fa-icon [icon]="faCommentAlt"></fa-icon>
             </button>
+            <button (click)="fullScreen()" style="margin: 5px;">
+                <fa-icon [icon]="faExpandArrowsAlt"></fa-icon>
+            </button>
+            <a routerLink="/editor" routerLinkActive="active">click</a>
         </div>
         <div class="p-toolbar-group-right">
             <button [id]="tabheader" (click)="save($event)">Save</button>

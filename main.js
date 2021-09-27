@@ -101,6 +101,43 @@ const mainMenuTemplate = [
   }
 ];
 
+function createFullScreenWindow() {
+
+  fullScreen = new BrowserWindow({
+    width: 1000,
+    height: 700,
+    modal: true,
+    show: false,
+    parent: mainWindow, 
+  
+    
+    webPreferences: {
+      nodeIntegration: true,
+      contextIsolation: false,
+      enableRemoteModule: true,
+    },
+  });
+  
+  
+  fullScreen.loadURL(
+    url.format({
+      pathname: path.join(__dirname, `/dist/assets/fullscreen.html`),
+      protocol: "file:",
+      slashes: true
+    })
+  );
+  
+  fullScreen.once("ready-to-show", () => {
+    fullScreen.show();
+  });
+
+}
+
+ipcMain.on('fullScreen', (event, arg) => {
+  createFullScreenWindow()
+})
+
+
 
 ipcMain.on('file', (event, arg) => {
   saveFile(arg)
