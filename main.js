@@ -3,17 +3,40 @@ const url = require("url");
 const path = require("path");
 const fs = require('fs');
 const read = require('fs-readdir-recursive')
-
+const { ConnectionBuilder } = require('electron-cgi');
 
 let files = [];
 let folderFiles = [];
 let imgfiles = [];
 let mainWindow
 let types = [{ name: 'Images', extensions: ['jpg', 'jpeg', 'png'] }]
-directory = app.getPath('documents') + "\\";
+directory = app.getPath('documents') + "\\editor";
+if (!fs.existsSync(directory)){
+    fs.mkdirSync(directory, { recursive: true });
+}
+
 
 
 function createWindow() {
+
+  let connection = new ConnectionBuilder()
+        .connectTo('dotnet', 'run', '--project', './PdfEditorService/PdfEditorService').build();
+        
+
+connection.onDisconnect = () => {
+    console.log('Lost connection to the .Net process');
+};
+
+connection.send('greeting', 'John', (error, theGreeting) => {
+    if (error) {
+        console.log(error);
+        return;
+    }
+
+    console.log(theGreeting);
+});
+//connection.close();
+
   mainWindow = new BrowserWindow({
     width: 800,
     height: 600,
@@ -145,9 +168,9 @@ ipcMain.on('file', (event, arg) => {
 
 function saveFile(arg) {
 
-  fs.access(directory + arg[0].file.substring(0, arg[0].file.lastIndexOf(".") + 1) + "json", (err) => {
+  fs.access(directory + "\\" + arg[0].file.substring(0, arg[0].file.lastIndexOf(".") + 1) + "json", (err) => {
     if (err) {
-      fs.writeFile(directory + arg[0].file.substring(0, arg[0].file.lastIndexOf(".") + 1) + "json", JSON.stringify(arg), function (err) {
+      fs.writeFile(directory + "\\" + arg[0].file.substring(0, arg[0].file.lastIndexOf(".") + 1) + "json", JSON.stringify(arg), function (err) {
         if (err) {
           return console.log(err);
         }
@@ -155,7 +178,7 @@ function saveFile(arg) {
     }
 
     else {
-      fs.writeFile(directory + arg[0].file.substring(0, arg[0].file.lastIndexOf(".") + 1) + "json", JSON.stringify(arg), function (err) {
+      fs.writeFile(directory + "\\" + arg[0].file.substring(0, arg[0].file.lastIndexOf(".") + 1) + "json", JSON.stringify(arg), function (err) {
         if (err) {
           return console.log(err);
         }
@@ -170,13 +193,13 @@ ipcMain.on('selectedNode', (event, arg) => {
 
 function checkFile(arg, event) {
 
-  fs.access(directory + arg.substring(0, arg.lastIndexOf(".") + 1) + "json", (err) => {
+  fs.access(directory + "\\" + arg.substring(0, arg.lastIndexOf(".") + 1) + "json", (err) => {
     if (err) {
       event.sender.send('data', 'No file')
     }
 
     else {
-      fs.readFile(directory + arg.substring(0, arg.lastIndexOf(".") + 1) + "json", function (err, data) {
+      fs.readFile(directory + "\\" + arg.substring(0, arg.lastIndexOf(".") + 1) + "json", function (err, data) {
         if (err) {
           return console.log(err);
         }
@@ -203,3 +226,6 @@ app.on('window-all-closed', function () {
 app.on('activate', function () {
   if (mainWindow === null) createWindow()
 })
+
+
+

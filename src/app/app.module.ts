@@ -23,6 +23,7 @@ import { MainbodyComponent } from './mainbody/mainbody.component';
 import { ToolbarComponent } from './toolbar/toolbar.component';
 import { EditingpanelComponent } from './editingpanel/editingpanel.component';
 
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -34,6 +35,7 @@ import { EditingpanelComponent } from './editingpanel/editingpanel.component';
     MainbodyComponent,
     ToolbarComponent,
     EditingpanelComponent
+    
   ],
   imports: [
     BrowserModule,
