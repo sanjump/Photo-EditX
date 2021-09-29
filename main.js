@@ -11,31 +11,23 @@ let imgfiles = [];
 let mainWindow
 let types = [{ name: 'Images', extensions: ['jpg', 'jpeg', 'png'] }]
 directory = app.getPath('documents') + "\\editor";
-if (!fs.existsSync(directory)){
-    fs.mkdirSync(directory, { recursive: true });
+if (!fs.existsSync(directory)) {
+  fs.mkdirSync(directory, { recursive: true });
 }
 
+let connection = new ConnectionBuilder()
+  .connectTo('dotnet', 'run', '--project', './EditorService/EditorService').build();
 
+
+connection.onDisconnect = () => {
+  console.log('Lost connection to the .Net process');
+};
 
 function createWindow() {
 
-  let connection = new ConnectionBuilder()
-        .connectTo('dotnet', 'run', '--project', './PdfEditorService/PdfEditorService').build();
-        
 
-connection.onDisconnect = () => {
-    console.log('Lost connection to the .Net process');
-};
 
-connection.send('greeting', 'John', (error, theGreeting) => {
-    if (error) {
-        console.log(error);
-        return;
-    }
 
-    console.log(theGreeting);
-});
-//connection.close();
 
   mainWindow = new BrowserWindow({
     width: 800,
@@ -131,17 +123,17 @@ function createFullScreenWindow() {
     height: 700,
     modal: true,
     show: false,
-    parent: mainWindow, 
-  
-    
+    parent: mainWindow,
+
+
     webPreferences: {
       nodeIntegration: true,
       contextIsolation: false,
       enableRemoteModule: true,
     },
   });
-  
-  
+
+
   fullScreen.loadURL(
     url.format({
       pathname: path.join(__dirname, `/dist/assets/fullscreen.html`),
@@ -149,7 +141,7 @@ function createFullScreenWindow() {
       slashes: true
     })
   );
-  
+
   fullScreen.once("ready-to-show", () => {
     fullScreen.show();
   });
@@ -160,6 +152,24 @@ ipcMain.on('fullScreen', (event, arg) => {
   createFullScreenWindow()
 })
 
+ipcMain.on('searchFile', (event, arg) => {
+
+  if (arg != "") {
+    connection.send('getJson', arg, (error, file) => {
+      if (error) {
+        console.log(error);
+        return;
+      }
+      if (file.length > 0) {
+        console.log(file);
+      }
+      else {
+        console.log("No match")
+      }
+
+    });
+  }
+})
 
 
 ipcMain.on('file', (event, arg) => {

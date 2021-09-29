@@ -44,6 +44,13 @@ export class ToolbarComponent implements OnInit {
     this.i += 1
   }
 
+  search(searchFile) {
+
+    this.ipc = (<any>window).require('electron').ipcRenderer;
+    this.ipc.send("searchFile", searchFile);
+
+  }
+
   fullScreen() {
 
     // const host: string =  location.origin;
@@ -64,10 +71,16 @@ export class ToolbarComponent implements OnInit {
     this.inputElements = document.getElementsByClassName("input" + "_" + e.target.id)
     this.overlay = document.getElementById('overlay' + "_" + e.target.id).getBoundingClientRect()
     this.l = this.inputElements.length;
+    var today = new Date();
+    var dd = String(today.getDate()).padStart(2, '0');
+    var mm = String(today.getMonth() + 1).padStart(2, '0'); 
+    var yyyy = today.getFullYear();
+    var date = dd + '-' + mm + '-' + yyyy;
+   
     while (this.l--) {
       this.json.push({
         file: this.tabheader,
-        date: new Date().toLocaleString(),
+        date: date,
         type: this.inputElements[this.l].type,
         id: this.inputElements[this.l].id,
         class: this.inputElements[this.l].className,

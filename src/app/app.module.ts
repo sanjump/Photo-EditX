@@ -22,7 +22,7 @@ import { ContainerComponent } from './container/container.component';
 import { MainbodyComponent } from './mainbody/mainbody.component';
 import { ToolbarComponent } from './toolbar/toolbar.component';
 import { EditingpanelComponent } from './editingpanel/editingpanel.component';
-
+import {TooltipModule} from 'primeng/tooltip';
 
 @NgModule({
   declarations: [
@@ -50,7 +50,8 @@ import { EditingpanelComponent } from './editingpanel/editingpanel.component';
     HttpClientModule,
     ToolbarModule,
     FontAwesomeModule,
-    DragDropModule
+    DragDropModule,
+    TooltipModule
   ],
   providers: [TabService,FileService],
   bootstrap: [AppComponent]
