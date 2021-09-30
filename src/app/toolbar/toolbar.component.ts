@@ -6,6 +6,7 @@ import { IpcRenderer } from 'electron';
 import { BrowserWindow } from 'electron';
 import { Router } from '@angular/router';
 
+
 @Component({
   selector: 'app-toolbar',
   templateUrl: './toolbar.component.html',
@@ -53,17 +54,11 @@ export class ToolbarComponent implements OnInit {
 
   fullScreen() {
 
-    // const host: string =  location.origin;
-    // const url: string = host + '/#/' + String(this.router.createUrlTree(['/main/product'], { queryParams: { key: encryptData } }));
-    window.open('assets/fullscreen.html');
-
-    // this.router.navigate([]).then(result => {  window.open(window.location.href+`assets/fullscreen.html`, '_blank'); });
-    //this.router.navigate([`/editor`])
-    //  window.open('C:\\Program Files\\Angular 10\\pdfeditor\\src\\app\\editor\\editor.component.html')
-    // this.ipc = (<any>window).require('electron').ipcRenderer;
-    // this.ipc.send("fullScreen", this.json);
+    this.ipc = (<any>window).require('electron').ipcRenderer;
+    this.ipc.send("fullScreen", '');
   }
 
+  
 
   save(e) {
 

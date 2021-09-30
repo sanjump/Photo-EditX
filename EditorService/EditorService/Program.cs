@@ -4,6 +4,7 @@ using System.IO;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System.Collections.Generic;
+using System.Net;
 
 namespace EditorService
 {
@@ -15,37 +16,27 @@ namespace EditorService
                    .WithLogging()
                    .Build();
 
-
+       
       connection.On("getJson", (string name) =>
       {
 
-        List<JArray> jsons = new List<JArray>();
-        List<JObject> file = new List<JObject>();
-        string path = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\editor";
-        string[] filePaths = Directory.GetFiles(path);
 
-        foreach (string paths in filePaths)
-        {
-          JArray obj1 = JArray.Parse(File.ReadAllText(paths));
-          jsons.Add(obj1);
-        }
-        foreach (JArray x in jsons)
+        using (var client = new WebClient())
         {
 
-          foreach (JObject y in x)
+          try
           {
-            if (y["file"].ToString().Contains(name) || y["date"].ToString().Contains(name))
-            {
-              file.Add(y);
-            }
+            var result = client.DownloadString("http://localhost:47525/api/Editor/" + name);
+            dynamic json = JsonConvert.DeserializeObject(result);
+            return json;
           }
-
-
+          catch (WebException)
+          {
+            return "API not running";
+          }
         }
 
-        return file;
-
-        
+                
       });
 
 

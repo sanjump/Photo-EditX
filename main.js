@@ -119,11 +119,11 @@ const mainMenuTemplate = [
 function createFullScreenWindow() {
 
   fullScreen = new BrowserWindow({
-    width: 1000,
-    height: 700,
-    modal: true,
-    show: false,
-    parent: mainWindow,
+    width: 800,
+    height: 600,
+    center: true,
+    frame: true,
+    transparent: false,
 
 
     webPreferences: {
@@ -133,18 +133,16 @@ function createFullScreenWindow() {
     },
   });
 
+  fullScreen.webContents.openDevTools()
 
-  fullScreen.loadURL(
-    url.format({
-      pathname: path.join(__dirname, `/dist/assets/fullscreen.html`),
-      protocol: "file:",
-      slashes: true
-    })
-  );
+  fullScreen.loadURL( url.format({
+    pathname: path.join(__dirname, 'dist/index.html'),
+    protocol: 'file:',
+    slashes: true,
+    hash: 'editor'
+  }));
 
-  fullScreen.once("ready-to-show", () => {
-    fullScreen.show();
-  });
+  fullScreen.maximize();
 
 }
 
