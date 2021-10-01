@@ -34,3 +34,5 @@ C:\Program Files\Angular 10\pdfeditor\EditorService\EditorService\obj\Debug\net5
 C:\Program Files\Angular 10\pdfeditor\EditorService\EditorService\obj\Debug\net5.0\ref\EditorService.dll
 C:\Program Files\Angular 10\pdfeditor\EditorService\EditorService\obj\Debug\net5.0\EditorService.pdb
 C:\Program Files\Angular 10\pdfeditor\EditorService\EditorService\obj\Debug\net5.0\EditorService.genruntimeconfig.cache
+C:\Program Files\Angular 10\pdfeditor\EditorService\EditorService\bin\Debug\net5.0\Image.dll
+C:\Program Files\Angular 10\pdfeditor\EditorService\EditorService\bin\Debug\net5.0\Image.pdb

@@ -1,5 +1,6 @@
 import { Component, OnInit, OnChanges, Input, NgZone } from '@angular/core';
 import { IpcRenderer } from 'electron';
+import { TabService } from '../tab.service';
 
 @Component({
   selector: 'app-editingpanel',
@@ -7,9 +8,9 @@ import { IpcRenderer } from 'electron';
   styleUrls: ['./editingpanel.component.css']
 })
 
-export class EditingpanelComponent implements OnInit, OnChanges {
+export class EditingpanelComponent implements OnInit, OnChanges{
 
-  constructor(private zone: NgZone) { }
+  constructor(private zone: NgZone,private tabService:TabService) { }
 
   @Input() tabheader: string
   @Input() tabcontent: string
@@ -23,8 +24,12 @@ export class EditingpanelComponent implements OnInit, OnChanges {
   divname: string = ""
   overlay: string = ""
 
+
+
   ngOnInit() {
 
+
+     
     this.ipc = (<any>window).require('electron').ipcRenderer;
     this.ipc.once('data', (event, args) => {
       this.zone.run(() => {
@@ -71,10 +76,11 @@ export class EditingpanelComponent implements OnInit, OnChanges {
 
   ngOnChanges() {
 
-    this.url = this.tabcontent
-    this.inputname = "input" + "_" + this.tabheader
-    this.divname = "div" + "_" + this.tabheader
-    this.overlay = "overlay" + "_" + this.tabheader
+    
+    this.url = this.tabService.getTabcontent()
+    this.inputname = "input" + "_" + this.tabService.getTabheader()
+    this.divname = "div" + "_" + this.tabService.getTabheader()
+    this.overlay = "overlay" + "_" + this.tabService.getTabheader()
 
   }
 

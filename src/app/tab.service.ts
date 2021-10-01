@@ -9,6 +9,8 @@ export class TabService {
   constructor() { }
 
   tabs: any[] = [];
+  tabheader : string
+  tabcontent : string
 
   getTabs() {
     return this.tabs
@@ -19,6 +21,22 @@ export class TabService {
       header: hvalue,
       content : cvalue
     })
+  }
+
+  setTabheader(tabheader){
+    this.tabheader = tabheader
+  }
+  
+  setTabcontent(tabcontent){
+    this.tabcontent = tabcontent
+  }
+  
+  getTabheader(){
+    return this.tabheader
+  }
+
+  getTabcontent(){
+    return this.tabcontent
   }
 
 }

@@ -148,6 +148,7 @@ function createFullScreenWindow() {
 
 ipcMain.on('fullScreen', (event, arg) => {
   createFullScreenWindow()
+  event.sender.send('full', '')
 })
 
 ipcMain.on('searchFile', (event, arg) => {

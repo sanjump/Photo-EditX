@@ -1,0 +1,12 @@
+C:\Program Files\Angular 10\pdfeditor\EditorService\Image\bin\Debug\net5.0\ImageLib.deps.json
+C:\Program Files\Angular 10\pdfeditor\EditorService\Image\bin\Debug\net5.0\ImageLib.dll
+C:\Program Files\Angular 10\pdfeditor\EditorService\Image\bin\Debug\net5.0\ref\ImageLib.dll
+C:\Program Files\Angular 10\pdfeditor\EditorService\Image\bin\Debug\net5.0\ImageLib.pdb
+C:\Program Files\Angular 10\pdfeditor\EditorService\Image\obj\Debug\net5.0\ImageLib.csproj.AssemblyReference.cache
+C:\Program Files\Angular 10\pdfeditor\EditorService\Image\obj\Debug\net5.0\ImageLib.GeneratedMSBuildEditorConfig.editorconfig
+C:\Program Files\Angular 10\pdfeditor\EditorService\Image\obj\Debug\net5.0\ImageLib.AssemblyInfoInputs.cache
+C:\Program Files\Angular 10\pdfeditor\EditorService\Image\obj\Debug\net5.0\ImageLib.AssemblyInfo.cs
+C:\Program Files\Angular 10\pdfeditor\EditorService\Image\obj\Debug\net5.0\ImageLib.csproj.CoreCompileInputs.cache
+C:\Program Files\Angular 10\pdfeditor\EditorService\Image\obj\Debug\net5.0\ImageLib.dll
+C:\Program Files\Angular 10\pdfeditor\EditorService\Image\obj\Debug\net5.0\ref\ImageLib.dll
+C:\Program Files\Angular 10\pdfeditor\EditorService\Image\obj\Debug\net5.0\ImageLib.pdb

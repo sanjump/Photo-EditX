@@ -731,6 +731,19 @@
         "compile": {
           "ref/netstandard1.2/System.Threading.Timer.dll": {}
         }
+      },
+      "Image/1.0.0": {
+        "type": "project",
+        "framework": ".NETCoreApp,Version=v5.0",
+        "dependencies": {
+          "Newtonsoft.Json": "13.0.1"
+        },
+        "compile": {
+          "bin/placeholder/Image.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/Image.dll": {}
+        }
       }
     }
   },
@@ -2981,11 +2994,17 @@
         "system.threading.timer.4.0.1.nupkg.sha512",
         "system.threading.timer.nuspec"
       ]
+    },
+    "Image/1.0.0": {
+      "type": "project",
+      "path": "../Image/Image.csproj",
+      "msbuildProject": "../Image/Image.csproj"
     }
   },
   "projectFileDependencyGroups": {
     "net5.0": [
       "ElectronCgi.DotNet >= 1.0.3",
+      "Image >= 1.0.0",
       "Newtonsoft.Json >= 13.0.1"
     ]
   },
@@ -3015,7 +3034,11 @@
       "frameworks": {
         "net5.0": {
           "targetAlias": "net5.0",
-          "projectReferences": {}
+          "projectReferences": {
+            "C:\\Program Files\\Angular 10\\pdfeditor\\EditorService\\Image\\Image.csproj": {
+              "projectPath": "C:\\Program Files\\Angular 10\\pdfeditor\\EditorService\\Image\\Image.csproj"
+            }
+          }
         }
       },
       "warningProperties": {
