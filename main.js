@@ -25,10 +25,6 @@ connection.onDisconnect = () => {
 
 function createWindow() {
 
-
-
-
-
   mainWindow = new BrowserWindow({
     width: 800,
     height: 600,
@@ -48,8 +44,9 @@ function createWindow() {
 
   const mainMenu = Menu.buildFromTemplate(mainMenuTemplate);
 
-  Menu.setApplicationMenu(mainMenu);
+  //Menu.setApplicationMenu(mainMenu);
 
+  mainWindow.setMenu(mainMenu)
   mainWindow.loadURL(
     url.format({
       pathname: path.join(__dirname, `/dist/index.html`),
@@ -107,6 +104,14 @@ const mainMenuTemplate = [
         }
       },
       {
+        label: 'Export',
+        click() {
+          createExportWindow();
+        }
+
+      },
+      ,
+      {
         label: 'Quit',
         click() {
           app.quit();
@@ -133,6 +138,7 @@ function createFullScreenWindow() {
     },
   });
 
+  fullScreen.setMenu(null)
   fullScreen.webContents.openDevTools()
 
   fullScreen.loadURL( url.format({
@@ -145,6 +151,38 @@ function createFullScreenWindow() {
   fullScreen.maximize();
 
 }
+
+
+function createExportWindow() {
+
+  ExportScreen = new BrowserWindow({
+    width: 1000,
+    height: 400,
+    center: true,
+    frame: true,
+    transparent: false,
+    resizable:false,
+
+    webPreferences: {
+      nodeIntegration: true,
+      contextIsolation: false,
+      enableRemoteModule: true,
+    },
+  });
+
+  ExportScreen.setMenu(null)
+  
+  ExportScreen.webContents.openDevTools()
+
+  ExportScreen.loadURL( url.format({
+    pathname: path.join(__dirname, 'dist/index.html'),
+    protocol: 'file:',
+    slashes: true,
+    hash: 'export'
+  }));
+
+}
+
 
 ipcMain.on('fullScreen', (event, arg) => {
   createFullScreenWindow()

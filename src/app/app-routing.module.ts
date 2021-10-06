@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import { ContainerComponent } from './container/container.component';
 import { EditorComponent } from './editor/editor.component';
+import { ExportComponent } from './export/export.component';
 
 
 const routes: Routes = [
@@ -13,6 +14,10 @@ const routes: Routes = [
   {
     path:'editor',
     component:EditorComponent
+  },
+  {
+    path:'export',
+    component:ExportComponent
   }
 ];
 

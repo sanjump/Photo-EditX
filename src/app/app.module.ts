@@ -23,6 +23,7 @@ import { MainbodyComponent } from './mainbody/mainbody.component';
 import { ToolbarComponent } from './toolbar/toolbar.component';
 import { EditingpanelComponent } from './editingpanel/editingpanel.component';
 import {TooltipModule} from 'primeng/tooltip';
+import { ExportComponent } from './export/export.component';
 
 @NgModule({
   declarations: [
@@ -34,7 +35,8 @@ import {TooltipModule} from 'primeng/tooltip';
     ContainerComponent,
     MainbodyComponent,
     ToolbarComponent,
-    EditingpanelComponent
+    EditingpanelComponent,
+    ExportComponent
     
   ],
   imports: [
