@@ -51,10 +51,19 @@ body{
 }
 
 #save{
-    margin-top: 70px;
-    margin-left: 450px;
+   
+    position: fixed;
+    top: 250px;
+    left: 450px;
+
 }
 
+#status{
+    font-size: medium;
+    color: red;
+    margin-top: 50px;
+    margin-left: 400px;
+}
 .input{
     margin-left: 10px;
 }

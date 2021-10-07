@@ -17,14 +17,24 @@ namespace EditorWebApi.Controllers
 
     Editor_BAL bl = new Editor_BAL();
    
-    [HttpGet("{name}")]
-    [ActionName("getJson")]
+    [HttpGet()]
+    [ActionName("filterFile")]
 
-    public string getJson(string name)
+    public string filterFile(string name)
     {
 
-     string json = bl.getJson(name);
+     string json = bl.filterFile(name);
      return json;
+
+    }
+
+    [HttpGet()]
+    [ActionName("exportFile")]
+    public string exportFile(string name=null,string date=null)
+    {
+
+      string json = bl.exportFile(name,date);
+      return json;
 
     }
 

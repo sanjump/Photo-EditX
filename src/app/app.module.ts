@@ -24,6 +24,7 @@ import { ToolbarComponent } from './toolbar/toolbar.component';
 import { EditingpanelComponent } from './editingpanel/editingpanel.component';
 import {TooltipModule} from 'primeng/tooltip';
 import { ExportComponent } from './export/export.component';
+import {ExportService} from './export.service';
 
 @NgModule({
   declarations: [
@@ -54,8 +55,9 @@ import { ExportComponent } from './export/export.component';
     FontAwesomeModule,
     DragDropModule,
     TooltipModule
+    
   ],
-  providers: [TabService,FileService],
+  providers: [TabService,FileService,ExportService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

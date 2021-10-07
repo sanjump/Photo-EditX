@@ -11,9 +11,15 @@ namespace EditorWebApi.BAL
   public class Editor_BAL
   {
     ImageInterface img = new ImageJsons();
-    public string getJson(string name)
+    public string filterFile(string name)
     {
-      string json = img.getJson(name);
+      string json = img.filterFile(name);
+      return json;
+    }
+
+    public string exportFile(string name,string date)
+    {
+      string json = img.exportFile(name,date);
       return json;
     }
   }

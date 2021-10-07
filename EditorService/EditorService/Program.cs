@@ -23,9 +23,9 @@ namespace EditorService
 
 
 
-      connection.On("getJson", (string name) =>
+      connection.On("filterFile", (string name) =>
       {
-        var result = img.getJson(name);
+        var result = img.filterFile(name);
         dynamic json = JsonConvert.DeserializeObject(result);
         return json;
  

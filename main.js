@@ -192,7 +192,7 @@ ipcMain.on('fullScreen', (event, arg) => {
 ipcMain.on('searchFile', (event, arg) => {
 
   if (arg != "") {
-    connection.send('getJson', arg, (error, file) => {
+    connection.send('filterFile', arg, (error, file) => {
       if (error) {
         console.log(error);
         return;
