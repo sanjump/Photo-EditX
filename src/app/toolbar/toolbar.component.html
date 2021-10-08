@@ -5,14 +5,15 @@
                 <fa-icon [icon]="faCommentAlt"></fa-icon>
             </button>
             <button pTooltip="Full Screen" tooltipPosition="bottom" (click)="fullScreen()" style="margin: 5px;">
-                <fa-icon [icon]="faExpandArrowsAlt"></fa-icon>
+                     <fa-icon [icon]="faExpandArrowsAlt"></fa-icon> 
             </button>
-            <button (click)="search(searchFile.value)" style="margin-left: 610px;">Search</button>
-            <input id="file" type="text" style="margin: 5px;width: 210px;" placeholder="Name or Date(dd-mm-yyyy)"
-                #searchFile>
+    
         </div>
         <div class="p-toolbar-group-right">
-            <button [id]="tabheader" (click)="save($event)">Save</button>
+            <button  style="color: black;" pButton pRipple (click)="search(searchFile)" type="button" label="Search" class="p-button-success"></button>
+            <input id = "file" style="margin: 5px;width: 215px;" type="text" pInputText placeholder="Name or Date(dd-mm-yyyy)" [(ngModel)]="searchFile"> 
+            <button  style="color: black;" [id]="tabheader" (click)="save($event)" pButton pRipple type="button" label="Save" class="p-button-success"></button>
+        
         </div>
     </p-toolbar>
 </div>

@@ -1,24 +1,28 @@
 <body>
     <div id="title">
-        <h2 id="heading" >Export Annotations</h2>
+        <h2 id="heading">Export Annotations</h2>
     </div>
     <div id="container">
-        <h2 id="byName">Filter by Name</h2>
-        <input class="input" type="text" placeholder="File Name"  #name>
+        <h2 class="input">Filter by Name</h2>
+        <span class="p-float-label">
+            <input id="float-input" type="text" pInputText [(ngModel)]="name">
+            <label for="float-input">File Name</label>
+        </span>
 
-        <h2 id="byDate">and/or Filter by Date</h2>
-        <input class="input" type="text" placeholder=" Date (dd-mm-yyyy)" #date>
+        <h2 class="input">and/or Filter by Date</h2>
+        <span class="p-float-label">
+            <input id="float-input" type="text" pInputText [(ngModel)]="date">
+            <label for="float-input">Date (dd-mm-yyyy)</label>
+        </span>
 
-        <h2 id="choose">Save as</h2>
-        <select (change)="validate(type.value)" class="input" #type>
-            <option value="">--select--</option>
-            <option value=".csv">csv</option>
-            <option value=".pdf">pdf</option>
-          </select>
+        <h2 class="input">Save as</h2>
+        <p-dropdown id="choose" [options]="format" [(ngModel)]="type" placeholder="Select file format"
+            optionLabel="name"></p-dropdown>
     </div>
     <h2 id="status">{{status}}</h2>
     <div id="save">
-       <button (click)="export(name.value,date.value,type.value)">Export</button>
+        <button pButton pRipple (click)="export(name,date,type)" type="button" label="Export"
+            class="p-button-rounded"></button>
     </div>
-    
+
 </body>

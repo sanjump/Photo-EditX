@@ -22,6 +22,7 @@ export class ToolbarComponent implements OnInit {
 
   ipc: IpcRenderer
   win: BrowserWindow
+  searchFile:string=""
   faCommentAlt = faCommentAlt;
   faExpandArrowsAlt = faExpandArrowsAlt;
   json: any[] = [];
@@ -33,6 +34,7 @@ export class ToolbarComponent implements OnInit {
 
 
   ngOnInit(): void {
+
   }
 
   setTextboxes(value: any) {

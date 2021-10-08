@@ -24,32 +24,6 @@ body{
     line-height:51px;
 }
 
-#byName{
-    margin: auto;
-    vertical-align: middle; 
-    line-height:51px;
-    font-size: medium;
-    margin-left: 50px;
-}
-
-#byDate{
-
-    margin: auto;
-    vertical-align: middle; 
-    line-height:51px;
-    font-size: medium;
-    margin-left: 20px;
-}
-
-#choose{
-
-    margin: auto;
-    vertical-align: middle; 
-    line-height:51px;
-    font-size: medium;
-    margin-left: 20px;
-}
-
 #save{
    
     position: fixed;
@@ -58,12 +32,26 @@ body{
 
 }
 
+#choose{
+    margin-left: 10px;
+}
+
 #status{
     font-size: medium;
     color: red;
     margin-top: 50px;
-    margin-left: 400px;
+    margin-left: 395px;
 }
+
 .input{
+    margin: auto;
+    vertical-align: middle; 
+    line-height:51px;
+    font-size: medium;
+    margin-left: 20px;
+
+}
+
+.p-float-label{
     margin-left: 10px;
 }

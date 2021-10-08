@@ -25,6 +25,8 @@ import { EditingpanelComponent } from './editingpanel/editingpanel.component';
 import {TooltipModule} from 'primeng/tooltip';
 import { ExportComponent } from './export/export.component';
 import {ExportService} from './export.service';
+import {InputTextModule} from 'primeng/inputtext';
+import {DropdownModule} from 'primeng/dropdown';
 
 @NgModule({
   declarations: [
@@ -54,7 +56,10 @@ import {ExportService} from './export.service';
     ToolbarModule,
     FontAwesomeModule,
     DragDropModule,
-    TooltipModule
+    TooltipModule,
+    InputTextModule,
+    DropdownModule
+  
     
   ],
   providers: [TabService,FileService,ExportService],

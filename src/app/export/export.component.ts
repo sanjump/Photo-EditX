@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { AngularCsv } from 'angular-csv-ext/dist/Angular-csv';
 import { ExportService } from '../export.service';
+import { jsPDF } from "jspdf";
+import autoTable from 'jspdf-autotable'
 
 @Component({
   selector: 'app-export',
@@ -9,10 +11,19 @@ import { ExportService } from '../export.service';
 })
 export class ExportComponent implements OnInit {
 
-  constructor(private exportService: ExportService) { }
+  constructor(private exportService: ExportService) {
+    this.format = [
+      { name: 'csv', code: '.csv' },
+      { name: 'pdf', code: '.pdf' }
 
- 
-  json: any
+    ];
+  }
+
+  name: string = ""
+  date: string = ""
+  type: string = ""
+  format: any
+  json: any = []
   exportfile = []
   status = ""
   options = {
@@ -52,22 +63,43 @@ export class ExportComponent implements OnInit {
       if (name != "" || date != "") {
 
         this.exportService.export(name, date).subscribe(data => { this.json = data })
+
         setTimeout(() => {
+
 
           for (var i = 0; i < this.json.length; i++) {
 
             this.exportfile.push({
               file: this.json[i].file,
               date: this.json[i].date,
-              value: this.json[i].value
+              comments: this.json[i].value
             })
 
           }
 
-          new AngularCsv(this.exportfile, name + date + type, this.options);
-         
+          if (type.code == ".csv") {
+            new AngularCsv(this.exportfile, name + date + type.code, this.options);
+          }
 
-        }, 100);
+          else {
+
+            var doc = new jsPDF();
+            doc.text("Annotation details", 15, 10)
+            var col = ["File", "Date", "Comments"];
+            var rows = [];
+            var annotations = this.exportfile;
+            annotations.forEach(element => {
+              var temp = [element.file, element.date, element.comments];
+              rows.push(temp);
+
+            });
+
+            autoTable(doc, { columns: col, body: rows });
+
+            doc.save(name + date + type.code);
+          }
+
+        }, 300);
       }
 
       else {
