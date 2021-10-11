@@ -33,7 +33,7 @@ export class TabsComponent implements OnInit, OnChanges {
   
         }
       }
-    }, 10);
+    }, 100);
   
   }
 

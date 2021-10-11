@@ -1,6 +1,7 @@
 import { Component, OnInit, OnChanges, Input, NgZone } from '@angular/core';
 import { IpcRenderer } from 'electron';
 import { TabService } from '../tab.service';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-editingpanel',
@@ -10,7 +11,7 @@ import { TabService } from '../tab.service';
 
 export class EditingpanelComponent implements OnInit, OnChanges{
 
-  constructor(private zone: NgZone,private tabService:TabService) { }
+  constructor(private zone: NgZone,private tabService:TabService,private  activatedRoute:ActivatedRoute) { }
 
   @Input() tabheader: string
   @Input() tabcontent: string
@@ -28,8 +29,15 @@ export class EditingpanelComponent implements OnInit, OnChanges{
 
   ngOnInit() {
 
+    
 
+    //   this.activatedRoute.data.subscribe((response: any) => {
+    //   this.url = response.tabcontent;
      
+    // });
+
+   // this.url  = this.tabService.getTabcontent();
+
     this.ipc = (<any>window).require('electron').ipcRenderer;
     this.ipc.once('data', (event, args) => {
       this.zone.run(() => {

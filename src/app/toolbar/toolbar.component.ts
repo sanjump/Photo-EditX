@@ -5,7 +5,7 @@ import { Output, EventEmitter } from '@angular/core';
 import { IpcRenderer } from 'electron';
 import { BrowserWindow } from 'electron';
 import { Router } from '@angular/router';
-
+import { FilterCommentsService } from '../filter-comments.service'
 
 @Component({
   selector: 'app-toolbar',
@@ -15,14 +15,14 @@ import { Router } from '@angular/router';
 
 export class ToolbarComponent implements OnInit {
 
-  constructor(private router: Router) { }
+  constructor(private router: Router,private filterService:FilterCommentsService) { }
 
   @Input() tabheader: string
   @Output() textboxes = new EventEmitter<any>();
 
   ipc: IpcRenderer
   win: BrowserWindow
-  searchFile:string=""
+  comment:string=""
   faCommentAlt = faCommentAlt;
   faExpandArrowsAlt = faExpandArrowsAlt;
   json: any[] = [];
@@ -30,9 +30,10 @@ export class ToolbarComponent implements OnInit {
   l: number;
   inputElements: any
   inputTextboxes: any[] = []
+  displaySave:boolean
   overlay: any;
-
-
+  filterData: any = []
+  annotations:any
   ngOnInit(): void {
 
   }
@@ -45,13 +46,44 @@ export class ToolbarComponent implements OnInit {
     this.inputTextboxes.push(this.i + "_" + this.tabheader)
     this.setTextboxes(this.inputTextboxes)
     this.i += 1
+
   }
 
-  search(searchFile) {
+  clearFind(){
 
-    this.ipc = (<any>window).require('electron').ipcRenderer;
-    this.ipc.send("searchFile", searchFile);
+   
+    this.comment="";
+    for(var i=0;i<this.annotations.length;i++){
+        
+          this.annotations[i].style.backgroundColor="white"
+        }
+       
+  }
 
+  search(comment) {
+
+    
+    
+    
+    this.filterService.filter(this.tabheader).subscribe(data => { this.filterData = data })
+   
+    setTimeout(() => {
+
+       this.annotations = document.getElementsByClassName(this.filterData[0].class)
+       for(var i=0;i<this.annotations.length;i++){
+        if(this.annotations[i].value.includes(comment) && comment!=""){
+          this.annotations[i].style.backgroundColor="yellow"
+        }
+        else{
+          this.annotations[i].style.backgroundColor="white"
+        }
+       }
+       
+
+      
+    }, 200);
+    
+  
   }
 
   fullScreen() {
@@ -97,5 +129,7 @@ export class ToolbarComponent implements OnInit {
       this.ipc.send("file", this.json);
 
     }
+
+    this.displaySave=true
   }
 }

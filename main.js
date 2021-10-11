@@ -189,24 +189,24 @@ ipcMain.on('fullScreen', (event, arg) => {
   event.sender.send('full', '')
 })
 
-ipcMain.on('searchFile', (event, arg) => {
+// ipcMain.on('searchFile', (event, arg) => {
 
-  if (arg != "") {
-    connection.send('filterFile', arg, (error, file) => {
-      if (error) {
-        console.log(error);
-        return;
-      }
-      if (file.length > 0) {
-        console.log(file);
-      }
-      else {
-        console.log("No match")
-      }
+//   if (arg != "") {
+//     connection.send('filterFile', arg, (error, file) => {
+//       if (error) {
+//         console.log(error);
+//         return;
+//       }
+//       if (file.length > 0) {
+//         console.log(file);
+//       }
+//       else {
+//         console.log("No match")
+//       }
 
-    });
-  }
-})
+//     });
+//   }
+// })
 
 
 ipcMain.on('file', (event, arg) => {

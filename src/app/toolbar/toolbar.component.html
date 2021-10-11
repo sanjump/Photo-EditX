@@ -10,9 +10,16 @@
     
         </div>
         <div class="p-toolbar-group-right">
-            <button  style="color: black;" pButton pRipple (click)="search(searchFile)" type="button" label="Search" class="p-button-success"></button>
-            <input id = "file" style="margin: 5px;width: 215px;" type="text" pInputText placeholder="Name or Date(dd-mm-yyyy)" [(ngModel)]="searchFile"> 
+            <button pButton pRipple style="color: black;" pTooltip="Find comments" tooltipPosition="bottom"  (click)="search(comment)" type="button" label="Find" class="p-button-success"></button>
+            <span class="p-input-icon-right">
+                <i (click)="clearFind()" id="clear" class="pi pi-times"></i>
+                <input id = "comment" style="margin: 5px;width: 120px;" type="text" pInputText placeholder="Comments" [(ngModel)]="comment"> 
+            </span>
+          
             <button  style="color: black;" [id]="tabheader" (click)="save($event)" pButton pRipple type="button" label="Save" class="p-button-success"></button>
+            <p-dialog header="Successfull" [(visible)]="displaySave" [style]="{width: '30vw'}">
+            <p>File saved successfully</p>    
+            </p-dialog>
         
         </div>
     </p-toolbar>

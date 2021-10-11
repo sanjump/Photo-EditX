@@ -27,6 +27,7 @@ import { ExportComponent } from './export/export.component';
 import {ExportService} from './export.service';
 import {InputTextModule} from 'primeng/inputtext';
 import {DropdownModule} from 'primeng/dropdown';
+import {DialogModule} from 'primeng/dialog';
 
 @NgModule({
   declarations: [
@@ -58,7 +59,8 @@ import {DropdownModule} from 'primeng/dropdown';
     DragDropModule,
     TooltipModule,
     InputTextModule,
-    DropdownModule
+    DropdownModule,
+    DialogModule
   
     
   ],

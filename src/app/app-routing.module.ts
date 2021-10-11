@@ -3,7 +3,7 @@ import { Routes, RouterModule } from '@angular/router';
 import { ContainerComponent } from './container/container.component';
 import { EditorComponent } from './editor/editor.component';
 import { ExportComponent } from './export/export.component';
-
+import { FullscreenResolverService } from './fullscreen-resolver.service'
 
 const routes: Routes = [
   {
@@ -13,7 +13,8 @@ const routes: Routes = [
 },
   {
     path:'editor',
-    component:EditorComponent
+    component:EditorComponent,
+    resolve: { tabcontent: FullscreenResolverService }
   },
   {
     path:'export',
