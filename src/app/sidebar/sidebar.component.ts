@@ -25,6 +25,7 @@ export class SidebarComponent implements OnInit {
     document.getElementById("open").hidden = false;
     document.getElementById("mySidebar").style.width = "0";
     document.getElementById("main").style.marginLeft = "0";
+    document.getElementById("panel").style.marginLeft = "150px"
   }
 
   setTabs(value: any) {

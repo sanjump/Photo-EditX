@@ -79,14 +79,14 @@ export class FiletreeComponent implements OnInit {
 
       if (this.files && !this.addedTabs.includes(e.node.label)) {
 
-        this.ipc = (<any>window).require('electron').ipcRenderer;
+      
         this.ipc.send("selectedNode", e.node.label);
 
         for (var i = 0; i < this.files.length; i++) {
 
           if (this.files[i].includes(e.node.label)) {
-
-            this.url = this.sanitizer.bypassSecurityTrustUrl(this.files[i])
+            
+            this.url = this.files[i]
             this.tabService.setTabs(e.node.label, this.url);
             break
 

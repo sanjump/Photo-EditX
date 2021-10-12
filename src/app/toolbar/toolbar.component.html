@@ -10,6 +10,7 @@
     
         </div>
         <div class="p-toolbar-group-right">
+            <button pButton pRipple styleClass="border:black" style="margin: 5px;color: black;" pTooltip="Export annotations" tooltipPosition="bottom"  (click)="export()" type="button" label="Export" class="p-button-success"></button>
             <button pButton pRipple style="color: black;" pTooltip="Find comments" tooltipPosition="bottom"  (click)="search(comment)" type="button" label="Find" class="p-button-success"></button>
             <span class="p-input-icon-right">
                 <i (click)="clearFind()" id="clear" class="pi pi-times"></i>

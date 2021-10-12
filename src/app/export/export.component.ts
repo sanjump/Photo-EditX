@@ -1,15 +1,18 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit,AfterViewInit } from '@angular/core';
 import { AngularCsv } from 'angular-csv-ext/dist/Angular-csv';
 import { ExportService } from '../export.service';
 import { jsPDF } from "jspdf";
 import autoTable from 'jspdf-autotable'
+import { IpcRenderer } from 'electron';
+
+
 
 @Component({
   selector: 'app-export',
   templateUrl: './export.component.html',
   styleUrls: ['./export.component.css']
 })
-export class ExportComponent implements OnInit {
+export class ExportComponent implements OnInit,AfterViewInit {
 
   constructor(private exportService: ExportService) {
     this.format = [
@@ -17,8 +20,12 @@ export class ExportComponent implements OnInit {
       { name: 'pdf', code: '.pdf' }
 
     ];
-  }
 
+    this.name=""
+   
+  }
+  messages: any[] = [];
+  ipc: IpcRenderer
   name: string = ""
   date: string = ""
   type: string = ""
@@ -39,8 +46,14 @@ export class ExportComponent implements OnInit {
 
 
   ngOnInit(): void {
-  }
 
+      
+}
+
+ngAfterViewInit(){
+ this.name = localStorage.getItem('fileName')
+ localStorage.removeItem('fileName');
+}
 
   validate(type) {
     if (type != "") {

@@ -183,30 +183,17 @@ function createExportWindow() {
 
 }
 
+ipcMain.on('export', (event, arg) => {
+ 
+  createExportWindow()
+ 
+})
+
 
 ipcMain.on('fullScreen', (event, arg) => {
   createFullScreenWindow()
-  event.sender.send('full', '')
+ 
 })
-
-// ipcMain.on('searchFile', (event, arg) => {
-
-//   if (arg != "") {
-//     connection.send('filterFile', arg, (error, file) => {
-//       if (error) {
-//         console.log(error);
-//         return;
-//       }
-//       if (file.length > 0) {
-//         console.log(file);
-//       }
-//       else {
-//         console.log("No match")
-//       }
-
-//     });
-//   }
-// })
 
 
 ipcMain.on('file', (event, arg) => {

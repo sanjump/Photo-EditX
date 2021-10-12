@@ -1,11 +1,11 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, NgZone } from '@angular/core';
 import { faCommentAlt } from '@fortawesome/free-solid-svg-icons';
 import { faExpandArrowsAlt } from '@fortawesome/free-solid-svg-icons';
 import { Output, EventEmitter } from '@angular/core';
 import { IpcRenderer } from 'electron';
 import { BrowserWindow } from 'electron';
-import { Router } from '@angular/router';
 import { FilterCommentsService } from '../filter-comments.service'
+import { TabService } from '../tab.service';
 
 @Component({
   selector: 'app-toolbar',
@@ -15,14 +15,17 @@ import { FilterCommentsService } from '../filter-comments.service'
 
 export class ToolbarComponent implements OnInit {
 
-  constructor(private router: Router,private filterService:FilterCommentsService) { }
+  constructor(private filterService: FilterCommentsService,private tabService:TabService) {
+   
+  }
 
   @Input() tabheader: string
+  @Input() tabcontent: string
   @Output() textboxes = new EventEmitter<any>();
 
   ipc: IpcRenderer
   win: BrowserWindow
-  comment:string=""
+  comment: string = ""
   faCommentAlt = faCommentAlt;
   faExpandArrowsAlt = faExpandArrowsAlt;
   json: any[] = [];
@@ -30,12 +33,15 @@ export class ToolbarComponent implements OnInit {
   l: number;
   inputElements: any
   inputTextboxes: any[] = []
-  displaySave:boolean
+  displaySave: boolean
   overlay: any;
   filterData: any = []
-  annotations:any
-  ngOnInit(): void {
+  annotations: any
 
+
+  ngOnInit(): void {
+    this.ipc = (<any>window).require('electron').ipcRenderer;
+    
   }
 
   setTextboxes(value: any) {
@@ -49,50 +55,52 @@ export class ToolbarComponent implements OnInit {
 
   }
 
-  clearFind(){
+  clearFind() {
 
-   
-    this.comment="";
-    for(var i=0;i<this.annotations.length;i++){
-        
-          this.annotations[i].style.backgroundColor="white"
-        }
-       
+
+    this.comment = "";
+    for (var i = 0; i < this.annotations.length; i++) {
+
+      this.annotations[i].style.backgroundColor = "white"
+    }
+
   }
 
   search(comment) {
 
-    
-    
-    
+
     this.filterService.filter(this.tabheader).subscribe(data => { this.filterData = data })
-   
+
     setTimeout(() => {
 
-       this.annotations = document.getElementsByClassName(this.filterData[0].class)
-       for(var i=0;i<this.annotations.length;i++){
-        if(this.annotations[i].value.includes(comment) && comment!=""){
-          this.annotations[i].style.backgroundColor="yellow"
+      this.annotations = document.getElementsByClassName(this.filterData[0].class)
+      for (var i = 0; i < this.annotations.length; i++) {
+        if (this.annotations[i].value.includes(comment) && comment != "") {
+          this.annotations[i].style.backgroundColor = "yellow"
         }
-        else{
-          this.annotations[i].style.backgroundColor="white"
+        else {
+          this.annotations[i].style.backgroundColor = "white"
         }
-       }
-       
+      }
 
-      
     }, 200);
-    
-  
   }
+
+  export() {
+  
+    localStorage.setItem('fileName',this.tabheader)
+    this.ipc.send("export",'');
+  }
+
 
   fullScreen() {
 
-    this.ipc = (<any>window).require('electron').ipcRenderer;
+    
+    localStorage.setItem('imgUrl',this.tabService.getTabcontent())
     this.ipc.send("fullScreen", '');
   }
 
-  
+
 
   save(e) {
 
@@ -102,10 +110,10 @@ export class ToolbarComponent implements OnInit {
     this.l = this.inputElements.length;
     var today = new Date();
     var dd = String(today.getDate()).padStart(2, '0');
-    var mm = String(today.getMonth() + 1).padStart(2, '0'); 
+    var mm = String(today.getMonth() + 1).padStart(2, '0');
     var yyyy = today.getFullYear();
     var date = dd + '-' + mm + '-' + yyyy;
-   
+
     while (this.l--) {
       this.json.push({
         file: this.tabheader,
@@ -125,11 +133,11 @@ export class ToolbarComponent implements OnInit {
     }
 
     if (this.json.length > 0) {
-      this.ipc = (<any>window).require('electron').ipcRenderer;
+
       this.ipc.send("file", this.json);
 
     }
 
-    this.displaySave=true
+    this.displaySave = true
   }
 }

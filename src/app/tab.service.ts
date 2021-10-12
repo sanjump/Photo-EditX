@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { Observable, Subject } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -8,6 +9,7 @@ export class TabService {
 
   constructor() { }
 
+  private subject = new Subject<any>();
   tabs: any[] = [];
   tabheader : string
   tabcontent : string
@@ -38,5 +40,6 @@ export class TabService {
   getTabcontent(){
     return this.tabcontent
   }
+
 
 }

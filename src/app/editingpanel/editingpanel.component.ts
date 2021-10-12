@@ -1,7 +1,7 @@
-import { Component, OnInit, OnChanges, Input, NgZone } from '@angular/core';
+import { Component, OnInit, OnChanges, Input, NgZone, AfterViewInit } from '@angular/core';
 import { IpcRenderer } from 'electron';
 import { TabService } from '../tab.service';
-import { ActivatedRoute } from '@angular/router';
+import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-editingpanel',
@@ -9,9 +9,9 @@ import { ActivatedRoute } from '@angular/router';
   styleUrls: ['./editingpanel.component.css']
 })
 
-export class EditingpanelComponent implements OnInit, OnChanges{
+export class EditingpanelComponent implements OnInit, OnChanges, AfterViewInit {
 
-  constructor(private zone: NgZone,private tabService:TabService,private  activatedRoute:ActivatedRoute) { }
+  constructor(private zone: NgZone, private tabService: TabService, private sanitizer: DomSanitizer) { }
 
   @Input() tabheader: string
   @Input() tabcontent: string
@@ -20,23 +20,24 @@ export class EditingpanelComponent implements OnInit, OnChanges{
   ipc: IpcRenderer
   data: any
   display = []
-  url = ""
+  url: SafeUrl
   inputname: string = ""
   divname: string = ""
   overlay: string = ""
 
+  ngAfterViewInit() {
 
+    // this.url =  localStorage.getItem('imgUrl');
+    // console.log(localStorage.getItem('imgUrl'))
+    // localStorage.removeItem('imgUrl');
+
+  }
 
   ngOnInit() {
 
+    this.url = this.sanitizer.bypassSecurityTrustUrl(localStorage.getItem('imgUrl'));
+    console.log(localStorage.getItem('imgUrl'))
     
-
-    //   this.activatedRoute.data.subscribe((response: any) => {
-    //   this.url = response.tabcontent;
-     
-    // });
-
-   // this.url  = this.tabService.getTabcontent();
 
     this.ipc = (<any>window).require('electron').ipcRenderer;
     this.ipc.once('data', (event, args) => {
@@ -84,8 +85,9 @@ export class EditingpanelComponent implements OnInit, OnChanges{
 
   ngOnChanges() {
 
-    
-    this.url = this.tabService.getTabcontent()
+
+    this.url = this.sanitizer.bypassSecurityTrustUrl(this.tabService.getTabcontent())
+    console.log(this.url)
     this.inputname = "input" + "_" + this.tabService.getTabheader()
     this.divname = "div" + "_" + this.tabService.getTabheader()
     this.overlay = "overlay" + "_" + this.tabService.getTabheader()
