@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, NgZone } from '@angular/core';
+import { Component, OnInit, Input} from '@angular/core';
 import { faCommentAlt } from '@fortawesome/free-solid-svg-icons';
 import { faExpandArrowsAlt } from '@fortawesome/free-solid-svg-icons';
 import { Output, EventEmitter } from '@angular/core';
@@ -15,8 +15,8 @@ import { TabService } from '../tab.service';
 
 export class ToolbarComponent implements OnInit {
 
-  constructor(private filterService: FilterCommentsService,private tabService:TabService) {
-   
+  constructor(private filterService: FilterCommentsService, private tabService: TabService) {
+
   }
 
   @Input() tabheader: string
@@ -37,10 +37,17 @@ export class ToolbarComponent implements OnInit {
   overlay: any;
   filterData: any = []
   annotations: any
-
+  tabs: any = []
+  url = ""
 
   ngOnInit(): void {
+    
     this.ipc = (<any>window).require('electron').ipcRenderer;
+    if (this.tabheader === undefined) {
+     
+      this.tabheader = localStorage.getItem('tabheader')
+      
+    }
     
   }
 
@@ -74,6 +81,8 @@ export class ToolbarComponent implements OnInit {
     setTimeout(() => {
 
       this.annotations = document.getElementsByClassName(this.filterData[0].class)
+      console.log(this.annotations)
+      console.log(this.filterData[0].class)
       for (var i = 0; i < this.annotations.length; i++) {
         if (this.annotations[i].value.includes(comment) && comment != "") {
           this.annotations[i].style.backgroundColor = "yellow"
@@ -87,17 +96,24 @@ export class ToolbarComponent implements OnInit {
   }
 
   export() {
-  
-    localStorage.setItem('fileName',this.tabheader)
-    this.ipc.send("export",'');
+
+    localStorage.setItem('fileName', this.tabheader)
+    this.ipc.send("export", '');
   }
 
 
   fullScreen() {
 
-    
-    localStorage.setItem('imgUrl',this.tabService.getTabcontent())
-    this.ipc.send("fullScreen", '');
+    this.tabs = this.tabService.getTabs()
+    for (var i = 0; i < this.tabs.length; i++) {
+      if (this.tabs[i].header == this.tabheader) {
+        this.url = this.tabs[i].content
+        break
+      }
+    }
+    localStorage.setItem('tabheader', this.tabheader)
+    localStorage.setItem('imgUrl', this.url)
+    this.ipc.send("fullScreen", this.tabheader)
   }
 
 

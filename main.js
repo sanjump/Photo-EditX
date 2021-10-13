@@ -9,6 +9,7 @@ let files = [];
 let folderFiles = [];
 let imgfiles = [];
 let mainWindow
+let overlayData
 let types = [{ name: 'Images', extensions: ['jpg', 'jpeg', 'png'] }]
 directory = app.getPath('documents') + "\\editor";
 if (!fs.existsSync(directory)) {
@@ -191,7 +192,15 @@ ipcMain.on('export', (event, arg) => {
 
 
 ipcMain.on('fullScreen', (event, arg) => {
+ 
+ 
   createFullScreenWindow()
+  checkFile(arg,event)
+  fullScreen.webContents.on('did-finish-load', ()=>{
+    fullScreen.webContents.send('loadScreen', overlayData);
+  })
+
+  
  
 })
 
@@ -229,6 +238,7 @@ function checkFile(arg, event) {
 
   fs.access(directory + "\\" + arg.substring(0, arg.lastIndexOf(".") + 1) + "json", (err) => {
     if (err) {
+      overlayData = 'No file'
       event.sender.send('data', 'No file')
     }
 
@@ -239,7 +249,9 @@ function checkFile(arg, event) {
         }
         else {
           if (data.length != 0) {
+            overlayData = JSON.parse(data)
             event.sender.send('data', JSON.parse(data))
+            
           }
         }
 

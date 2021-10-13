@@ -1,4 +1,4 @@
-import { Component, OnInit,AfterViewInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { AngularCsv } from 'angular-csv-ext/dist/Angular-csv';
 import { ExportService } from '../export.service';
 import { jsPDF } from "jspdf";
@@ -12,7 +12,7 @@ import { IpcRenderer } from 'electron';
   templateUrl: './export.component.html',
   styleUrls: ['./export.component.css']
 })
-export class ExportComponent implements OnInit,AfterViewInit {
+export class ExportComponent implements OnInit {
 
   constructor(private exportService: ExportService) {
     this.format = [
@@ -21,8 +21,8 @@ export class ExportComponent implements OnInit,AfterViewInit {
 
     ];
 
-    this.name=""
-   
+    this.name = ""
+
   }
   messages: any[] = [];
   ipc: IpcRenderer
@@ -46,14 +46,12 @@ export class ExportComponent implements OnInit,AfterViewInit {
 
 
   ngOnInit(): void {
+    this.name = localStorage.getItem('fileName')
+    localStorage.removeItem('fileName');
 
-      
-}
+  }
 
-ngAfterViewInit(){
- this.name = localStorage.getItem('fileName')
- localStorage.removeItem('fileName');
-}
+
 
   validate(type) {
     if (type != "") {
@@ -70,11 +68,13 @@ ngAfterViewInit(){
 
     else {
 
+      this.status = ""
       this.json = []
       this.exportfile = []
 
       if (name != "" || date != "") {
 
+        this.status = ""
         this.exportService.export(name, date).subscribe(data => { this.json = data })
 
         setTimeout(() => {

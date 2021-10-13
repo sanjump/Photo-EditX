@@ -20,8 +20,7 @@ export class EditorComponent implements OnInit,OnChanges {
 
     ngOnChanges(){
 
-        this.tabService.setTabheader(this.tabheader)
-        this.tabService.setTabcontent(this.tabcontent)
+      
     }
 
     setTextboxes(setTextboxes: any) {
