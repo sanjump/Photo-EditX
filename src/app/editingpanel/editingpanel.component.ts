@@ -15,6 +15,7 @@ export class EditingpanelComponent implements OnInit, OnChanges {
 
   @Input() tabheader: string
   @Input() tabcontent: string
+  @Input() zoomScale: any
   @Input() textboxes: any
 
   ipc: IpcRenderer
@@ -24,7 +25,7 @@ export class EditingpanelComponent implements OnInit, OnChanges {
   inputname: string = ""
   divname: string = ""
   overlay: string = ""
-
+  scale:any=1
   
 
   ngOnInit() {
@@ -49,6 +50,7 @@ export class EditingpanelComponent implements OnInit, OnChanges {
   }
 
 
+
   formOverlay(args) {
     
     this.data = args
@@ -70,8 +72,8 @@ export class EditingpanelComponent implements OnInit, OnChanges {
           text.style.width = this.data[i].width
           text.style.height = this.data[i].height
           text.style.position = 'absolute'
-          text.style.left = this.data[i].position.left + "px"
-          text.style.top = this.data[i].position.top + "px"
+          text.style.left = (this.data[i].position.left)   + "px"
+          text.style.top = (this.data[i].position.top ) + "px"
           text.disabled = true
           text.style.backgroundColor = "white"
           text.style.zIndex = "initial"
@@ -87,16 +89,19 @@ export class EditingpanelComponent implements OnInit, OnChanges {
   ngOnChanges() {
 
     if (this.tabheader === undefined) {
-      document.getElementById("panel").style.width = "100vw"
-      document.getElementById("panel").style.height = "85vh"
-      document.getElementById("panel").style.marginLeft = "100px"
+      // document.getElementById("panel").style.width = "100vw"
+      // document.getElementById("panel").style.height = "85vh"
+      document.getElementById("panel").style.marginLeft = "170px"
+      document.getElementById("panel").style.marginTop = "90px"
+      document.getElementById("fullScreen_btn").hidden=true
       this.url = this.sanitizer.bypassSecurityTrustUrl(localStorage.getItem('imgUrl'));  
       this.tabheader = localStorage.getItem('tabheader')
       localStorage.removeItem('imgUrl');
-      
-      
+    
     }
 
+    this.scale=this.zoomScale
+console.log(this.scale)
     this.inputname = "input" + "_" + this.tabheader
     this.divname = "div" + "_" + this.tabheader
     this.overlay = "overlay" + "_" + this.tabheader

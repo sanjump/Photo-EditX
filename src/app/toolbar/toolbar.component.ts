@@ -6,6 +6,8 @@ import { IpcRenderer } from 'electron';
 import { BrowserWindow } from 'electron';
 import { FilterCommentsService } from '../filter-comments.service'
 import { TabService } from '../tab.service';
+import { faSearchPlus} from '@fortawesome/free-solid-svg-icons';
+import { faSearchMinus} from '@fortawesome/free-solid-svg-icons';
 
 @Component({
   selector: 'app-toolbar',
@@ -22,10 +24,13 @@ export class ToolbarComponent implements OnInit {
   @Input() tabheader: string
   @Input() tabcontent: string
   @Output() textboxes = new EventEmitter<any>();
+  @Output() zoomScale = new EventEmitter<any>();
 
   ipc: IpcRenderer
   win: BrowserWindow
   comment: string = ""
+  faSearchPlus = faSearchPlus
+  faSearchMinus = faSearchMinus
   faCommentAlt = faCommentAlt;
   faExpandArrowsAlt = faExpandArrowsAlt;
   json: any[] = [];
@@ -39,6 +44,7 @@ export class ToolbarComponent implements OnInit {
   annotations: any
   tabs: any = []
   url = ""
+  scale:number=1;
 
   ngOnInit(): void {
     
@@ -53,6 +59,10 @@ export class ToolbarComponent implements OnInit {
 
   setTextboxes(value: any) {
     this.textboxes.emit(value);
+  }
+
+  setZoomScale(value: any) {
+    this.zoomScale.emit(value);
   }
 
   addTextbox() {
@@ -73,6 +83,19 @@ export class ToolbarComponent implements OnInit {
 
   }
 
+
+zoomIn(){
+this.scale+=.1
+this.setZoomScale(this.zoomScale)
+}
+
+zoomOut(){
+  if(this.scale>1){
+this.scale-=.1
+this.setZoomScale(this.zoomScale)
+  }
+
+}
   search(comment) {
 
 

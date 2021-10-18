@@ -4,10 +4,16 @@
             <button pTooltip="Add comments" tooltipPosition="bottom" (click)="addTextbox()" style="margin: 5px;">
                 <fa-icon [icon]="faCommentAlt"></fa-icon>
             </button>
-            <button pTooltip="Full Screen" tooltipPosition="bottom" (click)="fullScreen()" style="margin: 5px;">
+            <button id="fullScreen_btn" pTooltip="Full Screen" tooltipPosition="bottom" (click)="fullScreen()" style="margin: 5px;">
                      <fa-icon [icon]="faExpandArrowsAlt"></fa-icon> 
             </button>
-    
+            <button id="zoomIn_btn" pTooltip="Zoom In" tooltipPosition="bottom" (click)="zoomIn()" style="margin: 5px;">
+                <fa-icon [icon]="faSearchPlus"></fa-icon> 
+           </button>
+           <button id="zoomOut_btn" pTooltip="Zoom Out" tooltipPosition="bottom" (click)="zoomOut()" style="margin: 5px;">
+               <fa-icon [icon]="faSearchMinus"></fa-icon> 
+           </button>
+          
         </div>
         <div class="p-toolbar-group-right">
             <button pButton pRipple styleClass="border:black" style="margin: 5px;color: black;" pTooltip="Export annotations" tooltipPosition="bottom"  (click)="export()" type="button" label="Export" class="p-button-success"></button>
