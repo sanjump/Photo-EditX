@@ -89,8 +89,7 @@ export class EditingpanelComponent implements OnInit, OnChanges {
   ngOnChanges() {
 
     if (this.tabheader === undefined) {
-      // document.getElementById("panel").style.width = "100vw"
-      // document.getElementById("panel").style.height = "85vh"
+     
       document.getElementById("panel").style.marginLeft = "170px"
       document.getElementById("panel").style.marginTop = "90px"
       document.getElementById("fullScreen_btn").hidden=true
@@ -101,7 +100,6 @@ export class EditingpanelComponent implements OnInit, OnChanges {
     }
 
     this.scale=this.zoomScale
-console.log(this.scale)
     this.inputname = "input" + "_" + this.tabheader
     this.divname = "div" + "_" + this.tabheader
     this.overlay = "overlay" + "_" + this.tabheader

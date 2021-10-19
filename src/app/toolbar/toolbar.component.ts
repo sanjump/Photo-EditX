@@ -1,4 +1,4 @@
-import { Component, OnInit, Input} from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import { faCommentAlt } from '@fortawesome/free-solid-svg-icons';
 import { faExpandArrowsAlt } from '@fortawesome/free-solid-svg-icons';
 import { Output, EventEmitter } from '@angular/core';
@@ -6,8 +6,8 @@ import { IpcRenderer } from 'electron';
 import { BrowserWindow } from 'electron';
 import { FilterCommentsService } from '../filter-comments.service'
 import { TabService } from '../tab.service';
-import { faSearchPlus} from '@fortawesome/free-solid-svg-icons';
-import { faSearchMinus} from '@fortawesome/free-solid-svg-icons';
+import { faSearchPlus } from '@fortawesome/free-solid-svg-icons';
+import { faSearchMinus } from '@fortawesome/free-solid-svg-icons';
 
 @Component({
   selector: 'app-toolbar',
@@ -44,17 +44,17 @@ export class ToolbarComponent implements OnInit {
   annotations: any
   tabs: any = []
   url = ""
-  scale:number=1;
+  scale: number = 1;
 
   ngOnInit(): void {
-    
+
     this.ipc = (<any>window).require('electron').ipcRenderer;
     if (this.tabheader === undefined) {
-     
+
       this.tabheader = localStorage.getItem('tabheader')
-      
+
     }
-    
+
   }
 
   setTextboxes(value: any) {
@@ -63,6 +63,7 @@ export class ToolbarComponent implements OnInit {
 
   setZoomScale(value: any) {
     this.zoomScale.emit(value);
+   
   }
 
   addTextbox() {
@@ -84,18 +85,18 @@ export class ToolbarComponent implements OnInit {
   }
 
 
-zoomIn(){
-this.scale+=.1
-this.setZoomScale(this.zoomScale)
-}
-
-zoomOut(){
-  if(this.scale>1){
-this.scale-=.1
-this.setZoomScale(this.zoomScale)
+  zoomIn() {
+    this.scale += .1
+    this.setZoomScale(this.scale)
   }
 
-}
+  zoomOut() {
+    if (this.scale > 1) {
+      this.scale -= .1
+      this.setZoomScale(this.scale)
+    }
+
+  }
   search(comment) {
 
 

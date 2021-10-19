@@ -12,7 +12,7 @@ export class EditorComponent implements OnInit,OnChanges {
 
     @Input() tabcontent: string
     @Input() tabheader: string
-    zoomScale: any
+    zoomScale: any = ""
     textboxes: any[] = []
 
     ngOnInit() {

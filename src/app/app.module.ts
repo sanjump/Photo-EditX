@@ -30,6 +30,7 @@ import {DropdownModule} from 'primeng/dropdown';
 import {DialogModule} from 'primeng/dialog';
 import { PinchZoomModule } from 'ngx-pinch-zoom';
 import { NgxImageZoomModule } from 'ngx-image-zoom';
+import { DragScrollModule } from 'ngx-drag-scroll';
 @NgModule({
   declarations: [
     AppComponent,
@@ -63,7 +64,8 @@ import { NgxImageZoomModule } from 'ngx-image-zoom';
     DropdownModule,
     DialogModule,
     PinchZoomModule,
-    NgxImageZoomModule
+    NgxImageZoomModule,
+   DragScrollModule
   
     
   ],
