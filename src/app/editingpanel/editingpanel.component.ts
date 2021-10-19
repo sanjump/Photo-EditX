@@ -1,5 +1,5 @@
-import { Component, OnInit, OnChanges, Input, NgZone} from '@angular/core';
-import { IpcRenderer } from 'electron';
+import { Component, OnInit, OnChanges, Input, NgZone } from '@angular/core';
+import { clipboard, IpcRenderer } from 'electron';
 import { TabService } from '../tab.service';
 import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 
@@ -16,7 +16,8 @@ export class EditingpanelComponent implements OnInit, OnChanges {
   @Input() tabheader: string
   @Input() tabcontent: string
   @Input() zoomScale: any
-  @Input() textboxes: any
+  @Input() textboxes: any[]
+  @Input() rotateDegree: any
 
   ipc: IpcRenderer
   data: any
@@ -25,12 +26,15 @@ export class EditingpanelComponent implements OnInit, OnChanges {
   inputname: string = ""
   divname: string = ""
   overlay: string = ""
-  scale:any=1
-  
+  imgname: string = ""
+  scale: any 
+  degree:any 
+  copyValue: string = ""
+  dupCount: number = 1
 
   ngOnInit() {
 
- 
+    
     this.ipc = (<any>window).require('electron').ipcRenderer;
 
     this.ipc.once('loadScreen', (event, args) => {
@@ -51,8 +55,34 @@ export class EditingpanelComponent implements OnInit, OnChanges {
 
 
 
+  ngOnChanges() {
+
+    if (this.tabheader === undefined) {
+
+      document.getElementById("panel").style.marginLeft = "170px"
+      document.getElementById("panel").style.marginTop = "90px"
+      document.getElementById("fullScreen_btn").hidden = true
+      this.url = this.sanitizer.bypassSecurityTrustUrl(localStorage.getItem('imgUrl'));
+      this.tabheader = localStorage.getItem('tabheader')
+      localStorage.removeItem('imgUrl');
+
+    }
+
+    this.scale = this.zoomScale
+    this.degree=this.rotateDegree
+    this.inputname = "input" + "_" + this.tabheader
+    this.divname = "div" + "_" + this.tabheader
+    this.overlay = "overlay" + "_" + this.tabheader
+    this.imgname = "img" + "_" + this.tabheader
+
+  }
+
+
+
+
+
   formOverlay(args) {
-    
+
     this.data = args
 
     if (this.data != "No file" && this.data.length > 0) {
@@ -72,13 +102,13 @@ export class EditingpanelComponent implements OnInit, OnChanges {
           text.style.width = this.data[i].width
           text.style.height = this.data[i].height
           text.style.position = 'absolute'
-          text.style.left = (this.data[i].position.left)   + "px"
-          text.style.top = (this.data[i].position.top ) + "px"
+          text.style.left = (this.data[i].position.left) + "px"
+          text.style.top = (this.data[i].position.top) + "px"
           text.disabled = true
           text.style.backgroundColor = "white"
           text.style.zIndex = "initial"
           document.getElementById('overlay' + "_" + this.data[i].file).appendChild(text)
-
+          document.getElementById('img' + "_" + this.data[i].file).style.transform = this.data[i].transform
         }
       }
     }
@@ -86,25 +116,25 @@ export class EditingpanelComponent implements OnInit, OnChanges {
   }
 
 
-  ngOnChanges() {
+  setValue(e) {
+    this.copyValue = e.target.value
+    navigator.clipboard.writeText("")
+  }
 
-    if (this.tabheader === undefined) {
-     
-      document.getElementById("panel").style.marginLeft = "170px"
-      document.getElementById("panel").style.marginTop = "90px"
-      document.getElementById("fullScreen_btn").hidden=true
-      this.url = this.sanitizer.bypassSecurityTrustUrl(localStorage.getItem('imgUrl'));  
-      this.tabheader = localStorage.getItem('tabheader')
-      localStorage.removeItem('imgUrl');
-    
-    }
+  duplicate() {
 
-    this.scale=this.zoomScale
-    this.inputname = "input" + "_" + this.tabheader
-    this.divname = "div" + "_" + this.tabheader
-    this.overlay = "overlay" + "_" + this.tabheader
+    this.textboxes.push(this.textboxes[0] + "_dup" + this.dupCount);
+
+    setTimeout(() => {
+      (<HTMLInputElement>document.getElementById("text" + this.textboxes[0] + "_dup" + this.dupCount)).value = this.copyValue
+      this.dupCount += 1
+    }, 100);
+
+
 
   }
+
+
 
   remove(id) {
 

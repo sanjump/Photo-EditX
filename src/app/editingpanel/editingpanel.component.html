@@ -1,14 +1,14 @@
 
 <div id = "panel" class="container">
-   
     <div class="box" style="overflow:hidden">
-        <img [src]="url" height="100%" width="100%" [style.transform]="'scale('+scale+')'" />
+        <img [src]="url" [id]=
+        "imgname" height="100%" width="100%" [style.transform]="'scale('+scale+') rotate('+degree+'deg)'" />
     </div>
-    <div [id]="overlay" class="box overlay">
+    <div [id]="overlay" class="box overlay" >
         <ng-container *ngFor="let i of textboxes">
             <div id="cont{{i}}" [class]="divname" style="width: 100px;height: 30px; display:flex;z-index: 1;position: absolute"
                 cdkDragBoundary=".overlay" cdkDrag>
-                <input id="text{{i}}" [class]="inputname" style="width: 100px;height: 30px;z-index: 1;" type="text" />
+                <input id="text{{i}}" [class]="inputname" (paste)="duplicate()" (copy)="setValue($event)" style="width: 100px;height: 30px;z-index: 1;" type="text" />
                 <button id="btn{{i}}" style="z-index: 1;" (click)="remove(i)">X</button>
             </div>
         </ng-container>

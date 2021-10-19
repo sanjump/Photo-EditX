@@ -14,13 +14,17 @@ export class EditorComponent implements OnInit,OnChanges {
     @Input() tabheader: string
     zoomScale: any = ""
     textboxes: any[] = []
-
+    rotateDegree:any=""
     ngOnInit() {
     }
 
     ngOnChanges(){
 
       
+    }
+
+    setrotateDegree(setrotateDegree: any) {
+        this.rotateDegree = setrotateDegree;
     }
 
     setTextboxes(setTextboxes: any) {
