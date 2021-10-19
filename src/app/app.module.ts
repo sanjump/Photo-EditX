@@ -28,7 +28,9 @@ import {ExportService} from './export.service';
 import {InputTextModule} from 'primeng/inputtext';
 import {DropdownModule} from 'primeng/dropdown';
 import {DialogModule} from 'primeng/dialog';
-
+import { PinchZoomModule } from 'ngx-pinch-zoom';
+import { NgxImageZoomModule } from 'ngx-image-zoom';
+import { DragScrollModule } from 'ngx-drag-scroll';
 @NgModule({
   declarations: [
     AppComponent,
@@ -60,7 +62,10 @@ import {DialogModule} from 'primeng/dialog';
     TooltipModule,
     InputTextModule,
     DropdownModule,
-    DialogModule
+    DialogModule,
+    PinchZoomModule,
+    NgxImageZoomModule,
+   DragScrollModule
   
     
   ],

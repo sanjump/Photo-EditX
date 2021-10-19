@@ -1,6 +1,8 @@
+
 <div id = "panel" class="container">
-    <div class="box">
-        <img [src]="url" height="100%" width="100%" />
+   
+    <div class="box" style="overflow:hidden">
+        <img [src]="url" height="100%" width="100%" [style.transform]="'scale('+scale+')'" />
     </div>
     <div [id]="overlay" class="box overlay">
         <ng-container *ngFor="let i of textboxes">

@@ -15,7 +15,7 @@ namespace EditorService
     {
 
      
-      ImageInterface img = new ImageJsons();
+      IImageInterface img = new ImageJsons();
   
       var connection = new ConnectionBuilder()
                    .WithLogging()

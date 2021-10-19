@@ -10,7 +10,7 @@ namespace EditorWebApi.BAL
 {
   public class Editor_BAL
   {
-    ImageInterface img = new ImageJsons();
+    IImageInterface img = new ImageJsons();
     public string filterFile(string name)
     {
       string json = img.filterFile(name);

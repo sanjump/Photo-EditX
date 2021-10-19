@@ -8,7 +8,7 @@ using Newtonsoft.Json;
 
 namespace Image
 {
-  public interface ImageInterface
+  public interface IImageInterface
   {
 
     List<JArray> getJson();
@@ -18,7 +18,7 @@ namespace Image
     string exportFile(string name, string date);
 
   }
-  public class ImageJsons : ImageInterface
+  public class ImageJsons : IImageInterface
   {
 
     public List<JArray> getJson()
