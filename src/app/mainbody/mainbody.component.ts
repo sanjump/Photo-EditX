@@ -20,7 +20,9 @@ export class MainbodyComponent implements OnInit{
     document.getElementById("mySidebar").style.width = "250px";
     document.getElementById("main").style.marginLeft = "250px";
     document.getElementById("open").hidden = true;
-    document.getElementById("panel").style.margin = "15px"
-    document.getElementById("panel").style.marginLeft = "30px"
+    (document.querySelector(".container") as HTMLElement).style.margin = "15px";
+    (document.querySelector(".container") as HTMLElement).style.marginLeft =  "30px";
+    document.getElementById("rightSidebar").style.width = "0px";
+    document.getElementById("main").style.marginRight = "0px";
   }
 }

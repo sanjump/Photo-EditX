@@ -1,8 +1,8 @@
 
-<div id = "panel" class="container">
+<div [id] = "panel" class="container" [style.transform]="'rotate('+degree+'deg) scale('+reduceScale+')'">
     <div class="box" style="overflow:hidden">
         <img [src]="url" [id]=
-        "imgname" height="100%" width="100%" [style.transform]="'scale('+scale+') rotate('+degree+'deg)'" />
+        "imgname" height="100%" width="100%" [style.transform]="'scale('+scale+') rotate(0deg)'" />
     </div>
     <div [id]="overlay" class="box overlay" >
         <ng-container *ngFor="let i of textboxes">

@@ -2,6 +2,7 @@ import { Component, OnInit, Input, NgZone } from '@angular/core';
 import { faCommentAlt } from '@fortawesome/free-solid-svg-icons';
 import { faExpandArrowsAlt } from '@fortawesome/free-solid-svg-icons';
 import { faSyncAlt } from '@fortawesome/free-solid-svg-icons';
+import { faAdjust } from '@fortawesome/free-solid-svg-icons';
 import { Output, EventEmitter } from '@angular/core';
 import { IpcRenderer } from 'electron';
 import { BrowserWindow } from 'electron';
@@ -18,7 +19,7 @@ import { faSearchMinus } from '@fortawesome/free-solid-svg-icons';
 
 export class ToolbarComponent implements OnInit {
 
-  constructor(private filterService: FilterCommentsService, private tabService: TabService,private zone: NgZone) {
+  constructor(private filterService: FilterCommentsService, private tabService: TabService, private zone: NgZone) {
 
   }
 
@@ -33,8 +34,9 @@ export class ToolbarComponent implements OnInit {
   comment: string = ""
   faSearchPlus = faSearchPlus
   faSearchMinus = faSearchMinus
-  faCommentAlt = faCommentAlt;
+  faCommentAlt = faCommentAlt
   faSyncAlt = faSyncAlt
+  faAdjust = faAdjust
   faExpandArrowsAlt = faExpandArrowsAlt;
   json: any[] = [];
   i: number = 0;
@@ -48,7 +50,7 @@ export class ToolbarComponent implements OnInit {
   tabs: any = []
   url = ""
   scale: number = 1
-  degree:number = 0
+  degree: number = 0
 
 
   ngOnInit(): void {
@@ -60,26 +62,26 @@ export class ToolbarComponent implements OnInit {
 
     }
 
-    
+
     this.ipc.once('data', (event, args) => {
-    
+
       this.zone.run(() => {
         if (args != "No file" && args.length > 0) {
-       
-        this.scale = Number(args[0].transform.slice(args[0].transform.indexOf('(')+1,args[0].transform.indexOf(')')))
-        this.degree = Number(args[0].transform.slice(args[0].transform.lastIndexOf('(')+1,args[0].transform.lastIndexOf(')')-3));
-        this.zoomScale.emit(this.scale);
-        this.rotateDegree.emit(this.degree);
-        
+
+          this.scale = Number(args[0].imgTransform.slice(args[0].imgTransform.indexOf('(') + 1, args[0].imgTransform.indexOf(')')))
+          this.degree = Number(args[0].containerTransform.slice(args[0].containerTransform.indexOf('(') + 1, args[0].containerTransform.indexOf(')') - 3));
+          this.zoomScale.emit(this.scale);
+          this.rotateDegree.emit(this.degree);
+
         }
-        else{
+        else {
           this.zoomScale.emit(1)
           this.rotateDegree.emit(0)
         }
 
       });
     });
-    
+
   }
 
   setTextboxes(value: any) {
@@ -89,7 +91,7 @@ export class ToolbarComponent implements OnInit {
 
   setZoomScale(value: any) {
     this.zoomScale.emit(value);
-   
+
   }
 
   setrotateDegree(value: any) {
@@ -100,6 +102,18 @@ export class ToolbarComponent implements OnInit {
     this.inputTextboxes.push(this.i + "_" + this.tabheader)
     this.setTextboxes(this.inputTextboxes)
     this.i += 1
+
+  }
+
+  openRightBar() {
+
+    document.getElementById("rightSidebar").style.width = "300px";
+    document.getElementById("main").style.marginRight = "300px";
+    document.getElementById("mySidebar").style.width = "0px";
+    document.getElementById("main").style.marginLeft = "0px";
+    document.getElementById("open").hidden = false;
+    (document.querySelector(".container") as HTMLElement).style.margin = "15px";
+    (document.querySelector(".container") as HTMLElement).style.marginRight = "30px";
 
   }
 
@@ -128,8 +142,8 @@ export class ToolbarComponent implements OnInit {
 
   }
 
-  rotate(){
-    this.degree+=90
+  rotate() {
+    this.degree += 90
     this.setrotateDegree(this.degree)
   }
 
@@ -196,7 +210,8 @@ export class ToolbarComponent implements OnInit {
         id: this.inputElements[this.l].id,
         class: this.inputElements[this.l].className,
         value: this.inputElements[this.l].value,
-        transform: document.getElementById('img' + "_" + e.target.id).style.transform,
+        imgTransform: document.getElementById('img' + "_" + e.target.id).style.transform,
+        containerTransform: document.getElementById('panel' + "_" + e.target.id).style.transform,
         width: this.inputElements[this.l].style.width,
         height: this.inputElements[this.l].style.height,
         position: {
@@ -214,6 +229,6 @@ export class ToolbarComponent implements OnInit {
 
     }
 
-    
+
   }
 }

@@ -23,9 +23,9 @@ export class SidebarComponent implements OnInit {
 
   closeNav() {
     document.getElementById("open").hidden = false;
-    document.getElementById("mySidebar").style.width = "0";
-    document.getElementById("main").style.marginLeft = "0";
-    document.getElementById("panel").style.marginLeft = "150px"
+    document.getElementById("mySidebar").style.width = "0px";
+    document.getElementById("main").style.marginLeft = "0px";
+    (document.querySelector(".container") as HTMLElement).style.marginLeft = "150px"
   }
 
   setTabs(value: any) {

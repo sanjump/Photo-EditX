@@ -1,0 +1,9 @@
+<div id="rightSidebar" class="sidebar">
+    <a href="javascript:void(0)" id="close" class="closebtn" (click)="closeRightBar()">&times;</a>
+    <h3>Adjustments</h3>
+    <h5 style="color: cornsilk;margin-left: 30px;margin-top: 30px;">Brightness</h5>
+    <div style="width: 220px;margin-left: 30px;margin-top: 10px;">
+        <p-slider [(ngModel)]="brightness" [min]="-100" [max]="100" (onChange)="changeBrightness($event)"></p-slider>
+    </div>
+   
+</div>

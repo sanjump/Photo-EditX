@@ -4,33 +4,43 @@
             <button pTooltip="Add comments" tooltipPosition="bottom" (click)="addTextbox()" style="margin: 5px;">
                 <fa-icon [icon]="faCommentAlt"></fa-icon>
             </button>
-            <button id="fullScreen_btn" pTooltip="Full Screen" tooltipPosition="bottom" (click)="fullScreen()" style="margin: 5px;">
-                     <fa-icon [icon]="faExpandArrowsAlt"></fa-icon> 
+            <button id="fullScreen_btn" pTooltip="Full Screen" tooltipPosition="bottom" (click)="fullScreen()"
+                style="margin: 5px;">
+                <fa-icon [icon]="faExpandArrowsAlt"></fa-icon>
             </button>
             <button id="zoomIn_btn" pTooltip="Zoom In" tooltipPosition="bottom" (click)="zoomIn()" style="margin: 5px;">
-                <fa-icon [icon]="faSearchPlus"></fa-icon> 
-           </button>
-           <button id="zoomOut_btn" pTooltip="Zoom Out" tooltipPosition="bottom" (click)="zoomOut()" style="margin: 5px;">
-               <fa-icon [icon]="faSearchMinus"></fa-icon> 
-           </button>
-           <button id="rotate_btn" pTooltip="Rotate" tooltipPosition="bottom" (click)="rotate()" style="margin: 5px;">
-            <fa-icon [icon]="faSyncAlt"></fa-icon> 
-        </button>
-          
+                <fa-icon [icon]="faSearchPlus"></fa-icon>
+            </button>
+            <button id="zoomOut_btn" pTooltip="Zoom Out" tooltipPosition="bottom" (click)="zoomOut()"
+                style="margin: 5px;">
+                <fa-icon [icon]="faSearchMinus"></fa-icon>
+            </button>
+            <button id="rotate_btn" pTooltip="Rotate" tooltipPosition="bottom" (click)="rotate()" style="margin: 5px;">
+                <fa-icon [icon]="faSyncAlt"></fa-icon>
+            </button>
+            <button id="adjust_btn" pTooltip="Adjustments" tooltipPosition="bottom" (click)="openRightBar()" style="margin: 5px;">
+                <fa-icon [icon]="faAdjust"></fa-icon>
+            </button>
+
         </div>
         <div class="p-toolbar-group-right">
-            <button pButton pRipple styleClass="border:black" style="margin: 5px;color: black;" pTooltip="Export annotations" tooltipPosition="bottom"  (click)="export()" type="button" label="Export" class="p-button-success"></button>
-            <button pButton pRipple style="color: black;" pTooltip="Find comments" tooltipPosition="bottom"  (click)="search(comment)" type="button" label="Find" class="p-button-success"></button>
+            <button pButton pRipple styleClass="border:black" style="margin: 5px;color: black;"
+                pTooltip="Export annotations" tooltipPosition="bottom" (click)="export()" type="button" label="Export"
+                class="p-button-success"></button>
+            <button pButton pRipple style="color: black;" pTooltip="Find comments" tooltipPosition="bottom"
+                (click)="search(comment)" type="button" label="Find" class="p-button-success"></button>
             <span class="p-input-icon-right">
                 <i (click)="clearFind()" id="clear" class="pi pi-times"></i>
-                <input id = "comment" style="margin: 5px;width: 120px;" type="text" pInputText placeholder="Comments" [(ngModel)]="comment"> 
+                <input id="comment" style="margin: 5px;width: 120px;" type="text" pInputText placeholder="Comments"
+                    [(ngModel)]="comment">
             </span>
-          
-            <button  style="color: black;" [id]="tabheader" (click)="save($event)" pButton pRipple type="button" label="Save" class="p-button-success"></button>
+
+            <button style="color: black;" [id]="tabheader" (click)="save($event)" pButton pRipple type="button"
+                label="Save" class="p-button-success"></button>
             <p-dialog header="Successfull" [(visible)]="displaySave" [style]="{width: '30vw'}">
-            <p>File saved successfully</p>    
+                <p>File saved successfully</p>
             </p-dialog>
-        
+
         </div>
     </p-toolbar>
 </div>

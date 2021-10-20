@@ -27,14 +27,17 @@ export class EditingpanelComponent implements OnInit, OnChanges {
   divname: string = ""
   overlay: string = ""
   imgname: string = ""
-  scale: any 
-  degree:any 
+  panel:string=""
+  scale: any
+  degree: any
+  imgDegree:any
   copyValue: string = ""
   dupCount: number = 1
+  reduceScale: string = "1,1"
 
   ngOnInit() {
 
-    
+
     this.ipc = (<any>window).require('electron').ipcRenderer;
 
     this.ipc.once('loadScreen', (event, args) => {
@@ -59,8 +62,8 @@ export class EditingpanelComponent implements OnInit, OnChanges {
 
     if (this.tabheader === undefined) {
 
-      document.getElementById("panel").style.marginLeft = "170px"
-      document.getElementById("panel").style.marginTop = "90px"
+      (document.querySelector(".container") as HTMLElement).style.marginLeft = "170px";
+      (document.querySelector(".container") as HTMLElement).style.marginTop = "90px";
       document.getElementById("fullScreen_btn").hidden = true
       this.url = this.sanitizer.bypassSecurityTrustUrl(localStorage.getItem('imgUrl'));
       this.tabheader = localStorage.getItem('tabheader')
@@ -69,11 +72,21 @@ export class EditingpanelComponent implements OnInit, OnChanges {
     }
 
     this.scale = this.zoomScale
-    this.degree=this.rotateDegree
+    this.degree = this.rotateDegree
+    this.imgDegree = this.rotateDegree-90
+    if (this.degree / 90 % 2 != 0) {
+      this.reduceScale = "0.5,0.5"
+
+    }
+
+    else {
+      this.reduceScale = "1,1"
+    }
     this.inputname = "input" + "_" + this.tabheader
     this.divname = "div" + "_" + this.tabheader
     this.overlay = "overlay" + "_" + this.tabheader
     this.imgname = "img" + "_" + this.tabheader
+    this.panel = "panel"+ "_" + this.tabheader
 
   }
 
@@ -108,7 +121,8 @@ export class EditingpanelComponent implements OnInit, OnChanges {
           text.style.backgroundColor = "white"
           text.style.zIndex = "initial"
           document.getElementById('overlay' + "_" + this.data[i].file).appendChild(text)
-          document.getElementById('img' + "_" + this.data[i].file).style.transform = this.data[i].transform
+          document.getElementById('img' + "_" + this.data[i].file).style.transform = this.data[i].imgTransform
+          document.getElementById('panel' + "_" + this.data[i].file).style.transform = this.data[i].containerTransform
         }
       }
     }

@@ -7,30 +7,33 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { SidebarModule } from 'primeng/sidebar';
 import { ButtonModule } from 'primeng/button';
 import { TabViewModule } from 'primeng/tabview';
-import {TreeModule} from 'primeng/tree';
+import { TreeModule } from 'primeng/tree';
 import { HttpClientModule } from '@angular/common/http';
-import { TabService} from './tab.service'
-import { FileService} from './file.service'
+import { TabService } from './tab.service'
+import { FileService } from './file.service'
 import { SidebarComponent } from './sidebar/sidebar.component';
 import { FiletreeComponent } from './filetree/filetree.component';
 import { TabsComponent } from './tabs/tabs.component';
 import { EditorComponent } from './editor/editor.component';
-import {ToolbarModule} from 'primeng/toolbar';
+import { ToolbarModule } from 'primeng/toolbar';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
-import {DragDropModule} from '@angular/cdk/drag-drop';
+import { DragDropModule } from '@angular/cdk/drag-drop';
 import { ContainerComponent } from './container/container.component';
 import { MainbodyComponent } from './mainbody/mainbody.component';
 import { ToolbarComponent } from './toolbar/toolbar.component';
 import { EditingpanelComponent } from './editingpanel/editingpanel.component';
-import {TooltipModule} from 'primeng/tooltip';
+import { TooltipModule } from 'primeng/tooltip';
 import { ExportComponent } from './export/export.component';
-import {ExportService} from './export.service';
-import {InputTextModule} from 'primeng/inputtext';
-import {DropdownModule} from 'primeng/dropdown';
-import {DialogModule} from 'primeng/dialog';
+import { ExportService } from './export.service';
+import { InputTextModule } from 'primeng/inputtext';
+import { DropdownModule } from 'primeng/dropdown';
+import { DialogModule } from 'primeng/dialog';
 import { PinchZoomModule } from 'ngx-pinch-zoom';
 import { NgxImageZoomModule } from 'ngx-image-zoom';
 import { DragScrollModule } from 'ngx-drag-scroll';
+import { RightSidebarComponent } from './right-sidebar/right-sidebar.component';
+import { SliderModule } from 'primeng/slider';
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -42,8 +45,9 @@ import { DragScrollModule } from 'ngx-drag-scroll';
     MainbodyComponent,
     ToolbarComponent,
     EditingpanelComponent,
-    ExportComponent
-    
+    ExportComponent,
+    RightSidebarComponent
+
   ],
   imports: [
     BrowserModule,
@@ -65,11 +69,12 @@ import { DragScrollModule } from 'ngx-drag-scroll';
     DialogModule,
     PinchZoomModule,
     NgxImageZoomModule,
-   DragScrollModule
-  
-    
+    DragScrollModule,
+    SliderModule
+
+
   ],
-  providers: [TabService,FileService,ExportService],
+  providers: [TabService, FileService, ExportService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
