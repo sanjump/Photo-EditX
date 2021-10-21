@@ -20,8 +20,11 @@ export class MainbodyComponent implements OnInit{
     document.getElementById("mySidebar").style.width = "250px";
     document.getElementById("main").style.marginLeft = "250px";
     document.getElementById("open").hidden = true;
-    (document.querySelector(".container") as HTMLElement).style.margin = "15px";
-    (document.querySelector(".container") as HTMLElement).style.marginLeft =  "30px";
+    var elements = document.getElementsByClassName('container');
+    for (var i = 0; i < elements.length; i++) {
+      (elements[i] as HTMLElement).style.margin = "15px";
+      (elements[i] as HTMLElement).style.marginRight = "30px";
+    }
     document.getElementById("rightSidebar").style.width = "0px";
     document.getElementById("main").style.marginRight = "0px";
   }

@@ -10,6 +10,8 @@ import { FilterCommentsService } from '../filter-comments.service'
 import { TabService } from '../tab.service';
 import { faSearchPlus } from '@fortawesome/free-solid-svg-icons';
 import { faSearchMinus } from '@fortawesome/free-solid-svg-icons';
+import { faBold } from '@fortawesome/free-solid-svg-icons';
+import { faItalic } from '@fortawesome/free-solid-svg-icons';
 
 @Component({
   selector: 'app-toolbar',
@@ -37,6 +39,8 @@ export class ToolbarComponent implements OnInit {
   faCommentAlt = faCommentAlt
   faSyncAlt = faSyncAlt
   faAdjust = faAdjust
+  faBold = faBold
+  faItalic = faItalic
   faExpandArrowsAlt = faExpandArrowsAlt;
   json: any[] = [];
   i: number = 0;
@@ -112,9 +116,13 @@ export class ToolbarComponent implements OnInit {
     document.getElementById("mySidebar").style.width = "0px";
     document.getElementById("main").style.marginLeft = "0px";
     document.getElementById("open").hidden = false;
-    (document.querySelector(".container") as HTMLElement).style.margin = "15px";
-    (document.querySelector(".container") as HTMLElement).style.marginRight = "30px";
-
+    var elements = document.getElementsByClassName('container');
+    for (var i = 0; i < elements.length; i++) {
+      (elements[i] as HTMLElement).style.margin = "15px";
+      (elements[i] as HTMLElement).style.marginRight = "30px";
+    }
+    localStorage.setItem('imgName', this.tabheader)
+    this.tabService.SharingData.next(document.getElementById('img' + "_" + this.tabheader).style.filter)
   }
 
   clearFind() {
@@ -147,8 +155,28 @@ export class ToolbarComponent implements OnInit {
     this.setrotateDegree(this.degree)
   }
 
-  search(comment) {
+  makeBold(){
 
+    if(document.getElementById(localStorage.getItem('selectedText')).style.fontWeight == "bold"){
+      document.getElementById(localStorage.getItem('selectedText')).style.fontWeight = "normal"
+    }
+    else{
+      document.getElementById(localStorage.getItem('selectedText')).style.fontWeight = "bold"
+    }
+    
+  }
+
+  makeItalic(){
+
+    if(document.getElementById(localStorage.getItem('selectedText')).style.fontStyle == "italic"){
+      document.getElementById(localStorage.getItem('selectedText')).style.fontStyle = "normal"
+    }
+    else{
+      document.getElementById(localStorage.getItem('selectedText')).style.fontStyle = "italic"
+    }
+  }
+
+  search(comment) {
 
     this.filterService.filter(this.tabheader).subscribe(data => { this.filterData = data })
 
@@ -210,8 +238,11 @@ export class ToolbarComponent implements OnInit {
         id: this.inputElements[this.l].id,
         class: this.inputElements[this.l].className,
         value: this.inputElements[this.l].value,
+        fontWeight:this.inputElements[this.l].style.fontWeight,
+        fontStyle:this.inputElements[this.l].style.fontStyle,
         imgTransform: document.getElementById('img' + "_" + e.target.id).style.transform,
         containerTransform: document.getElementById('panel' + "_" + e.target.id).style.transform,
+        filters: document.getElementById('img' + "_" + e.target.id).style.filter,
         width: this.inputElements[this.l].style.width,
         height: this.inputElements[this.l].style.height,
         position: {

@@ -27,10 +27,10 @@ export class EditingpanelComponent implements OnInit, OnChanges {
   divname: string = ""
   overlay: string = ""
   imgname: string = ""
-  panel:string=""
+  panel: string = ""
   scale: any
   degree: any
-  imgDegree:any
+  imgDegree: any
   copyValue: string = ""
   dupCount: number = 1
   reduceScale: string = "1,1"
@@ -73,9 +73,9 @@ export class EditingpanelComponent implements OnInit, OnChanges {
 
     this.scale = this.zoomScale
     this.degree = this.rotateDegree
-    this.imgDegree = this.rotateDegree-90
+    this.imgDegree = this.rotateDegree - 90
     if (this.degree / 90 % 2 != 0) {
-      this.reduceScale = "0.5,0.5"
+      this.reduceScale = "0.45,0.45"
 
     }
 
@@ -86,7 +86,7 @@ export class EditingpanelComponent implements OnInit, OnChanges {
     this.divname = "div" + "_" + this.tabheader
     this.overlay = "overlay" + "_" + this.tabheader
     this.imgname = "img" + "_" + this.tabheader
-    this.panel = "panel"+ "_" + this.tabheader
+    this.panel = "panel" + "_" + this.tabheader
 
   }
 
@@ -104,6 +104,9 @@ export class EditingpanelComponent implements OnInit, OnChanges {
       if (!this.display.includes(this.data[0].file)) {
 
         this.display.push(this.data[0].file)
+        document.getElementById('img' + "_" + this.data[0].file).style.transform = this.data[0].imgTransform
+        document.getElementById('panel' + "_" + this.data[0].file).style.transform = this.data[0].containerTransform
+        document.getElementById('img' + "_" + this.data[0].file).style.filter = this.data[0].filters
 
         for (var i = 0; i < this.data.length; i++) {
 
@@ -120,9 +123,10 @@ export class EditingpanelComponent implements OnInit, OnChanges {
           text.disabled = true
           text.style.backgroundColor = "white"
           text.style.zIndex = "initial"
+          text.style.fontWeight = this.data[i].fontWeight
+          text.style.fontStyle = this.data[i].fontStyle
           document.getElementById('overlay' + "_" + this.data[i].file).appendChild(text)
-          document.getElementById('img' + "_" + this.data[i].file).style.transform = this.data[i].imgTransform
-          document.getElementById('panel' + "_" + this.data[i].file).style.transform = this.data[i].containerTransform
+
         }
       }
     }
@@ -131,6 +135,7 @@ export class EditingpanelComponent implements OnInit, OnChanges {
 
 
   setValue(e) {
+    localStorage.setItem("selectedText",e.target.id)
     this.copyValue = e.target.value
     navigator.clipboard.writeText("")
   }
