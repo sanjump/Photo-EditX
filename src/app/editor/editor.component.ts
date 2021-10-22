@@ -15,6 +15,7 @@ export class EditorComponent implements OnInit,OnChanges {
     zoomScale: any = ""
     textboxes: any[] = []
     rotateDegree:any=""
+    paragraphs:any[] = []
     ngOnInit() {
     }
 
@@ -23,6 +24,9 @@ export class EditorComponent implements OnInit,OnChanges {
       
     }
 
+    setParagraphs(setParagraphs: any) {
+        this.paragraphs = setParagraphs;
+    }
     setrotateDegree(setrotateDegree: any) {
         this.rotateDegree = setrotateDegree;
     }

@@ -17,7 +17,7 @@ export class MainbodyComponent implements OnInit{
   }
 
   openNav() {
-    document.getElementById("mySidebar").style.width = "250px";
+    document.getElementById("leftSidebar").style.width = "250px";
     document.getElementById("main").style.marginLeft = "250px";
     document.getElementById("open").hidden = true;
     var elements = document.getElementsByClassName('container');

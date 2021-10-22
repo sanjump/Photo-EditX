@@ -8,9 +8,12 @@
         <ng-container *ngFor="let i of textboxes">
             <div id="cont{{i}}" [class]="divname" style="width: 100px;height: 30px; display:flex;z-index: 1;position: absolute;transform: rotate(0deg);"
                 cdkDragBoundary=".overlay" cdkDrag>
-                <input id="text{{i}}" [class]="inputname" (click)="setValue($event)"  (paste)="duplicate()" (copy)="setValue($event)" style="width: 100px;height: 30px;z-index: 1;" type="text" />
+                <input id="text{{i}}" [class]="inputname" (click)="setValue($event)" (keydown)="checkDelete($event,i)" (paste)="duplicate()" (copy)="setValue($event)" style="width: 100px;height: 30px;z-index: 1;" type="text" />
                 <button id="btn{{i}}" style="z-index: 1;" (click)="remove(i)">X</button>
             </div>
+        </ng-container>
+        <ng-container *ngFor="let i of paragraphs">
+            <textarea autoResize="autoResize" (click)="setValue($event)" [class]="inputname" id={{i}} (keydown)="checkDelete($event,i)" (paste)="duplicateParagraph()" (copy)="setValue($event)" style="z-index: 1;position: absolute;"rows="1" cols="30" pInputTextarea cdkDragBoundary=".overlay" cdkDrag></textarea>
         </ng-container>
     </div>
 </div>

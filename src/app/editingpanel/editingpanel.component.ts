@@ -17,6 +17,7 @@ export class EditingpanelComponent implements OnInit, OnChanges {
   @Input() tabcontent: string
   @Input() zoomScale: any
   @Input() textboxes: any[]
+  @Input() paragraphs: any[]
   @Input() rotateDegree: any
 
   ipc: IpcRenderer
@@ -32,7 +33,8 @@ export class EditingpanelComponent implements OnInit, OnChanges {
   degree: any
   imgDegree: any
   copyValue: string = ""
-  dupCount: number = 1
+  dupCountTextbox: number = 1
+  dupCountParagraph: number = 1
   reduceScale: string = "1,1"
 
   ngOnInit() {
@@ -59,6 +61,7 @@ export class EditingpanelComponent implements OnInit, OnChanges {
 
 
   ngOnChanges() {
+  
 
     if (this.tabheader === undefined) {
 
@@ -113,6 +116,7 @@ export class EditingpanelComponent implements OnInit, OnChanges {
 
           var text = document.createElement('input')
           text.id = this.data[i].id
+          text.type = this.data[i].type
           text.className = this.data[i].class
           text.value = this.data[i].value
           text.style.width = this.data[i].width
@@ -125,6 +129,9 @@ export class EditingpanelComponent implements OnInit, OnChanges {
           text.style.zIndex = "initial"
           text.style.fontWeight = this.data[i].fontWeight
           text.style.fontStyle = this.data[i].fontStyle
+          text.style.fontFamily = this.data[i].fontFamily
+          text.style.color = this.data[i].fontColor
+          text.style.fontSize = this.data[i].fontSize
           document.getElementById('overlay' + "_" + this.data[i].file).appendChild(text)
 
         }
@@ -140,13 +147,26 @@ export class EditingpanelComponent implements OnInit, OnChanges {
     navigator.clipboard.writeText("")
   }
 
-  duplicate() {
+  duplicateTextbox() {
 
-    this.textboxes.push(this.textboxes[0] + "_dup" + this.dupCount);
+    this.textboxes.push(this.textboxes[0] + "_dup" + this.dupCountTextbox);
 
     setTimeout(() => {
-      (<HTMLInputElement>document.getElementById("text" + this.textboxes[0] + "_dup" + this.dupCount)).value = this.copyValue
-      this.dupCount += 1
+      (<HTMLInputElement>document.getElementById("text" + this.textboxes[0] + "_dup" + this.dupCountTextbox)).value = this.copyValue
+      this.dupCountTextbox += 1
+    }, 100);
+
+
+
+  }
+
+  duplicateParagraph() {
+
+    this.paragraphs.push(this.paragraphs[0] + "_dup" + this.dupCountParagraph);
+
+    setTimeout(() => {
+      (<HTMLInputElement>document.getElementById(this.paragraphs[0] + "_dup" + this.dupCountParagraph)).value = this.copyValue
+      this.dupCountParagraph += 1
     }, 100);
 
 
@@ -155,11 +175,28 @@ export class EditingpanelComponent implements OnInit, OnChanges {
 
 
 
+
+  checkDelete(e,i){
+
+   
+    if(e.key=='Delete'){
+      this.remove(i)
+    }
+
+  }
+
   remove(id) {
 
-    var cont = document.getElementById('cont' + id)
-    cont.removeChild(document.getElementById('text' + id))
-    cont.removeChild(document.getElementById('btn' + id))
+    if(id.includes("paragraph")){
+      document.getElementById(id).style.display = 'none'
+    }
+   
+   else{
+    document.getElementById('text' + id).style.display = 'none'
+    document.getElementById('btn' + id).style.display = 'none'
+    document.getElementById('cont' + id).style.display = 'none'
+   }
+    
 
   }
 

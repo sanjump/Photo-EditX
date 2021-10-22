@@ -33,7 +33,9 @@ import { NgxImageZoomModule } from 'ngx-image-zoom';
 import { DragScrollModule } from 'ngx-drag-scroll';
 import { RightSidebarComponent } from './right-sidebar/right-sidebar.component';
 import { SliderModule } from 'primeng/slider';
-
+import { NecessaryService } from './necessary.service';
+import {ColorPickerModule} from 'primeng/colorpicker';
+import {InputTextareaModule} from 'primeng/inputtextarea';
 @NgModule({
   declarations: [
     AppComponent,
@@ -70,11 +72,13 @@ import { SliderModule } from 'primeng/slider';
     PinchZoomModule,
     NgxImageZoomModule,
     DragScrollModule,
-    SliderModule
+    SliderModule,
+    ColorPickerModule,
+    InputTextareaModule
 
 
   ],
-  providers: [TabService, FileService, ExportService],
+  providers: [TabService, FileService, ExportService,NecessaryService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

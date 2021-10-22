@@ -18,7 +18,7 @@
             <button id="rotate_btn" pTooltip="Rotate" tooltipPosition="bottom" (click)="rotate()" style="margin: 5px;">
                 <fa-icon [icon]="faSyncAlt"></fa-icon>
             </button>
-            <button id="adjust_btn" pTooltip="Adjustments" tooltipPosition="bottom" (click)="openRightBar()" style="margin: 5px;">
+            <button id="adjust_btn" pTooltip="Adjustments" tooltipPosition="bottom" (click)="openRightBar($event)" style="margin: 5px;">
                 <fa-icon [icon]="faAdjust"></fa-icon>
             </button>
             <button id="bold_btn" pTooltip="Bold" tooltipPosition="bottom" (click)="makeBold()" style="margin: 5px;">
@@ -26,6 +26,9 @@
             </button>
             <button id="italic_btn" pTooltip="Italic" tooltipPosition="bottom" (click)="makeItalic()" style="margin: 5px;">
                 <fa-icon [icon]="faItalic"></fa-icon>
+            </button>
+            <button id="paragraph_btn" pTooltip="Paragraph" tooltipPosition="bottom" (click)="addParagraph($event)" style="margin: 5px;">
+                <fa-icon [icon]="faParagraph"></fa-icon>
             </button>
 
         </div>

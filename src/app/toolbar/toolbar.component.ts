@@ -3,16 +3,16 @@ import { faCommentAlt } from '@fortawesome/free-solid-svg-icons';
 import { faExpandArrowsAlt } from '@fortawesome/free-solid-svg-icons';
 import { faSyncAlt } from '@fortawesome/free-solid-svg-icons';
 import { faAdjust } from '@fortawesome/free-solid-svg-icons';
+import { faParagraph } from '@fortawesome/free-solid-svg-icons';
 import { Output, EventEmitter } from '@angular/core';
 import { IpcRenderer } from 'electron';
 import { BrowserWindow } from 'electron';
-import { FilterCommentsService } from '../filter-comments.service'
 import { TabService } from '../tab.service';
 import { faSearchPlus } from '@fortawesome/free-solid-svg-icons';
 import { faSearchMinus } from '@fortawesome/free-solid-svg-icons';
 import { faBold } from '@fortawesome/free-solid-svg-icons';
 import { faItalic } from '@fortawesome/free-solid-svg-icons';
-
+import {NecessaryService} from '../necessary.service'
 @Component({
   selector: 'app-toolbar',
   templateUrl: './toolbar.component.html',
@@ -21,13 +21,14 @@ import { faItalic } from '@fortawesome/free-solid-svg-icons';
 
 export class ToolbarComponent implements OnInit {
 
-  constructor(private filterService: FilterCommentsService, private tabService: TabService, private zone: NgZone) {
+  constructor( private tabService: TabService,private necessaryService:NecessaryService, private zone: NgZone) {
 
   }
 
   @Input() tabheader: string
   @Input() tabcontent: string
   @Output() textboxes = new EventEmitter<any>();
+  @Output() paragraphs = new EventEmitter<any>();
   @Output() zoomScale = new EventEmitter<any>();
   @Output() rotateDegree = new EventEmitter<any>();
 
@@ -41,12 +42,15 @@ export class ToolbarComponent implements OnInit {
   faAdjust = faAdjust
   faBold = faBold
   faItalic = faItalic
+  faParagraph = faParagraph
   faExpandArrowsAlt = faExpandArrowsAlt;
   json: any[] = [];
   i: number = 0;
+  j: number = 0
   l: number;
   inputElements: any
   inputTextboxes: any[] = []
+  inputParagraph:any[]=[]
   displaySave: boolean
   overlay: any;
   filterData: any = []
@@ -93,6 +97,13 @@ export class ToolbarComponent implements OnInit {
 
   }
 
+  setParagraphs(value: any) {
+    this.paragraphs.emit(value);
+
+  }
+
+
+
   setZoomScale(value: any) {
     this.zoomScale.emit(value);
 
@@ -109,20 +120,30 @@ export class ToolbarComponent implements OnInit {
 
   }
 
-  openRightBar() {
+  addParagraph(e){
 
+    this.inputParagraph.push("paragraph"+this.j + "_" + this.tabheader)
+    this.setParagraphs(this.inputParagraph)
+    this.j += 1
+    this.openRightBar(e)
+
+  }
+
+  openRightBar(e) {
+    
+    this.necessaryService.btnPressed.next(e.target.id)
     document.getElementById("rightSidebar").style.width = "300px";
     document.getElementById("main").style.marginRight = "300px";
-    document.getElementById("mySidebar").style.width = "0px";
+    document.getElementById("leftSidebar").style.width = "0px";
     document.getElementById("main").style.marginLeft = "0px";
     document.getElementById("open").hidden = false;
     var elements = document.getElementsByClassName('container');
     for (var i = 0; i < elements.length; i++) {
       (elements[i] as HTMLElement).style.margin = "15px";
-      (elements[i] as HTMLElement).style.marginRight = "30px";
+      (elements[i] as HTMLElement).style.marginRight = "40px";
     }
     localStorage.setItem('imgName', this.tabheader)
-    this.tabService.SharingData.next(document.getElementById('img' + "_" + this.tabheader).style.filter)
+    this.necessaryService.brightness.next(document.getElementById('img' + "_" + this.tabheader).style.filter)
   }
 
   clearFind() {
@@ -178,11 +199,8 @@ export class ToolbarComponent implements OnInit {
 
   search(comment) {
 
-    this.filterService.filter(this.tabheader).subscribe(data => { this.filterData = data })
 
-    setTimeout(() => {
-
-      this.annotations = document.getElementsByClassName(this.filterData[0].class)
+      this.annotations = document.getElementsByClassName("input_"+this.tabheader)
       for (var i = 0; i < this.annotations.length; i++) {
         if (this.annotations[i].value.includes(comment) && comment != "") {
           this.annotations[i].style.backgroundColor = "yellow"
@@ -192,7 +210,6 @@ export class ToolbarComponent implements OnInit {
         }
       }
 
-    }, 200);
   }
 
   export() {
@@ -236,10 +253,13 @@ export class ToolbarComponent implements OnInit {
         date: date,
         type: this.inputElements[this.l].type,
         id: this.inputElements[this.l].id,
-        class: this.inputElements[this.l].className,
+        class: "input_"+e.target.id,
         value: this.inputElements[this.l].value,
         fontWeight:this.inputElements[this.l].style.fontWeight,
         fontStyle:this.inputElements[this.l].style.fontStyle,
+        fontFamily:this.inputElements[this.l].style.fontFamily,
+        fontColor:this.inputElements[this.l].style.color,
+        fontSize:this.inputElements[this.l].style.fontSize,
         imgTransform: document.getElementById('img' + "_" + e.target.id).style.transform,
         containerTransform: document.getElementById('panel' + "_" + e.target.id).style.transform,
         filters: document.getElementById('img' + "_" + e.target.id).style.filter,

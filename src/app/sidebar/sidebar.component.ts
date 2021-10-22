@@ -16,14 +16,14 @@ export class SidebarComponent implements OnInit {
 
 
   ngOnInit(): void {
-    document.getElementById("mySidebar").style.width = "250px";
+    document.getElementById("leftSidebar").style.width = "250px";
     document.getElementById("main").style.marginLeft = "250px";
     document.getElementById("open").hidden = true;
   }
 
   closeNav() {
     document.getElementById("open").hidden = false;
-    document.getElementById("mySidebar").style.width = "0px";
+    document.getElementById("leftSidebar").style.width = "0px";
     document.getElementById("main").style.marginLeft = "0px";
     var elements = document.getElementsByClassName('container');
     for (var i = 0; i < elements.length; i++) {
