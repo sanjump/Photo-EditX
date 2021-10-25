@@ -19,6 +19,8 @@ export class EditingpanelComponent implements OnInit, OnChanges {
   @Input() textboxes: any[]
   @Input() paragraphs: any[]
   @Input() rotateDegree: any
+  @Input() richText: any[]
+
 
   ipc: IpcRenderer
   data: any
@@ -36,6 +38,7 @@ export class EditingpanelComponent implements OnInit, OnChanges {
   dupCountTextbox: number = 1
   dupCountParagraph: number = 1
   reduceScale: string = "1,1"
+  richTextValue : string
 
   ngOnInit() {
 
@@ -92,8 +95,6 @@ export class EditingpanelComponent implements OnInit, OnChanges {
     this.panel = "panel" + "_" + this.tabheader
 
   }
-
-
 
 
 
@@ -188,6 +189,10 @@ export class EditingpanelComponent implements OnInit, OnChanges {
   remove(id) {
 
     if(id.includes("paragraph")){
+      document.getElementById(id).style.display = 'none'
+    }
+
+    else if(id.includes("richText")){
       document.getElementById(id).style.display = 'none'
     }
    

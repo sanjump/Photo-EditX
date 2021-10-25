@@ -13,6 +13,8 @@ import { faSearchMinus } from '@fortawesome/free-solid-svg-icons';
 import { faBold } from '@fortawesome/free-solid-svg-icons';
 import { faItalic } from '@fortawesome/free-solid-svg-icons';
 import {NecessaryService} from '../necessary.service'
+import { faFont } from '@fortawesome/free-solid-svg-icons';
+import { faEdit } from '@fortawesome/free-solid-svg-icons';
 @Component({
   selector: 'app-toolbar',
   templateUrl: './toolbar.component.html',
@@ -29,6 +31,7 @@ export class ToolbarComponent implements OnInit {
   @Input() tabcontent: string
   @Output() textboxes = new EventEmitter<any>();
   @Output() paragraphs = new EventEmitter<any>();
+  @Output() richText = new EventEmitter<any>();
   @Output() zoomScale = new EventEmitter<any>();
   @Output() rotateDegree = new EventEmitter<any>();
 
@@ -43,14 +46,18 @@ export class ToolbarComponent implements OnInit {
   faBold = faBold
   faItalic = faItalic
   faParagraph = faParagraph
+  faFont = faFont
   faExpandArrowsAlt = faExpandArrowsAlt;
+  faEdit = faEdit
   json: any[] = [];
-  i: number = 0;
-  j: number = 0
+  countText: number = 0;
+  countTextArea: number = 0
+  countRichText: number = 0
   l: number;
   inputElements: any
   inputTextboxes: any[] = []
   inputParagraph:any[]=[]
+  inputRichText:any[]=[]
   displaySave: boolean
   overlay: any;
   filterData: any = []
@@ -102,6 +109,11 @@ export class ToolbarComponent implements OnInit {
 
   }
 
+  setRichText(value: any) {
+    this.richText.emit(value);
+
+  }
+
 
 
   setZoomScale(value: any) {
@@ -114,18 +126,27 @@ export class ToolbarComponent implements OnInit {
   }
 
   addTextbox() {
-    this.inputTextboxes.push(this.i + "_" + this.tabheader)
+    this.inputTextboxes.push(this.countText + "_" + this.tabheader)
     this.setTextboxes(this.inputTextboxes)
-    this.i += 1
+    this.countText += 1
 
   }
 
   addParagraph(e){
 
-    this.inputParagraph.push("paragraph"+this.j + "_" + this.tabheader)
+    this.inputParagraph.push("paragraph"+this.countTextArea + "_" + this.tabheader)
     this.setParagraphs(this.inputParagraph)
-    this.j += 1
-    this.openRightBar(e)
+    this.countTextArea += 1
+   
+
+  }
+
+  addRichText(e){
+
+    this.inputRichText.push("richText"+this.countRichText + "_" + this.tabheader)
+    this.setRichText(this.inputRichText)
+    this.countRichText += 1
+   
 
   }
 
@@ -232,7 +253,6 @@ export class ToolbarComponent implements OnInit {
     localStorage.setItem('imgUrl', this.url)
     this.ipc.send("fullScreen", this.tabheader)
   }
-
 
 
   save(e) {

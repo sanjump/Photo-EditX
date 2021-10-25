@@ -36,6 +36,8 @@ import { SliderModule } from 'primeng/slider';
 import { NecessaryService } from './necessary.service';
 import {ColorPickerModule} from 'primeng/colorpicker';
 import {InputTextareaModule} from 'primeng/inputtextarea';
+import {EditorModule} from 'primeng/editor';
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -74,7 +76,8 @@ import {InputTextareaModule} from 'primeng/inputtextarea';
     DragScrollModule,
     SliderModule,
     ColorPickerModule,
-    InputTextareaModule
+    InputTextareaModule,
+    EditorModule
 
 
   ],

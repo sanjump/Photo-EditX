@@ -6,6 +6,7 @@
     margin-left: 30px;
     padding-top: 200px;
     border: solid black 3px;
+    overflow: hidden;
 }
 
 .box {
@@ -39,4 +40,12 @@ button {
     line-height: 0px;
     padding: 6px 1px;     
 }
-  
+
+
+
+::ng-deep .ql-toolbar.ql-snow {
+    width: 200px;
+    height: 40px;
+    background-color: rgb(12, 0, 0);
+}
+

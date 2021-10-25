@@ -16,12 +16,17 @@ export class EditorComponent implements OnInit,OnChanges {
     textboxes: any[] = []
     rotateDegree:any=""
     paragraphs:any[] = []
+    richText:any[] = []
     ngOnInit() {
     }
 
     ngOnChanges(){
 
       
+    }
+
+    setRichText(setRichText: any) {
+        this.richText = setRichText;
     }
 
     setParagraphs(setParagraphs: any) {

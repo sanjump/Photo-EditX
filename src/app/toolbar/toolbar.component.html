@@ -1,9 +1,7 @@
 <div>
     <p-toolbar>
         <div class="p-toolbar-group-left">
-            <button pTooltip="Add comments" tooltipPosition="bottom" (click)="addTextbox()" style="margin: 5px;">
-                <fa-icon [icon]="faCommentAlt"></fa-icon>
-            </button>
+            
             <button id="fullScreen_btn" pTooltip="Full Screen" tooltipPosition="bottom" (click)="fullScreen()"
                 style="margin: 5px;">
                 <fa-icon [icon]="faExpandArrowsAlt"></fa-icon>
@@ -18,8 +16,14 @@
             <button id="rotate_btn" pTooltip="Rotate" tooltipPosition="bottom" (click)="rotate()" style="margin: 5px;">
                 <fa-icon [icon]="faSyncAlt"></fa-icon>
             </button>
-            <button id="adjust_btn" pTooltip="Adjustments" tooltipPosition="bottom" (click)="openRightBar($event)" style="margin: 5px;">
-                <fa-icon [icon]="faAdjust"></fa-icon>
+            <button pTooltip="Add comments" tooltipPosition="bottom" (click)="addTextbox()" style="margin: 5px;">
+                <fa-icon [icon]="faCommentAlt"></fa-icon>
+            </button>
+            <button id="paragraph_btn" pTooltip="Paragraph" tooltipPosition="bottom" (click)="addParagraph($event)" style="margin: 5px;">
+                <fa-icon [icon]="faParagraph"></fa-icon>
+            </button>
+            <button id="paragraph_btn" pTooltip="Rich text" tooltipPosition="bottom" (click)="addRichText($event)" style="margin: 5px;">
+                <fa-icon [icon]="faEdit"></fa-icon>
             </button>
             <button id="bold_btn" pTooltip="Bold" tooltipPosition="bottom" (click)="makeBold()" style="margin: 5px;">
                 <fa-icon [icon]="faBold"></fa-icon>
@@ -27,8 +31,11 @@
             <button id="italic_btn" pTooltip="Italic" tooltipPosition="bottom" (click)="makeItalic()" style="margin: 5px;">
                 <fa-icon [icon]="faItalic"></fa-icon>
             </button>
-            <button id="paragraph_btn" pTooltip="Paragraph" tooltipPosition="bottom" (click)="addParagraph($event)" style="margin: 5px;">
-                <fa-icon [icon]="faParagraph"></fa-icon>
+            <button id="font_btn" pTooltip="Font Styling" tooltipPosition="bottom" (click)="openRightBar($event)" style="margin: 5px;">
+                <fa-icon [icon]="faFont"></fa-icon>
+            </button>
+            <button id="adjust_btn" pTooltip="Adjustments" tooltipPosition="bottom" (click)="openRightBar($event)" style="margin: 5px;">
+                <fa-icon [icon]="faAdjust"></fa-icon>
             </button>
 
         </div>

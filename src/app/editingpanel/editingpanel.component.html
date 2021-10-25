@@ -1,19 +1,63 @@
-
-<div [id] = "panel" class="container" [style.transform]="'rotate('+degree+'deg) scale('+reduceScale+')'">
+<div [id]="panel" class="container" [style.transform]="'rotate('+degree+'deg) scale('+reduceScale+')'">
     <div class="box" style="overflow:hidden">
-        <img [src]="url" [id]=
-        "imgname" height="100%" width="100%" [style.transform]="'scale('+scale+') rotate(0deg)'" />
+        <img [src]="url" [id]="imgname" height="100%" width="100%"
+            [style.transform]="'scale('+scale+') rotate(0deg)'" />
     </div>
+
     <div [id]="overlay" class="box overlay">
         <ng-container *ngFor="let i of textboxes">
-            <div id="cont{{i}}" [class]="divname" style="width: 100px;height: 30px; display:flex;z-index: 1;position: absolute;transform: rotate(0deg);"
+            <div id="cont{{i}}" [class]="divname"
+                style="width: 100px;height: 30px; display:flex;z-index: 1;position: absolute;transform: rotate(0deg);"
                 cdkDragBoundary=".overlay" cdkDrag>
-                <input id="text{{i}}" [class]="inputname" (click)="setValue($event)" (keydown)="checkDelete($event,i)" (paste)="duplicate()" (copy)="setValue($event)" style="width: 100px;height: 30px;z-index: 1;" type="text" />
+                <input id="text{{i}}" [class]="inputname" maxlength="10" (click)="setValue($event)"
+                    (keydown)="checkDelete($event,i)" (paste)="duplicate()" (copy)="setValue($event)"
+                    style="width: 100px;height: 30px;z-index: 1;" type="text" />
                 <button id="btn{{i}}" style="z-index: 1;" (click)="remove(i)">X</button>
             </div>
         </ng-container>
         <ng-container *ngFor="let i of paragraphs">
-            <textarea autoResize="autoResize" (click)="setValue($event)" [class]="inputname" id={{i}} (keydown)="checkDelete($event,i)" (paste)="duplicateParagraph()" (copy)="setValue($event)" style="z-index: 1;position: absolute;"rows="1" cols="30" pInputTextarea cdkDragBoundary=".overlay" cdkDrag></textarea>
+            <textarea autoResize="autoResize" (click)="setValue($event)" [class]="inputname" id={{i}}
+                (keydown)="checkDelete($event,i)" (paste)="duplicateParagraph()" (copy)="setValue($event)"
+                style="z-index: 1;position: absolute;" rows="1" cols="30" pInputTextarea cdkDragBoundary=".overlay"
+                cdkDrag></textarea>
+        </ng-container>
+        <ng-container *ngFor="let i of richText">
+            <div style="width: 200px;height: 240px; display:flex;z-index: 1;position: absolute;transform: rotate(0deg);"
+                cdkDragBoundary=".overlay" cdkDrag>
+                <p-editor id={{i}} [class]="inputname" (keydown)="checkDelete($event,i)" (ngModel)="richTextValue"
+                    [style]="{'height':'200px','width':'200px'}">
+                    <p-header>
+                        <span class="ql-formats">
+                            <button type="button" class="ql-bold" aria-label="Bold"></button>
+                            <button type="button" class="ql-italic" aria-label="Italic"></button>
+                            <button type="button" class="ql-underline" aria-label="Underline"></button>
+                            <button class="ql-strike" aria-label="Strike"></button>
+                            <select title="Text Color" class="ql-color" defaultValue="rgb(0, 0, 0)">
+                                <option value="rgb(0, 0, 0)" label="rgb(0, 0, 0)"></option>
+                                <option value="rgb(230, 0, 0)" label="rgb(230, 0, 0)"></option>
+                                <option value="rgb(255, 153, 0)" label="rgb(255, 153, 0)"></option>
+                                <option value="rgb(0, 138, 0)" label="rgb(0, 138, 0)"></option>
+                                <option value="rgb(0, 102, 204)" label="rgb(0, 102, 204)"></option>
+                                <option value="rgb(61, 20, 102)" label="rgb(61, 20, 102)"></option>
+                                <option value="rgb(255, 255, 255)" label="rgb(255, 255, 255)"></option>
+                            </select>
+                            <span class="ql-format-separator"></span>
+                            <select title="Background Color" class="ql-background" defaultValue="rgb(255, 255, 255)">
+                                <option value="rgb(0, 0, 0)" label="rgb(0, 0, 0)"></option>
+                                <option value="rgb(230, 0, 0)" label="rgb(230, 0, 0)"></option>
+                                <option value="rgb(255, 153, 0)" label="rgb(255, 153, 0)"></option>
+                                <option value="rgb(0, 138, 0)" label="rgb(0, 138, 0)"></option>
+                                <option value="rgb(0, 102, 204)" label="rgb(0, 102, 204)"></option>
+                                <option value="rgb(61, 20, 102)" label="rgb(61, 20, 102)"></option>
+                                <option value="rgb(255, 255, 255)" label="rgb(255, 255, 255)"></option>
+                            </select>
+
+                        </span>
+
+                    </p-header>
+                </p-editor>
+            </div>
         </ng-container>
     </div>
+
 </div>

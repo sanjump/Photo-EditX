@@ -73,8 +73,20 @@ export class RightSidebarComponent implements OnInit {
   }
 
   changeFontSize(e){
+
+
+    if((<HTMLInputElement>(document.getElementById(localStorage.getItem('selectedText')))).type=="text"){
+      var size = document.getElementById(localStorage.getItem('selectedText')).style.fontSize.slice(0,-2)
+      if(Number(size)<=20){
+        document.getElementById(localStorage.getItem('selectedText')).style.fontSize = e.value + "px"
+      }
+    }
+
+    else{
+      document.getElementById(localStorage.getItem('selectedText')).style.fontSize = e.value + "px"
+    }
     
-    document.getElementById(localStorage.getItem('selectedText')).style.fontSize = e.value + "px"
+    
   }
 
 }
