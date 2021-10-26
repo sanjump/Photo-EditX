@@ -84,7 +84,7 @@ export class ToolbarComponent implements OnInit {
         if (args != "No file" && args.length > 0) {
 
           this.scale = Number(args[0].imgTransform.slice(args[0].imgTransform.indexOf('(') + 1, args[0].imgTransform.indexOf(')')))
-          this.degree = Number(args[0].containerTransform.slice(args[0].containerTransform.indexOf('(') + 1, args[0].containerTransform.indexOf(')') - 3));
+          this.degree = Number(args[0].containerTransform.slice(args[0].containerTransform.lastIndexOf('(') + 1, args[0].containerTransform.lastIndexOf(')') - 3));
           this.zoomScale.emit(this.scale);
           this.rotateDegree.emit(this.degree);
 
@@ -266,39 +266,48 @@ export class ToolbarComponent implements OnInit {
     var mm = String(today.getMonth() + 1).padStart(2, '0');
     var yyyy = today.getFullYear();
     var date = dd + '-' + mm + '-' + yyyy;
-
+    this.json.push({
+      file: this.tabheader,
+      date: date,
+      imgTransform: document.getElementById('img' + "_" + e.target.id).style.transform,
+      containerTransform: document.getElementById('panel' + "_" + e.target.id).style.transform,
+      filters: document.getElementById('img' + "_" + e.target.id).style.filter,
+    })
     while (this.l--) {
-      this.json.push({
-        file: this.tabheader,
-        date: date,
-        type: this.inputElements[this.l].type,
-        id: this.inputElements[this.l].id,
-        class: "input_"+e.target.id,
-        value: this.inputElements[this.l].value,
-        fontWeight:this.inputElements[this.l].style.fontWeight,
-        fontStyle:this.inputElements[this.l].style.fontStyle,
-        fontFamily:this.inputElements[this.l].style.fontFamily,
-        fontColor:this.inputElements[this.l].style.color,
-        fontSize:this.inputElements[this.l].style.fontSize,
-        imgTransform: document.getElementById('img' + "_" + e.target.id).style.transform,
-        containerTransform: document.getElementById('panel' + "_" + e.target.id).style.transform,
-        filters: document.getElementById('img' + "_" + e.target.id).style.filter,
-        width: this.inputElements[this.l].style.width,
-        height: this.inputElements[this.l].style.height,
-        position: {
-          left: (this.inputElements[this.l] as HTMLElement).getBoundingClientRect().left - this.overlay.left,
-          top: (this.inputElements[this.l] as HTMLElement).getBoundingClientRect().top - this.overlay.top
-        }
-      });
+
+      if(this.inputElements[this.l].value!="" && this.inputElements[this.l].style.display!="none"){
+        this.json.push({
+          file: this.tabheader,
+          date: date,
+          type: this.inputElements[this.l].type,
+          id: this.inputElements[this.l].id,
+          class: this.inputElements[this.l].className,
+          value: this.inputElements[this.l].value,
+          fontWeight:this.inputElements[this.l].style.fontWeight,
+          fontStyle:this.inputElements[this.l].style.fontStyle,
+          fontFamily:this.inputElements[this.l].style.fontFamily,
+          fontColor:this.inputElements[this.l].style.color,
+          fontSize:this.inputElements[this.l].style.fontSize,
+          width: this.inputElements[this.l].style.width,
+          height: this.inputElements[this.l].style.height,
+          display:this.inputElements[this.l].style.display,
+          position: {
+            left: (this.inputElements[this.l] as HTMLElement).getBoundingClientRect().left - this.overlay.left,
+            top: (this.inputElements[this.l] as HTMLElement).getBoundingClientRect().top - this.overlay.top
+          }
+        });
+
+      }
+      
 
     }
 
-    if (this.json.length > 0) {
+   
 
       this.ipc.send("file", this.json);
       this.displaySave = true
 
-    }
+    
 
 
   }

@@ -44,8 +44,11 @@ button {
 
 
 ::ng-deep .ql-toolbar.ql-snow {
-    width: 200px;
+    width: 260px;
     height: 40px;
     background-color: rgb(12, 0, 0);
 }
 
+::ng-deep .p-editor-container .p-editor-content .ql-editor{
+background-color: transparent;
+}

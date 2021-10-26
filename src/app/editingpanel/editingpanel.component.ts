@@ -38,7 +38,7 @@ export class EditingpanelComponent implements OnInit, OnChanges {
   dupCountTextbox: number = 1
   dupCountParagraph: number = 1
   reduceScale: string = "1,1"
-  richTextValue : string
+  richTextValue: string
 
   ngOnInit() {
 
@@ -64,7 +64,7 @@ export class EditingpanelComponent implements OnInit, OnChanges {
 
 
   ngOnChanges() {
-  
+
 
     if (this.tabheader === undefined) {
 
@@ -111,29 +111,41 @@ export class EditingpanelComponent implements OnInit, OnChanges {
         document.getElementById('img' + "_" + this.data[0].file).style.transform = this.data[0].imgTransform
         document.getElementById('panel' + "_" + this.data[0].file).style.transform = this.data[0].containerTransform
         document.getElementById('img' + "_" + this.data[0].file).style.filter = this.data[0].filters
+        var text;
+        
+        for (var i = 1; i < this.data.length; i++) {
 
-        for (var i = 0; i < this.data.length; i++) {
+          if (this.data[i].type == "text") {
+
+            text = document.createElement('input')
+          }
+
+          else if(this.data[i].type == "textarea"){
+
+            text = document.createElement('textarea')
+
+          }
 
 
-          var text = document.createElement('input')
-          text.id = this.data[i].id
-          text.type = this.data[i].type
-          text.className = this.data[i].class
-          text.value = this.data[i].value
-          text.style.width = this.data[i].width
-          text.style.height = this.data[i].height
-          text.style.position = 'absolute'
-          text.style.left = (this.data[i].position.left) + "px"
-          text.style.top = (this.data[i].position.top) + "px"
-          text.disabled = true
-          text.style.backgroundColor = "white"
-          text.style.zIndex = "initial"
-          text.style.fontWeight = this.data[i].fontWeight
-          text.style.fontStyle = this.data[i].fontStyle
-          text.style.fontFamily = this.data[i].fontFamily
-          text.style.color = this.data[i].fontColor
-          text.style.fontSize = this.data[i].fontSize
-          document.getElementById('overlay' + "_" + this.data[i].file).appendChild(text)
+            text.id = this.data[i].id
+            text.className = this.data[i].class
+            text.value = this.data[i].value
+            text.style.width = this.data[i].width
+            text.style.height = this.data[i].height
+            text.style.position = 'absolute'
+            text.style.left = (this.data[i].position.left) + "px"
+            text.style.top = (this.data[i].position.top) + "px"
+            text.disabled = true
+            text.style.backgroundColor = "transparent"
+            text.style.border = "none"
+            text.style.zIndex = "initial"
+            text.style.fontWeight = this.data[i].fontWeight
+            text.style.fontStyle = this.data[i].fontStyle
+            text.style.fontFamily = this.data[i].fontFamily
+            text.style.color = this.data[i].fontColor
+            text.style.fontSize = this.data[i].fontSize
+            document.getElementById('overlay' + "_" + this.data[i].file).appendChild(text)
+          
 
         }
       }
@@ -142,14 +154,32 @@ export class EditingpanelComponent implements OnInit, OnChanges {
   }
 
 
-  setValue(e) {
-    localStorage.setItem("selectedText",e.target.id)
+  show(){
+    console.log("SD")
+    document.getElementById('box').style.zIndex = "2"
+  }
+
+  show1(){
+    console.log("SDdas")
+    document.getElementById('box').style.zIndex = "-1"
+  }
+
+
+
+
+  setValue(e,i="") {
+    
+    localStorage.setItem("selectedText", e.target.id)
     this.copyValue = e.target.value
     navigator.clipboard.writeText("")
+
+    if(e.type=="cut"){
+      this.remove(i)
+    }
   }
 
   duplicateTextbox() {
-
+console.log("dsa")
     this.textboxes.push(this.textboxes[0] + "_dup" + this.dupCountTextbox);
 
     setTimeout(() => {
@@ -177,10 +207,10 @@ export class EditingpanelComponent implements OnInit, OnChanges {
 
 
 
-  checkDelete(e,i){
+  checkDelete(e, i) {
 
-   
-    if(e.key=='Delete'){
+
+    if (e.key == 'Delete') {
       this.remove(i)
     }
 
@@ -188,20 +218,26 @@ export class EditingpanelComponent implements OnInit, OnChanges {
 
   remove(id) {
 
-    if(id.includes("paragraph")){
+    if (id.includes("paragraph")) {
       document.getElementById(id).style.display = 'none'
     }
 
-    else if(id.includes("richText")){
+    else if (id.includes("richText")) {
       document.getElementById(id).style.display = 'none'
     }
-   
-   else{
-    document.getElementById('text' + id).style.display = 'none'
-    document.getElementById('btn' + id).style.display = 'none'
-    document.getElementById('cont' + id).style.display = 'none'
-   }
-    
+
+    else {
+      document.getElementById('text' + id).style.display = 'none'
+      document.getElementById('btn' + id).style.display = 'none'
+      document.getElementById('cont' + id).style.display = 'none'
+    }
+
+
+  }
+
+
+  getRichTextValue(e) {
+
 
   }
 
