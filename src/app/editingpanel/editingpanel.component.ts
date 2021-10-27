@@ -39,7 +39,7 @@ export class EditingpanelComponent implements OnInit, OnChanges {
   dupCountParagraph: number = 1
   reduceScale: string = "1,1"
   richTextValue: string
-
+ 
   ngOnInit() {
 
 
@@ -82,6 +82,7 @@ export class EditingpanelComponent implements OnInit, OnChanges {
     this.imgDegree = this.rotateDegree - 90
     if (this.degree / 90 % 2 != 0) {
       this.reduceScale = "0.45,0.45"
+      
 
     }
 
@@ -172,43 +173,57 @@ export class EditingpanelComponent implements OnInit, OnChanges {
     localStorage.setItem("selectedText", e.target.id)
     this.copyValue = e.target.value
     navigator.clipboard.writeText("")
-
-    if(e.type=="cut"){
-      this.remove(i)
-    }
   }
 
-  duplicateTextbox() {
-console.log("dsa")
-    this.textboxes.push(this.textboxes[0] + "_dup" + this.dupCountTextbox);
+  duplicateTextbox(e) {
 
+    
+
+    this.textboxes.push(this.textboxes[0] + "_dup" + this.dupCountTextbox);
+   
     setTimeout(() => {
-      (<HTMLInputElement>document.getElementById("text" + this.textboxes[0] + "_dup" + this.dupCountTextbox)).value = this.copyValue
-      this.dupCountTextbox += 1
+      
+      (<HTMLInputElement>document.getElementById("text" + this.textboxes[0] + "_dup" + this.dupCountTextbox)).value = this.copyValue;
+      (document.getElementById("text" + this.textboxes[0] + "_dup" + this.dupCountTextbox)).style.fontFamily = e.target.style.fontFamily;
+      (document.getElementById("text" + this.textboxes[0] + "_dup" + this.dupCountTextbox)).style.fontSize = e.target.style.fontSize;
+      (document.getElementById("text" + this.textboxes[0] + "_dup" + this.dupCountTextbox)).style.color = e.target.style.color;
+      (document.getElementById("text" + this.textboxes[0] + "_dup" + this.dupCountTextbox)).style.fontStyle = e.target.style.fontStyle;
+      (document.getElementById("text" + this.textboxes[0] + "_dup" + this.dupCountTextbox)).style.fontWeight = e.target.style.fontWeight;
+      this.dupCountTextbox += 1;
+      
     }, 100);
 
+  
 
 
-  }
+}
 
-  duplicateParagraph() {
+  duplicateParagraph(e) {
+
 
     this.paragraphs.push(this.paragraphs[0] + "_dup" + this.dupCountParagraph);
 
     setTimeout(() => {
-      (<HTMLInputElement>document.getElementById(this.paragraphs[0] + "_dup" + this.dupCountParagraph)).value = this.copyValue
-      this.dupCountParagraph += 1
+     
+      (<HTMLInputElement>document.getElementById(this.paragraphs[0] + "_dup" + this.dupCountParagraph)).value = this.copyValue;
+      (document.getElementById(this.paragraphs[0] + "_dup" + this.dupCountParagraph)).style.fontFamily = e.target.style.fontFamily;
+      (document.getElementById(this.paragraphs[0] + "_dup" + this.dupCountParagraph)).style.fontSize = e.target.style.fontSize;
+      (document.getElementById(this.paragraphs[0] + "_dup" + this.dupCountParagraph)).style.color = e.target.style.color;
+      (document.getElementById(this.paragraphs[0] + "_dup" + this.dupCountParagraph)).style.fontStyle = e.target.style.fontStyle;
+      (document.getElementById(this.paragraphs[0] + "_dup" + this.dupCountParagraph)).style.fontWeight = e.target.style.fontWeight;
+      this.dupCountParagraph += 1;
+      
     }, 100);
 
+  
+ 
+}
 
 
-  }
 
 
-
-
-  checkDelete(e, i) {
-
+checkKeydown(e, i) {
+   
 
     if (e.key == 'Delete') {
       this.remove(i)

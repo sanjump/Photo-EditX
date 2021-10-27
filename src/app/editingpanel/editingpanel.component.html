@@ -1,25 +1,27 @@
 <div [id]="panel" class="container" [style.transform]="'scale('+reduceScale+') rotate('+degree+'deg)'">
     
     <div id = "box" class="box" >
-        <drag-scroll>
-        <img drag-scroll-item [src]="url" [id]="imgname" height="100%" width="100%"
+        <!-- <drag-scroll> -->
+        <img  [src]="url" [id]="imgname" height="100%" width="100%"
             [style.transform]="'scale('+scale+') rotate(0deg)'" />
-        </drag-scroll>
+        <!-- </drag-scroll> -->
     </div>
-    <div [id]="overlay"   class="box overlay">
+    <div [id]="overlay"   class="box overlay" >
         <ng-container *ngFor="let i of textboxes">
             <div id="cont{{i}}" [class]="divname" 
                 style="width: 100px;height: 30px; display:flex;z-index: 1;position: absolute;"
                 cdkDragBoundary=".overlay" cdkDrag>
+               
                 <input id="text{{i}}" [class]="inputname" maxlength="10" (click)="setValue($event)"
-                    (keydown)="checkDelete($event,i)" (paste)="duplicateTextbox()" (cut) = "setValue($event,i)" (copy)="setValue($event)"
-                    style="width: 100px;height: 30px;z-index: 1;background-color: transparent;" type="text" />
-                <button id="btn{{i}}" style="z-index: 1;" (click)="remove(i)">X</button>
+                    (keydown)="checkKeydown($event,i)" (paste)="duplicateTextbox($event)"  (copy)="setValue($event)"
+                     style="width: 100px;height: 30px;z-index: 1;background-color: transparent;" type="text" />
+                <button id="btn{{i}}" style="z-index: 1;"  (click)="remove(i)">X</button>
+            
             </div>
         </ng-container>
         <ng-container *ngFor="let i of paragraphs">
             <textarea autoResize="autoResize" (click)="setValue($event)" [class]="inputname" id={{i}}
-                (keydown)="checkDelete($event,i)" (paste)="duplicateParagraph()" (cut) = "setValue($event)" (copy)="setValue($event)"
+                (keydown)="checkKeydown($event,i)" (paste)="duplicateParagraph($event)"  (copy)="setValue($event)"
                 style="z-index: 1;position: absolute;width: 200px;background-color: transparent;"  pInputTextarea cdkDragBoundary=".overlay"
                 cdkDrag></textarea>
         </ng-container>
