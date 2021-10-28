@@ -33,7 +33,7 @@ import { NgxImageZoomModule } from 'ngx-image-zoom';
 import { DragScrollModule } from 'ngx-drag-scroll';
 import { RightSidebarComponent } from './right-sidebar/right-sidebar.component';
 import { SliderModule } from 'primeng/slider';
-import { NecessaryService } from './necessary.service';
+import { BtnPressedService } from './btn-pressed.service';
 import {ColorPickerModule} from 'primeng/colorpicker';
 import {InputTextareaModule} from 'primeng/inputtextarea';
 import {EditorModule} from 'primeng/editor';
@@ -81,7 +81,7 @@ import {EditorModule} from 'primeng/editor';
 
 
   ],
-  providers: [TabService, FileService, ExportService,NecessaryService],
+  providers: [TabService, FileService, ExportService,BtnPressedService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

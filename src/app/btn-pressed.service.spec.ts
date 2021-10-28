@@ -1,13 +1,13 @@
 import { TestBed } from '@angular/core/testing';
 
-import { NecessaryService } from './necessary.service';
+import { BtnPressedService } from './btn-pressed.service';
 
-describe('NecessaryService', () => {
-  let service: NecessaryService;
+describe('BtnPressedService', () => {
+  let service: BtnPressedService;
 
   beforeEach(() => {
     TestBed.configureTestingModule({});
-    service = TestBed.inject(NecessaryService);
+    service = TestBed.inject(BtnPressedService);
   });
 
   it('should be created', () => {

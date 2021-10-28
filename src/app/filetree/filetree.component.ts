@@ -15,7 +15,7 @@ import { FileService } from '../file.service';
 
 export class FiletreeComponent implements OnInit {
 
-  constructor(private tabService: TabService,private fileService: FileService,private zone: NgZone, private sanitizer: DomSanitizer) { }
+  constructor(private tabService: TabService, private fileService: FileService, private zone: NgZone, private sanitizer: DomSanitizer) { }
 
   @Output() tabs = new EventEmitter<any>();
   @Output() node = new EventEmitter<any>();
@@ -57,7 +57,6 @@ export class FiletreeComponent implements OnInit {
           this.myFiles.push(args[0] + "\\" + args[1][i])
         }
         this.fileTree = this.data.reduce(this.reducePath, [])
-        console.log(this.myFiles)
         this.fileService.setFiles(this.myFiles)
       });
 
@@ -65,9 +64,129 @@ export class FiletreeComponent implements OnInit {
 
   }
 
+  checkKeydown(e) {
 
+    if (e.key == 'Delete') {
+
+      this.loadedTabs = this.tabService.getTabs()
+      for (var i = 0; i < this.fileTree.length; i++) {
+
+        if (this.fileTree[i].icon != "fa-folder") {
+
+          if (this.fileTree[i].label == localStorage.getItem('selectedNode')) {
+            this.fileTree.splice(i, 1)
+            this.data.splice(i, 1)
+            this.myFiles.splice(i, 1)
+            this.fileService.setFiles(this.myFiles)
+
+            for (var j = 0; j < this.loadedTabs.length; j++) {
+              if (this.loadedTabs[j].header == localStorage.getItem('selectedNode')) {
+
+                this.loadedTabs.splice(j, 1)
+                this.getTabs(this.loadedTabs)
+                if (j != 0) {
+                  this.selectedNode(this.loadedTabs[j - 1].header)
+                }
+                else {
+                  if (this.loadedTabs.length > 0) {
+                    this.selectedNode(this.loadedTabs[0].header)
+                  }
+
+                }
+
+              }
+            }
+
+            break
+          }
+        }
+
+        else if (this.fileTree[i].icon == "fa-folder" && this.fileTree[i].label != localStorage.getItem('selectedNode')) {
+          for (var j = 0; j < this.fileTree[i].children.length; j++) {
+            if (this.fileTree[i].children[j].label == localStorage.getItem('selectedNode')) {
+              this.fileTree[i].children.splice(j, 1)
+              this.data.splice(this.data.indexOf(localStorage.getItem('selectedNode'), 0), 1)
+              this.myFiles.splice(this.data.indexOf(localStorage.getItem('selectedNode'), 0), 1)
+              this.fileService.setFiles(this.myFiles)
+              for (var j = 0; j < this.loadedTabs.length; j++) {
+                if (this.loadedTabs[j].header == localStorage.getItem('selectedNode')) {
+
+                  this.loadedTabs.splice(j, 1)
+                  this.getTabs(this.loadedTabs)
+                  if (j != 0) {
+                    this.selectedNode(this.loadedTabs[j - 1].header)
+                  }
+                  else {
+                    if (this.loadedTabs.length > 0) {
+                      this.selectedNode(this.loadedTabs[0].header)
+                    }
+
+                  }
+
+                }
+              }
+            }
+          }
+          break
+        }
+
+        else {
+          var length = this.fileTree[i].children.length
+          console.log(this.loadedTabs.length)
+          for (var j = 0; j < length; j++) {
+
+
+            this.data.splice(this.data.indexOf(this.fileTree[i].children[j].label, 0), 1)
+            this.myFiles.splice(this.data.indexOf(this.fileTree[i].children[j].label, 0), 1)
+            this.fileService.setFiles(this.myFiles)
+
+          }
+          for (var k = 0; k < this.loadedTabs.length; k++) {
+
+            for (var j = 0; j < length; j++) {
+
+              if (this.loadedTabs[k].header == this.fileTree[i].children[j].label) {
+                console.log("sd")
+                this.loadedTabs.splice(k, 1)
+                this.getTabs(this.loadedTabs)
+                if (k != 0) {
+                  this.selectedNode(this.loadedTabs[k - 1].header)
+                }
+                else {
+                  if (this.loadedTabs.length > 0) {
+                    this.selectedNode(this.loadedTabs[0].header)
+                  }
+
+                }
+
+              }
+            }
+
+          }
+
+          this.fileTree[i].children = []
+          this.fileTree.splice(i, 1)
+          this.data.splice(i, 1)
+          this.myFiles.splice(i, 1)
+          this.fileService.setFiles(this.myFiles)
+          console.log(this.data)
+          console.log(this.fileTree)
+          console.log(this.fileService.getFiles())
+
+          
+
+
+        }
+
+
+      }
+
+    }
+  }
   nodeSelect(e) {
 
+    localStorage.setItem('selectedNode', e.node.label)
+    console.log(e.node.label)
     if (!(e.node.icon == "fa-folder")) {
 
       this.files = this.fileService.getFiles()
@@ -79,13 +198,13 @@ export class FiletreeComponent implements OnInit {
 
       if (this.files && !this.addedTabs.includes(e.node.label)) {
 
-      
+
         this.ipc.send("selectedNode", e.node.label);
 
         for (var i = 0; i < this.files.length; i++) {
 
           if (this.files[i].includes(e.node.label)) {
-            
+
             this.url = this.files[i]
             this.tabService.setTabs(e.node.label, this.url);
             break

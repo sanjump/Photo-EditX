@@ -25,7 +25,10 @@ export class MainbodyComponent implements OnInit{
       (elements[i] as HTMLElement).style.margin = "15px";
       (elements[i] as HTMLElement).style.marginRight = "30px";
     }
-    document.getElementById("rightSidebar").style.width = "0px";
-    document.getElementById("main").style.marginRight = "0px";
+    if(document.getElementById("rightSidebar_"+localStorage.getItem('currentTab'))){
+      document.getElementById("rightSidebar_"+localStorage.getItem('currentTab')).style.width = "0px";
+      document.getElementById("main").style.marginRight = "0px";
+    }
+    
   }
 }

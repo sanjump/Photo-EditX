@@ -1,27 +1,19 @@
-import { Component, OnInit } from '@angular/core';
-import {NecessaryService} from '../necessary.service'
+import { Component, OnInit,Input,OnChanges } from '@angular/core';
+import {BtnPressedService} from '../btn-pressed.service'
 
 @Component({
   selector: 'app-right-sidebar',
   templateUrl: './right-sidebar.component.html',
   styleUrls: ['./right-sidebar.component.css']
 })
-export class RightSidebarComponent implements OnInit {
+export class RightSidebarComponent implements OnInit,OnChanges {
 
-  constructor(private necessaryService:NecessaryService) { 
-    this.necessaryService.brightness.subscribe((res: any) => {  
-      this.currentBrightness = res.slice(res.indexOf('(')+1,res.indexOf('%'))
-      if(this.currentBrightness.toString()==""){
-               this.brightness=0
-      }
-      else if(this.brightness!=0){
+  
+  @Input() tabheader: string
+  
+  constructor(private btnPressedService:BtnPressedService) { 
 
-               this.brightness = this.currentBrightness-100
-      }
-      
-    }) 
-
-    this.necessaryService.btnPressed.subscribe((res:any)=>{    
+    this.btnPressedService.btnPressed.subscribe((res:any)=>{    
       this.btnPressed=res
     })
 
@@ -43,13 +35,25 @@ export class RightSidebarComponent implements OnInit {
   fonts:any
   type: string = ""
   color: string = '#000000';
-  ngOnInit(): void {
-    document.getElementById("rightSidebar").style.width = "0px";
+  rightSidebar:string=""
 
+  ngOnInit(): void {
+  
+  }
+
+  ngOnChanges(){
+
+    if (this.tabheader === undefined) {
+
+      this.tabheader = localStorage.getItem('tabheader')
+
+    }
+     
+      this.rightSidebar = "rightSidebar_"+this.tabheader
   }
 
   closeRightBar() {
-    document.getElementById("rightSidebar").style.width = "0px";
+    document.getElementById("rightSidebar_"+this.tabheader).style.width = "0px";
     document.getElementById("main").style.marginRight = "0px";
     var elements = document.getElementsByClassName('container');
     for (var i = 0; i < elements.length; i++) {
@@ -60,7 +64,7 @@ export class RightSidebarComponent implements OnInit {
 
   changeBrightness(e) {
   
-    document.getElementById("img"+"_"+localStorage.getItem('imgName')).style.filter = "brightness("+(e.value+100)+"%)"
+    document.getElementById("img"+"_"+this.tabheader).style.filter = "brightness("+(e.value+100)+"%)"
   }
 
   changeFont(type){

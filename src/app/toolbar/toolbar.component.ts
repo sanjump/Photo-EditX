@@ -12,7 +12,7 @@ import { faSearchPlus } from '@fortawesome/free-solid-svg-icons';
 import { faSearchMinus } from '@fortawesome/free-solid-svg-icons';
 import { faBold } from '@fortawesome/free-solid-svg-icons';
 import { faItalic } from '@fortawesome/free-solid-svg-icons';
-import {NecessaryService} from '../necessary.service'
+import {BtnPressedService} from '../btn-pressed.service'
 import { faFont } from '@fortawesome/free-solid-svg-icons';
 import { faEdit } from '@fortawesome/free-solid-svg-icons';
 @Component({
@@ -23,7 +23,7 @@ import { faEdit } from '@fortawesome/free-solid-svg-icons';
 
 export class ToolbarComponent implements OnInit {
 
-  constructor( private tabService: TabService,private necessaryService:NecessaryService, private zone: NgZone) {
+  constructor( private tabService: TabService,private btnPressedService:BtnPressedService, private zone: NgZone) {
 
   }
 
@@ -152,8 +152,8 @@ export class ToolbarComponent implements OnInit {
 
   openRightBar(e) {
     
-    this.necessaryService.btnPressed.next(e.target.id)
-    document.getElementById("rightSidebar").style.width = "300px";
+    this.btnPressedService.btnPressed.next(e.target.id)
+    document.getElementById("rightSidebar_"+this.tabheader).style.width = "300px";
     document.getElementById("main").style.marginRight = "300px";
     document.getElementById("leftSidebar").style.width = "0px";
     document.getElementById("main").style.marginLeft = "0px";
@@ -163,8 +163,8 @@ export class ToolbarComponent implements OnInit {
       (elements[i] as HTMLElement).style.margin = "15px";
       (elements[i] as HTMLElement).style.marginRight = "40px";
     }
-    localStorage.setItem('imgName', this.tabheader)
-    this.necessaryService.brightness.next(document.getElementById('img' + "_" + this.tabheader).style.filter)
+    localStorage.setItem('currentTab', this.tabheader)
+    
   }
 
   clearFind() {

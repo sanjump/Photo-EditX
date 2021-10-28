@@ -1,12 +1,10 @@
 import { Injectable } from '@angular/core';
 import { Subject } from 'rxjs'; 
-
 @Injectable({
   providedIn: 'root'
 })
-export class NecessaryService {
+export class BtnPressedService {
 
   constructor() { }
-  brightness = new Subject();  
   btnPressed = new Subject();
 }

@@ -43,7 +43,9 @@ export class TabsComponent implements OnInit, OnChanges {
     e.close()
     this.tabService.getTabs().splice(e.index, 1)
 
-    document.getElementById("rightSidebar").style.width = "0px";
+    if(document.getElementById("rightSidebar_"+localStorage.getItem('currentTab')).style.width != "0px"){
+
+    document.getElementById("rightSidebar_"+localStorage.getItem('currentTab')).style.width = "0px";
     document.getElementById("main").style.marginRight = "0px";
     var elements = document.getElementsByClassName('container');
     for (var i = 0; i < elements.length; i++) {
@@ -52,9 +54,11 @@ export class TabsComponent implements OnInit, OnChanges {
 
   }
 
+}
+
   closeRightBar() {
-    if (document.getElementById("rightSidebar").style.width != "0px") {
-      document.getElementById("rightSidebar").style.width = "0px";
+    if (document.getElementById("rightSidebar_"+localStorage.getItem('currentTab')).style.width != "0px") {
+      document.getElementById("rightSidebar_"+localStorage.getItem('currentTab')).style.width = "0px";
       document.getElementById("main").style.marginRight = "0px"; var elements = document.getElementsByClassName('container');
       for (var i = 0; i < elements.length; i++) {
         (elements[i] as HTMLElement).style.marginLeft = "150px"
