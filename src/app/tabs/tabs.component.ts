@@ -43,8 +43,12 @@ export class TabsComponent implements OnInit, OnChanges {
     e.close()
     this.tabService.getTabs().splice(e.index, 1)
 
-    if(document.getElementById("rightSidebar_"+localStorage.getItem('currentTab')).style.width != "0px"){
+    if(localStorage.getItem('currentTab')!=""){
 
+    
+
+    if(document.getElementById("rightSidebar_"+localStorage.getItem('currentTab')).style.width != "0px"){
+    console.log(localStorage.getItem('currentTab'))
     document.getElementById("rightSidebar_"+localStorage.getItem('currentTab')).style.width = "0px";
     document.getElementById("main").style.marginRight = "0px";
     var elements = document.getElementsByClassName('container');
@@ -53,11 +57,16 @@ export class TabsComponent implements OnInit, OnChanges {
     }
 
   }
+}
 
 }
 
   closeRightBar() {
+
+    if(localStorage.getItem('currentTab')!=""){
+
     if (document.getElementById("rightSidebar_"+localStorage.getItem('currentTab')).style.width != "0px") {
+      console.log(localStorage.getItem('currentTab'))
       document.getElementById("rightSidebar_"+localStorage.getItem('currentTab')).style.width = "0px";
       document.getElementById("main").style.marginRight = "0px"; var elements = document.getElementsByClassName('container');
       for (var i = 0; i < elements.length; i++) {
@@ -66,5 +75,6 @@ export class TabsComponent implements OnInit, OnChanges {
     }
 
   }
+}
 
 }

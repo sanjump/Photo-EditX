@@ -29,6 +29,7 @@ export class ToolbarComponent implements OnInit {
 
   @Input() tabheader: string
   @Input() tabcontent: string
+  @Input() richTextArray:any[]
   @Output() textboxes = new EventEmitter<any>();
   @Output() paragraphs = new EventEmitter<any>();
   @Output() richText = new EventEmitter<any>();
@@ -69,6 +70,8 @@ export class ToolbarComponent implements OnInit {
 
 
   ngOnInit(): void {
+
+    localStorage.setItem('currentTab', "")
 
     this.ipc = (<any>window).require('electron').ipcRenderer;
     if (this.tabheader === undefined) {
@@ -275,7 +278,7 @@ export class ToolbarComponent implements OnInit {
     })
     while (this.l--) {
 
-      if(this.inputElements[this.l].value!="" && this.inputElements[this.l].style.display!="none"){
+      if(this.inputElements[this.l].value!="" && this.inputElements[this.l].style.display!="none" && !this.inputElements[this.l].id.includes("richText")){
         this.json.push({
           file: this.tabheader,
           date: date,
@@ -297,6 +300,33 @@ export class ToolbarComponent implements OnInit {
           }
         });
 
+      }
+
+      else if(this.inputElements[this.l].style.display!="none" && this.inputElements[this.l].id.includes("richText")){
+        
+        for(var i=0;i<this.richTextArray.length;i++){
+          if(this.richTextArray[i].id==this.inputElements[this.l].id){
+            var richTextValue=this.richTextArray[i].value
+          }
+        }
+        if(richTextValue!=""){
+        this.json.push({
+          file: this.tabheader,
+          date: date,
+          type: this.inputElements[this.l].type,
+          id: this.inputElements[this.l].id,
+          value:richTextValue,
+          width: "260",
+          height: "100",
+          display:this.inputElements[this.l].style.display,
+          position: {
+            left: (this.inputElements[this.l] as HTMLElement).getBoundingClientRect().left - this.overlay.left,
+            top: (this.inputElements[this.l] as HTMLElement).getBoundingClientRect().top - this.overlay.top
+          }
+
+        });
+      }
+        
       }
       
 

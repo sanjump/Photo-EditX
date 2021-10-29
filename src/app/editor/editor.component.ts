@@ -17,12 +17,18 @@ export class EditorComponent implements OnInit,OnChanges {
     rotateDegree:any=""
     paragraphs:any[] = []
     richText:any[] = []
+    richTextArray:any[] = []
     ngOnInit() {
     }
 
     ngOnChanges(){
 
       
+    }
+
+
+    setRichTextArray(setRichTextArray: any) {
+        this.richTextArray = setRichTextArray;
     }
 
     setRichText(setRichText: any) {

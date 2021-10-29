@@ -30,6 +30,7 @@
     "@types/electron": "^1.6.10",
     "angular-csv-ext": "^1.0.5",
     "bootstrap": "^5.1.0",
+    "dragscroll": "0.0.8",
     "font-awesome": "^4.7.0",
     "fs-readdir-recursive": "^1.1.0",
     "jspdf": "^2.4.0",

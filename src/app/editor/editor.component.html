@@ -1,6 +1,6 @@
 
-<app-toolbar [tabheader]="tabheader" [tabcontent]="tabcontent" (richText) = "setRichText($event)" (paragraphs)="setParagraphs($event)" (textboxes)="setTextboxes($event)" (zoomScale)="setZoomScale($event)" (rotateDegree)="setrotateDegree($event)"></app-toolbar>
+<app-toolbar [tabheader]="tabheader"   [richTextArray]="richTextArray" [tabcontent]="tabcontent" (richText) = "setRichText($event)" (paragraphs)="setParagraphs($event)" (textboxes)="setTextboxes($event)" (zoomScale)="setZoomScale($event)" (rotateDegree)="setrotateDegree($event)"></app-toolbar>
 
-<app-editingpanel [tabheader]="tabheader" [richText]="richText" [paragraphs]="paragraphs" [tabcontent]="tabcontent"  [textboxes]="textboxes" [zoomScale]="zoomScale" [rotateDegree]="rotateDegree"></app-editingpanel>
+<app-editingpanel  (richTextArray)="setRichTextArray($event)"  [tabheader]="tabheader"  [richText]="richText" [paragraphs]="paragraphs" [tabcontent]="tabcontent"  [textboxes]="textboxes" [zoomScale]="zoomScale" [rotateDegree]="rotateDegree"></app-editingpanel>
 
 <app-right-sidebar [tabheader]="tabheader"></app-right-sidebar>

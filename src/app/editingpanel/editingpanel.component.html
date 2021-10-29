@@ -1,12 +1,12 @@
 <div [id]="panel" class="container" [style.transform]="'scale('+reduceScale+') rotate('+degree+'deg)'">
     
-    <div id = "box" class="box" >
-        <!-- <drag-scroll> -->
-        <img  [src]="url" [id]="imgname" height="100%" width="100%"
-            [style.transform]="'scale('+scale+') rotate(0deg)'" />
-        <!-- </drag-scroll> -->
+    <div id = "box" class="box" (mouseout)="showOverlay()" (click)="showOverlay()" (mousedown)="grabbingCursor()">
+        <drag-scroll style="width: 1050px; height: 500px" >
+        <img drag-scroll-item [src]="url" [id]="imgname" height="100%" width="100%"
+            style="transform-origin: top left;"     [style.transform]="'scale('+scale+') rotate(0deg)'" />
+        </drag-scroll>
     </div>
-    <div [id]="overlay"   class="box overlay" >
+    <div [id]="overlay" (click)="showImage($event)" (mouseup)="defaultCursor($event)" class="box overlay" >
         <ng-container *ngFor="let i of textboxes">
             <div id="cont{{i}}" [class]="divname" 
                 style="width: 100px;height: 30px; display:flex;z-index: 1;position: absolute;"
@@ -26,9 +26,9 @@
                 cdkDrag></textarea>
         </ng-container>
         <ng-container *ngFor="let i of richText">
-            <div style="width: 200px;height: 240px; display:flex;z-index: 1;position: absolute;"
+            <div style="width: 260px;height: 140px; display:flex;z-index: 1;position: absolute;"
                 cdkDragBoundary=".overlay" cdkDrag>
-                <p-editor id={{i}}  (onTextChange)="getRichTextValue($event)"  [class]="inputname" (keydown)="checkDelete($event,i)" 
+                <p-editor id={{i}}  (onTextChange)="getRichTextValue($event,i)"  [class]="inputname" (keydown)="checkKeydown($event,i)" 
                     [style]="{'height':'100px','width':'260px'}">
                     <p-header>
                         <span class="ql-formats">

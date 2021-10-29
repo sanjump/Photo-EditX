@@ -1,7 +1,8 @@
-import { Component, OnInit, OnChanges, Input, NgZone } from '@angular/core';
+import { Component, OnInit, OnChanges, Input, NgZone} from '@angular/core';
 import { clipboard, IpcRenderer } from 'electron';
 import { TabService } from '../tab.service';
 import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
+import { Output, EventEmitter } from '@angular/core';
 
 @Component({
   selector: 'app-editingpanel',
@@ -20,6 +21,7 @@ export class EditingpanelComponent implements OnInit, OnChanges {
   @Input() paragraphs: any[]
   @Input() rotateDegree: any
   @Input() richText: any[]
+  @Output() richTextArray = new EventEmitter<any>();
 
 
   ipc: IpcRenderer
@@ -38,8 +40,12 @@ export class EditingpanelComponent implements OnInit, OnChanges {
   dupCountTextbox: number = 1
   dupCountParagraph: number = 1
   reduceScale: string = "1,1"
-  richTextValue: string
- 
+  richTextValue: any[] = []
+  flag:boolean
+  
+  
+  
+  
   ngOnInit() {
 
 
@@ -82,7 +88,7 @@ export class EditingpanelComponent implements OnInit, OnChanges {
     this.imgDegree = this.rotateDegree - 90
     if (this.degree / 90 % 2 != 0) {
       this.reduceScale = "0.45,0.45"
-      
+
 
     }
 
@@ -97,7 +103,10 @@ export class EditingpanelComponent implements OnInit, OnChanges {
 
   }
 
+  setRichTextArray(value: any) {
+    this.richTextArray.emit(value);
 
+  }
 
   formOverlay(args) {
 
@@ -113,7 +122,7 @@ export class EditingpanelComponent implements OnInit, OnChanges {
         document.getElementById('panel' + "_" + this.data[0].file).style.transform = this.data[0].containerTransform
         document.getElementById('img' + "_" + this.data[0].file).style.filter = this.data[0].filters
         var text;
-        
+
         for (var i = 1; i < this.data.length; i++) {
 
           if (this.data[i].type == "text") {
@@ -121,32 +130,32 @@ export class EditingpanelComponent implements OnInit, OnChanges {
             text = document.createElement('input')
           }
 
-          else if(this.data[i].type == "textarea"){
+          else if (this.data[i].type == "textarea") {
 
             text = document.createElement('textarea')
 
           }
 
 
-            text.id = this.data[i].id
-            text.className = this.data[i].class
-            text.value = this.data[i].value
-            text.style.width = this.data[i].width
-            text.style.height = this.data[i].height
-            text.style.position = 'absolute'
-            text.style.left = (this.data[i].position.left) + "px"
-            text.style.top = (this.data[i].position.top) + "px"
-            text.disabled = true
-            text.style.backgroundColor = "transparent"
-            text.style.border = "none"
-            text.style.zIndex = "initial"
-            text.style.fontWeight = this.data[i].fontWeight
-            text.style.fontStyle = this.data[i].fontStyle
-            text.style.fontFamily = this.data[i].fontFamily
-            text.style.color = this.data[i].fontColor
-            text.style.fontSize = this.data[i].fontSize
-            document.getElementById('overlay' + "_" + this.data[i].file).appendChild(text)
-          
+          text.id = this.data[i].id
+          text.className = this.data[i].class
+          text.value = this.data[i].value
+          text.style.width = this.data[i].width
+          text.style.height = this.data[i].height
+          text.style.position = 'absolute'
+          text.style.left = (this.data[i].position.left) + "px"
+          text.style.top = (this.data[i].position.top) + "px"
+          text.disabled = true
+          text.style.backgroundColor = "transparent"
+          text.style.border = "none"
+          text.style.zIndex = "initial"
+          text.style.fontWeight = this.data[i].fontWeight
+          text.style.fontStyle = this.data[i].fontStyle
+          text.style.fontFamily = this.data[i].fontFamily
+          text.style.color = this.data[i].fontColor
+          text.style.fontSize = this.data[i].fontSize
+          document.getElementById('overlay' + "_" + this.data[i].file).appendChild(text)
+
 
         }
       }
@@ -155,21 +164,37 @@ export class EditingpanelComponent implements OnInit, OnChanges {
   }
 
 
-  show(){
-    console.log("SD")
-    document.getElementById('box').style.zIndex = "2"
+  showImage(e) {
+
+    if (e.target.id == this.overlay) {
+      document.getElementById('box').style.zIndex = "2"
+      document.getElementById('box').style.cursor = "grab"
+    }
+
   }
 
-  show1(){
-    console.log("SDdas")
+  showOverlay() {
+
     document.getElementById('box').style.zIndex = "-1"
+
+  }
+
+  grabbingCursor() {
+
+    document.getElementById(this.overlay).style.cursor = "grabbing"
+  }
+
+  defaultCursor(e) {
+    if (e.target.id == this.overlay) {
+      document.getElementById(this.overlay).style.cursor = "default"
+    }
   }
 
 
 
 
-  setValue(e,i="") {
-    
+  setValue(e, i = "") {
+
     localStorage.setItem("selectedText", e.target.id)
     this.copyValue = e.target.value
     navigator.clipboard.writeText("")
@@ -177,12 +202,12 @@ export class EditingpanelComponent implements OnInit, OnChanges {
 
   duplicateTextbox(e) {
 
-    
+
 
     this.textboxes.push(this.textboxes[0] + "_dup" + this.dupCountTextbox);
-   
+
     setTimeout(() => {
-      
+
       (<HTMLInputElement>document.getElementById("text" + this.textboxes[0] + "_dup" + this.dupCountTextbox)).value = this.copyValue;
       (document.getElementById("text" + this.textboxes[0] + "_dup" + this.dupCountTextbox)).style.fontFamily = e.target.style.fontFamily;
       (document.getElementById("text" + this.textboxes[0] + "_dup" + this.dupCountTextbox)).style.fontSize = e.target.style.fontSize;
@@ -190,13 +215,13 @@ export class EditingpanelComponent implements OnInit, OnChanges {
       (document.getElementById("text" + this.textboxes[0] + "_dup" + this.dupCountTextbox)).style.fontStyle = e.target.style.fontStyle;
       (document.getElementById("text" + this.textboxes[0] + "_dup" + this.dupCountTextbox)).style.fontWeight = e.target.style.fontWeight;
       this.dupCountTextbox += 1;
-      
+
     }, 100);
 
-  
 
 
-}
+
+  }
 
   duplicateParagraph(e) {
 
@@ -204,7 +229,7 @@ export class EditingpanelComponent implements OnInit, OnChanges {
     this.paragraphs.push(this.paragraphs[0] + "_dup" + this.dupCountParagraph);
 
     setTimeout(() => {
-     
+
       (<HTMLInputElement>document.getElementById(this.paragraphs[0] + "_dup" + this.dupCountParagraph)).value = this.copyValue;
       (document.getElementById(this.paragraphs[0] + "_dup" + this.dupCountParagraph)).style.fontFamily = e.target.style.fontFamily;
       (document.getElementById(this.paragraphs[0] + "_dup" + this.dupCountParagraph)).style.fontSize = e.target.style.fontSize;
@@ -212,18 +237,18 @@ export class EditingpanelComponent implements OnInit, OnChanges {
       (document.getElementById(this.paragraphs[0] + "_dup" + this.dupCountParagraph)).style.fontStyle = e.target.style.fontStyle;
       (document.getElementById(this.paragraphs[0] + "_dup" + this.dupCountParagraph)).style.fontWeight = e.target.style.fontWeight;
       this.dupCountParagraph += 1;
-      
+
     }, 100);
 
-  
- 
-}
+
+
+  }
 
 
 
 
-checkKeydown(e, i) {
-   
+  checkKeydown(e, i) {
+
 
     if (e.key == 'Delete') {
       this.remove(i)
@@ -239,6 +264,8 @@ checkKeydown(e, i) {
 
     else if (id.includes("richText")) {
       document.getElementById(id).style.display = 'none'
+      this.richTextValue.splice(this.richTextValue.indexOf(id,0),1)
+      console.log(this.richTextValue)
     }
 
     else {
@@ -251,8 +278,35 @@ checkKeydown(e, i) {
   }
 
 
-  getRichTextValue(e) {
+  getRichTextValue(e,i) {
+    
+     this.flag=false
+     console.log(i)
+     console.log(this.richTextValue.length)
+      for(var j=0;j<this.richTextValue.length;j++){
 
+           if(this.richTextValue[j].id==i){
+            console.log("dsa")
+            this.richTextValue[j].value=e.htmlValue
+            this.flag=true
+            break
+
+           }
+             
+
+      }
+
+      if(this.flag==false){
+        console.log("sd")
+        this.richTextValue.push({
+          id:i,
+          value:e.htmlValue
+        })
+      }
+
+  
+    this.setRichTextArray(this.richTextValue)
+      console.log(this.richTextValue)
 
   }
 

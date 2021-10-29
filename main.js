@@ -90,6 +90,7 @@ const mainMenuTemplate = [
             .then(function (fileObj) {
               if (!fileObj.canceled) {
                 folderFiles = []
+                imgfiles=[]
                 folderFiles.push(fileObj.filePaths[0].toString())
                 for (var i = 0; i < types[0].extensions.length; i++) {
                   var foundFiles = read(fileObj.filePaths[0].toString()).filter(item => item.endsWith("." + types[0].extensions[i]));
