@@ -6,7 +6,7 @@
             style="transform-origin: top left;"     [style.transform]="'scale('+scale+') rotate(0deg)'" />
         </drag-scroll>
     </div>
-    <div [id]="overlay" (click)="showImage($event)" (mouseup)="defaultCursor($event)" class="box overlay" >
+    <div [id]="overlay" (click)="showImage($event)"  (mouseup)="defaultCursor($event)"  class="box overlay" >
         <ng-container *ngFor="let i of textboxes">
             <div id="cont{{i}}" [class]="divname" 
                 style="width: 100px;height: 30px; display:flex;z-index: 1;position: absolute;"
@@ -22,7 +22,7 @@
         <ng-container *ngFor="let i of paragraphs">
             <textarea autoResize="autoResize" (click)="setValue($event)" [class]="inputname" id={{i}}
                 (keydown)="checkKeydown($event,i)" (paste)="duplicateParagraph($event)"  (copy)="setValue($event)"
-                style="z-index: 1;position: absolute;width: 200px;background-color: transparent;"  pInputTextarea cdkDragBoundary=".overlay"
+                style="z-index: 1;position: absolute;width: 200px;background-color: transparent;;"  pInputTextarea cdkDragBoundary=".overlay"
                 cdkDrag></textarea>
         </ng-container>
         <ng-container *ngFor="let i of richText">

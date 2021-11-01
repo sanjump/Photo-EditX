@@ -8,7 +8,9 @@ import { Component, OnInit,Input} from '@angular/core';
 
 export class MainbodyComponent implements OnInit{
 
-  constructor() { }
+  constructor() {
+    document.addEventListener("keydown",(event)=>this.saveOnkeyPress(event))
+   }
 
   @Input() tabs: any[]
   @Input() node: any
@@ -31,4 +33,14 @@ export class MainbodyComponent implements OnInit{
     }
     
   }
+
+  saveOnkeyPress(event){
+    if(event.ctrlKey && event.keyCode==83){
+      
+      document.getElementById("btn_"+localStorage.getItem('tabSelected')).click();
+      
+    }
+  
+  }
+
 }

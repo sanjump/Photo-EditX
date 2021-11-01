@@ -1,4 +1,4 @@
-import { Component, OnInit, OnChanges, Input, NgZone} from '@angular/core';
+import { Component, OnInit, OnChanges, Input, NgZone } from '@angular/core';
 import { clipboard, IpcRenderer } from 'electron';
 import { TabService } from '../tab.service';
 import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
@@ -12,7 +12,9 @@ import { Output, EventEmitter } from '@angular/core';
 
 export class EditingpanelComponent implements OnInit, OnChanges {
 
-  constructor(private zone: NgZone, private tabService: TabService, private sanitizer: DomSanitizer) { }
+  constructor(private zone: NgZone, private tabService: TabService, private sanitizer: DomSanitizer) { 
+   
+  }
 
   @Input() tabheader: string
   @Input() tabcontent: string
@@ -41,11 +43,11 @@ export class EditingpanelComponent implements OnInit, OnChanges {
   dupCountParagraph: number = 1
   reduceScale: string = "1,1"
   richTextValue: any[] = []
-  flag:boolean
-  
-  
-  
-  
+  flag: boolean
+
+
+
+
   ngOnInit() {
 
 
@@ -136,25 +138,53 @@ export class EditingpanelComponent implements OnInit, OnChanges {
 
           }
 
+          else if (this.data[i].type == "richText") {
 
-          text.id = this.data[i].id
-          text.className = this.data[i].class
-          text.value = this.data[i].value
-          text.style.width = this.data[i].width
-          text.style.height = this.data[i].height
-          text.style.position = 'absolute'
-          text.style.left = (this.data[i].position.left) + "px"
-          text.style.top = (this.data[i].position.top) + "px"
-          text.disabled = true
-          text.style.backgroundColor = "transparent"
-          text.style.border = "none"
-          text.style.zIndex = "initial"
-          text.style.fontWeight = this.data[i].fontWeight
-          text.style.fontStyle = this.data[i].fontStyle
-          text.style.fontFamily = this.data[i].fontFamily
-          text.style.color = this.data[i].fontColor
-          text.style.fontSize = this.data[i].fontSize
-          document.getElementById('overlay' + "_" + this.data[i].file).appendChild(text)
+            text = document.createElement('div')
+            text.id = this.data[i].id
+            text.className = this.data[i].class
+            text.innerHTML = this.data[i].value
+            text.contenteditable="true"
+            text.style.width = this.data[i].width
+            text.style.height = this.data[i].height
+            text.style.position = 'absolute'
+            text.style.left = (this.data[i].position.left) + "px"
+            text.style.top = (this.data[i].position.top) + "px"
+            text.disabled = true
+            text.style.backgroundColor = "transparent"
+            text.style.border = "none"
+            text.style.zIndex = "initial"
+            document.getElementById('overlay' + "_" + this.data[i].file).appendChild(text)
+          }
+
+
+          if(this.data[i].type == "text" || this.data[i].type == "textarea"){
+
+            text.id = this.data[i].id
+            text.className = this.data[i].class
+            text.value = this.data[i].value
+            text.style.width = this.data[i].width
+            text.style.height = this.data[i].height
+            text.style.position = 'absolute'
+            text.style.left = (this.data[i].position.left) + "px"
+            text.style.top = (this.data[i].position.top) + "px"
+            text.disabled = true
+            text.style.backgroundColor = "transparent"
+            text.style.border = "none"
+            text.style.zIndex = "initial"
+            text.style.fontWeight = this.data[i].fontWeight
+            text.style.fontStyle = this.data[i].fontStyle
+            text.style.fontFamily = this.data[i].fontFamily
+            text.style.color = this.data[i].fontColor
+            text.style.fontSize = this.data[i].fontSize
+            document.getElementById('overlay' + "_" + this.data[i].file).appendChild(text)
+
+
+
+          }
+
+
+         
 
 
         }
@@ -163,6 +193,7 @@ export class EditingpanelComponent implements OnInit, OnChanges {
 
   }
 
+ 
 
   showImage(e) {
 
@@ -264,8 +295,8 @@ export class EditingpanelComponent implements OnInit, OnChanges {
 
     else if (id.includes("richText")) {
       document.getElementById(id).style.display = 'none'
-      this.richTextValue.splice(this.richTextValue.indexOf(id,0),1)
-      console.log(this.richTextValue)
+      this.richTextValue.splice(this.richTextValue.indexOf(id, 0), 1)
+      
     }
 
     else {
@@ -278,35 +309,34 @@ export class EditingpanelComponent implements OnInit, OnChanges {
   }
 
 
-  getRichTextValue(e,i) {
+  getRichTextValue(e, i) {
+
+    this.flag = false
     
-     this.flag=false
-     console.log(i)
-     console.log(this.richTextValue.length)
-      for(var j=0;j<this.richTextValue.length;j++){
+    for (var j = 0; j < this.richTextValue.length; j++) {
 
-           if(this.richTextValue[j].id==i){
-            console.log("dsa")
-            this.richTextValue[j].value=e.htmlValue
-            this.flag=true
-            break
-
-           }
-             
+      if (this.richTextValue[j].id == i) {
+        
+        this.richTextValue[j].value = e.htmlValue
+        this.flag = true
+        break
 
       }
 
-      if(this.flag==false){
-        console.log("sd")
-        this.richTextValue.push({
-          id:i,
-          value:e.htmlValue
-        })
-      }
 
-  
+    }
+
+    if (this.flag == false) {
+      
+      this.richTextValue.push({
+        id: i,
+        value: e.htmlValue
+      })
+    }
+
+
     this.setRichTextArray(this.richTextValue)
-      console.log(this.richTextValue)
+    
 
   }
 

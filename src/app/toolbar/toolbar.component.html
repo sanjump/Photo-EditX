@@ -51,7 +51,7 @@
                     [(ngModel)]="comment">
             </span>
 
-            <button style="color: black;" [id]="tabheader" (click)="save($event)" pButton pRipple type="button"
+            <button style="color: black;" [id]="btnID" (click)="save()" pButton pRipple type="button"
                 label="Save" class="p-button-success"></button>
             <p-dialog header="Successfull" [(visible)]="displaySave" [style]="{width: '30vw'}">
                 <p>File saved successfully</p>

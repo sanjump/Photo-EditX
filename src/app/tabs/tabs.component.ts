@@ -33,7 +33,7 @@ export class TabsComponent implements OnInit, OnChanges {
 
         }
       }
-    }, 100);
+    }, 200);
 
   }
 
@@ -44,8 +44,6 @@ export class TabsComponent implements OnInit, OnChanges {
     this.tabService.getTabs().splice(e.index, 1)
 
     if(localStorage.getItem('currentTab')!=""){
-
-    
 
     if(document.getElementById("rightSidebar_"+localStorage.getItem('currentTab')).style.width != "0px"){
     console.log(localStorage.getItem('currentTab'))
@@ -61,7 +59,9 @@ export class TabsComponent implements OnInit, OnChanges {
 
 }
 
-  closeRightBar() {
+  closeRightBar(e) {
+
+    localStorage.setItem('tabSelected',this.tabs[e.index].header)
 
     if(localStorage.getItem('currentTab')!=""){
 

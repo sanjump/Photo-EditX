@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, NgZone } from '@angular/core';
+import { Component, OnInit, Input, NgZone,OnChanges } from '@angular/core';
 import { faCommentAlt } from '@fortawesome/free-solid-svg-icons';
 import { faExpandArrowsAlt } from '@fortawesome/free-solid-svg-icons';
 import { faSyncAlt } from '@fortawesome/free-solid-svg-icons';
@@ -21,10 +21,10 @@ import { faEdit } from '@fortawesome/free-solid-svg-icons';
   styleUrls: ['./toolbar.component.css']
 })
 
-export class ToolbarComponent implements OnInit {
+export class ToolbarComponent implements OnInit,OnChanges {
 
   constructor( private tabService: TabService,private btnPressedService:BtnPressedService, private zone: NgZone) {
-
+   
   }
 
   @Input() tabheader: string
@@ -67,7 +67,7 @@ export class ToolbarComponent implements OnInit {
   url = ""
   scale: number = 1
   degree: number = 0
-
+  btnID:string=""
 
   ngOnInit(): void {
 
@@ -99,6 +99,13 @@ export class ToolbarComponent implements OnInit {
 
       });
     });
+
+  }
+
+
+  ngOnChanges(){
+
+this.btnID="btn_"+this.tabheader
 
   }
 
@@ -176,7 +183,7 @@ export class ToolbarComponent implements OnInit {
     this.comment = "";
     for (var i = 0; i < this.annotations.length; i++) {
 
-      this.annotations[i].style.backgroundColor = "white"
+      this.annotations[i].style.backgroundColor = "transparent"
     }
 
   }
@@ -226,11 +233,39 @@ export class ToolbarComponent implements OnInit {
 
       this.annotations = document.getElementsByClassName("input_"+this.tabheader)
       for (var i = 0; i < this.annotations.length; i++) {
+        if(this.annotations[i].value!==undefined ){
+
         if (this.annotations[i].value.includes(comment) && comment != "") {
           this.annotations[i].style.backgroundColor = "yellow"
         }
         else {
-          this.annotations[i].style.backgroundColor = "white"
+          this.annotations[i].style.backgroundColor = "transparent"
+        }
+      }
+    }
+
+    for (var i = 0; i < this.annotations.length; i++) {
+      if(this.annotations[i].value===undefined && this.annotations[i].innerHTML!=""  ){
+
+      if ((this.annotations[i].innerHTML.includes(comment)) && comment != "") {
+        this.annotations[i].style.backgroundColor = "yellow"
+      }
+      else {
+        this.annotations[i].style.backgroundColor = "transparent"
+      }
+    }
+  }
+
+
+
+      for(var i=0;i<this.richTextArray.length;i++){
+        if(this.richTextArray[i].value.includes(comment) && comment != "") {
+          document.getElementById(this.richTextArray[i].id).style.backgroundColor = "yellow"
+          
+        }
+        else{
+          document.getElementById(this.richTextArray[i].id).style.backgroundColor = "transparent"
+
         }
       }
 
@@ -258,11 +293,12 @@ export class ToolbarComponent implements OnInit {
   }
 
 
-  save(e) {
+
+  save() {
 
     this.json = []
-    this.inputElements = document.getElementsByClassName("input" + "_" + e.target.id)
-    this.overlay = document.getElementById('overlay' + "_" + e.target.id).getBoundingClientRect()
+    this.inputElements = document.getElementsByClassName("input" + "_" + this.tabheader)
+    this.overlay = document.getElementById('overlay' + "_" + this.tabheader).getBoundingClientRect()
     this.l = this.inputElements.length;
     var today = new Date();
     var dd = String(today.getDate()).padStart(2, '0');
@@ -272,9 +308,9 @@ export class ToolbarComponent implements OnInit {
     this.json.push({
       file: this.tabheader,
       date: date,
-      imgTransform: document.getElementById('img' + "_" + e.target.id).style.transform,
-      containerTransform: document.getElementById('panel' + "_" + e.target.id).style.transform,
-      filters: document.getElementById('img' + "_" + e.target.id).style.filter,
+      imgTransform: document.getElementById('img' + "_" +this.tabheader).style.transform,
+      containerTransform: document.getElementById('panel' + "_" + this.tabheader).style.transform,
+      filters: document.getElementById('img' + "_" + this.tabheader).style.filter,
     })
     while (this.l--) {
 
@@ -293,7 +329,6 @@ export class ToolbarComponent implements OnInit {
           fontSize:this.inputElements[this.l].style.fontSize,
           width: this.inputElements[this.l].style.width,
           height: this.inputElements[this.l].style.height,
-          display:this.inputElements[this.l].style.display,
           position: {
             left: (this.inputElements[this.l] as HTMLElement).getBoundingClientRect().left - this.overlay.left,
             top: (this.inputElements[this.l] as HTMLElement).getBoundingClientRect().top - this.overlay.top
@@ -313,15 +348,15 @@ export class ToolbarComponent implements OnInit {
         this.json.push({
           file: this.tabheader,
           date: date,
-          type: this.inputElements[this.l].type,
+          type: "richText",
           id: this.inputElements[this.l].id,
+          class: this.inputElements[this.l].className,
           value:richTextValue,
           width: "260",
           height: "100",
-          display:this.inputElements[this.l].style.display,
           position: {
             left: (this.inputElements[this.l] as HTMLElement).getBoundingClientRect().left - this.overlay.left,
-            top: (this.inputElements[this.l] as HTMLElement).getBoundingClientRect().top - this.overlay.top
+            top: (this.inputElements[this.l] as HTMLElement).getBoundingClientRect().top - this.overlay.top + 40
           }
 
         });

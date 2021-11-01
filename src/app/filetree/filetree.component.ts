@@ -186,6 +186,7 @@ export class FiletreeComponent implements OnInit {
   nodeSelect(e) {
 
     localStorage.setItem('selectedNode', e.node.label)
+    localStorage.setItem('tabSelected',e.node.label)
     
     if (!(e.node.icon == "fa-folder")) {
 
