@@ -1,12 +1,18 @@
 <div [id]="panel" class="container" [style.transform]="'scale('+reduceScale+') rotate('+degree+'deg)'">
     
-    <div id = "box" class="box" (mouseout)="showOverlay()" (click)="showOverlay()" (mousedown)="grabbingCursor()">
-        <drag-scroll style="width: 1050px; height: 500px" >
-        <img drag-scroll-item [src]="url" [id]="imgname" height="100%" width="100%"
-            style="transform-origin: top left;"     [style.transform]="'scale('+scale+') rotate(0deg)'" />
+    <div id = "box" class="box" [style.width]="imgWidth" [style.height]="imgHeigth" (mouseout)="showOverlay()" (click)="showOverlay()" (mousedown)="grabbingCursor()">
+        <drag-scroll style="width: 1030px; height: 470px" >
+        <img drag-scroll-item [src]="url" [id]="imgname" 
+            style="transform-origin: top left;" width="1000px" height="450px"
+            [style.object-fit]="imgFit"   [style.object-position]="cropedPosition"   [style.transform]="'scale('+scale+') rotate(0deg)'" />
         </drag-scroll>
     </div>
     <div [id]="overlay" (click)="showImage($event)"  (mouseup)="defaultCursor($event)"  class="box overlay" >
+        
+            <div  [id]="crop" style="width: 200px;height: 200px;background-color: darkgray;position: relative;z-index: 1;opacity: 0.5;" cdkDragBoundary=".overlay" cdkDrag>
+            <div (mousedown)="resizeCrop($event,1)"   (window:mouseup)="resizeCrop($event,2)" style="width: 10px;height: 10px;bottom: 0px;right: 0px;z-index: 1;background-color: red;position: absolute;cursor: nw-resize;" ></div>
+            </div>
+          
         <ng-container *ngFor="let i of textboxes">
             <div id="cont{{i}}" [class]="divname" 
                 style="width: 100px;height: 30px; display:flex;z-index: 1;position: absolute;"

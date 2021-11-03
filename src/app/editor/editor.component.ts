@@ -18,6 +18,9 @@ export class EditorComponent implements OnInit,OnChanges {
     paragraphs:any[] = []
     richText:any[] = []
     richTextArray:any[] = []
+    cropArea:boolean
+    cropAreaDimensions:any[] = []
+
     ngOnInit() {
     }
 
@@ -26,6 +29,13 @@ export class EditorComponent implements OnInit,OnChanges {
       
     }
 
+    setcropAreaDimensions(setcropAreaDimensions: any) {
+        this.cropAreaDimensions = setcropAreaDimensions;
+    }
+
+    setCropArea(setCropArea: any) {
+        this.cropArea = setCropArea;
+    }
 
     setRichTextArray(setRichTextArray: any) {
         this.richTextArray = setRichTextArray;

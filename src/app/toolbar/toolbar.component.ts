@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, NgZone,OnChanges } from '@angular/core';
+import { Component, OnInit, Input, NgZone,OnChanges, HostListener } from '@angular/core';
 import { faCommentAlt } from '@fortawesome/free-solid-svg-icons';
 import { faExpandArrowsAlt } from '@fortawesome/free-solid-svg-icons';
 import { faSyncAlt } from '@fortawesome/free-solid-svg-icons';
@@ -15,6 +15,7 @@ import { faItalic } from '@fortawesome/free-solid-svg-icons';
 import {BtnPressedService} from '../btn-pressed.service'
 import { faFont } from '@fortawesome/free-solid-svg-icons';
 import { faEdit } from '@fortawesome/free-solid-svg-icons';
+import { faCrop } from '@fortawesome/free-solid-svg-icons';
 @Component({
   selector: 'app-toolbar',
   templateUrl: './toolbar.component.html',
@@ -35,6 +36,8 @@ export class ToolbarComponent implements OnInit,OnChanges {
   @Output() richText = new EventEmitter<any>();
   @Output() zoomScale = new EventEmitter<any>();
   @Output() rotateDegree = new EventEmitter<any>();
+  @Output() cropArea = new EventEmitter<any>();
+  @Output() cropAreaDimensions = new EventEmitter<any>();
 
   ipc: IpcRenderer
   win: BrowserWindow
@@ -46,6 +49,7 @@ export class ToolbarComponent implements OnInit,OnChanges {
   faAdjust = faAdjust
   faBold = faBold
   faItalic = faItalic
+  faCrop = faCrop
   faParagraph = faParagraph
   faFont = faFont
   faExpandArrowsAlt = faExpandArrowsAlt;
@@ -56,6 +60,7 @@ export class ToolbarComponent implements OnInit,OnChanges {
   countRichText: number = 0
   l: number;
   inputElements: any
+  cropContainer:any
   inputTextboxes: any[] = []
   inputParagraph:any[]=[]
   inputRichText:any[]=[]
@@ -68,11 +73,14 @@ export class ToolbarComponent implements OnInit,OnChanges {
   scale: number = 1
   degree: number = 0
   btnID:string=""
+  mouse:any={}
+  flag= false
+
 
   ngOnInit(): void {
 
     localStorage.setItem('currentTab', "")
-
+    
     this.ipc = (<any>window).require('electron').ipcRenderer;
     if (this.tabheader === undefined) {
 
@@ -84,17 +92,20 @@ export class ToolbarComponent implements OnInit,OnChanges {
     this.ipc.once('data', (event, args) => {
 
       this.zone.run(() => {
+        this.cropArea.emit(this.flag)
         if (args != "No file" && args.length > 0) {
 
           this.scale = Number(args[0].imgTransform.slice(args[0].imgTransform.indexOf('(') + 1, args[0].imgTransform.indexOf(')')))
           this.degree = Number(args[0].containerTransform.slice(args[0].containerTransform.lastIndexOf('(') + 1, args[0].containerTransform.lastIndexOf(')') - 3));
           this.zoomScale.emit(this.scale);
           this.rotateDegree.emit(this.degree);
+          this.cropAreaDimensions.emit([args[0].cropWidth,args[0].cropHeigth,args[0].cropLeft,args[0].cropTop,args[0].cropFit])
 
         }
         else {
           this.zoomScale.emit(1)
           this.rotateDegree.emit(0)
+          this.cropAreaDimensions.emit(["1000px","450px",0,0,"fill"])
         }
 
       });
@@ -124,7 +135,10 @@ this.btnID="btn_"+this.tabheader
 
   }
 
+setCropArea(value: any) {
+  this.cropArea.emit(value);
 
+}
 
   setZoomScale(value: any) {
     this.zoomScale.emit(value);
@@ -205,6 +219,23 @@ this.btnID="btn_"+this.tabheader
   rotate() {
     this.degree += 90
     this.setrotateDegree(this.degree)
+  }
+
+
+
+
+  crop(){
+
+    if(this.flag==false){
+      this.flag=true
+      this.setCropArea(this.flag)
+    }
+
+    else{
+      this.flag=false
+      this.setCropArea(this.flag)
+    }
+
   }
 
   makeBold(){
@@ -297,6 +328,7 @@ this.btnID="btn_"+this.tabheader
   save() {
 
     this.json = []
+    this.cropContainer = document.getElementById("crop_"+this.tabheader)
     this.inputElements = document.getElementsByClassName("input" + "_" + this.tabheader)
     this.overlay = document.getElementById('overlay' + "_" + this.tabheader).getBoundingClientRect()
     this.l = this.inputElements.length;
@@ -305,12 +337,31 @@ this.btnID="btn_"+this.tabheader
     var mm = String(today.getMonth() + 1).padStart(2, '0');
     var yyyy = today.getFullYear();
     var date = dd + '-' + mm + '-' + yyyy;
+    if(this.cropContainer.style.display!="none"){
+      var cropWidth =  this.cropContainer.style.width
+      var cropHeigth = this.cropContainer.style.height
+      var cropLeft = this.cropContainer.getBoundingClientRect().left - this.overlay.left
+      var cropTop = this.cropContainer.getBoundingClientRect().top - this.overlay.top 
+      var cropFit = "fill"
+    }
+    else{
+      cropWidth="1000px"
+      cropHeigth="450px"
+      cropLeft=0
+      cropTop=0
+      cropFit="fill"
+    }
     this.json.push({
       file: this.tabheader,
       date: date,
       imgTransform: document.getElementById('img' + "_" +this.tabheader).style.transform,
       containerTransform: document.getElementById('panel' + "_" + this.tabheader).style.transform,
       filters: document.getElementById('img' + "_" + this.tabheader).style.filter,
+      cropWidth: cropWidth,
+      cropHeigth:cropHeigth,
+      cropLeft:cropLeft,
+      cropTop:cropTop,
+      cropFit : cropFit
     })
     while (this.l--) {
 

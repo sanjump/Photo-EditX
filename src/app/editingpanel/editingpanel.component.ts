@@ -1,4 +1,4 @@
-import { Component, OnInit, OnChanges, Input, NgZone } from '@angular/core';
+import { Component, OnInit, OnChanges, Input, NgZone, HostListener } from '@angular/core';
 import { clipboard, IpcRenderer } from 'electron';
 import { TabService } from '../tab.service';
 import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
@@ -12,8 +12,8 @@ import { Output, EventEmitter } from '@angular/core';
 
 export class EditingpanelComponent implements OnInit, OnChanges {
 
-  constructor(private zone: NgZone, private tabService: TabService, private sanitizer: DomSanitizer) { 
-   
+  constructor(private zone: NgZone, private tabService: TabService, private sanitizer: DomSanitizer) {
+
   }
 
   @Input() tabheader: string
@@ -23,6 +23,8 @@ export class EditingpanelComponent implements OnInit, OnChanges {
   @Input() paragraphs: any[]
   @Input() rotateDegree: any
   @Input() richText: any[]
+  @Input() cropArea: boolean
+  @Input() cropAreaDimensions:any[]
   @Output() richTextArray = new EventEmitter<any>();
 
 
@@ -38,14 +40,19 @@ export class EditingpanelComponent implements OnInit, OnChanges {
   scale: any
   degree: any
   imgDegree: any
+  imgWidth:any = ""
+  imgHeigth:any = ""
+  imgFit:any = ""
+  cropedPosition:any
   copyValue: string = ""
   dupCountTextbox: number = 1
   dupCountParagraph: number = 1
   reduceScale: string = "1,1"
   richTextValue: any[] = []
   flag: boolean
-
-
+  crop: string = ""
+  mouse: any = {}
+  status:number
 
 
   ngOnInit() {
@@ -85,6 +92,12 @@ export class EditingpanelComponent implements OnInit, OnChanges {
 
     }
 
+    
+
+    this.imgWidth = this.cropAreaDimensions[0]
+    this.imgHeigth = this.cropAreaDimensions[1]
+    this.cropedPosition = "-"+this.cropAreaDimensions[2]+"px" + "  " + "-"+this.cropAreaDimensions[3]+"px"
+    this.imgFit = this.cropAreaDimensions[4]
     this.scale = this.zoomScale
     this.degree = this.rotateDegree
     this.imgDegree = this.rotateDegree - 90
@@ -102,16 +115,53 @@ export class EditingpanelComponent implements OnInit, OnChanges {
     this.overlay = "overlay" + "_" + this.tabheader
     this.imgname = "img" + "_" + this.tabheader
     this.panel = "panel" + "_" + this.tabheader
+    this.crop = "crop" + "_" + this.tabheader
+    if (this.cropArea == true) {
+      document.getElementById(this.crop).style.display = ""
+    }
+    else if (this.cropArea == false) {
+      document.getElementById(this.crop).style.display = "none"
+    }
 
   }
+
+
+
 
   setRichTextArray(value: any) {
     this.richTextArray.emit(value);
 
   }
 
+  resizeCrop(event,status) {
+    this.status=status
+    event.stopPropagation();
+    
+  }
+
+
+
+  @HostListener('window:mousemove', ['$event'])
+  onMouseMove(event: MouseEvent) {
+    this.mouse = {
+      x: event.clientX,
+      y: event.clientY
+    }
+    if(this.status==1){
+      document.getElementById(this.crop).style.width = this.mouse.x - document.getElementById(this.crop).getBoundingClientRect().left + "px"
+      document.getElementById(this.crop).style.height = this.mouse.y - document.getElementById(this.crop).getBoundingClientRect().top + "px"
+    }
+   
+    
+  }
+
+
+
+
+
   formOverlay(args) {
 
+  
     this.data = args
 
     if (this.data != "No file" && this.data.length > 0) {
@@ -144,7 +194,7 @@ export class EditingpanelComponent implements OnInit, OnChanges {
             text.id = this.data[i].id
             text.className = this.data[i].class
             text.innerHTML = this.data[i].value
-            text.contenteditable="true"
+            text.contenteditable = "true"
             text.style.width = this.data[i].width
             text.style.height = this.data[i].height
             text.style.position = 'absolute'
@@ -158,7 +208,7 @@ export class EditingpanelComponent implements OnInit, OnChanges {
           }
 
 
-          if(this.data[i].type == "text" || this.data[i].type == "textarea"){
+          if (this.data[i].type == "text" || this.data[i].type == "textarea") {
 
             text.id = this.data[i].id
             text.className = this.data[i].class
@@ -184,7 +234,7 @@ export class EditingpanelComponent implements OnInit, OnChanges {
           }
 
 
-         
+
 
 
         }
@@ -193,7 +243,7 @@ export class EditingpanelComponent implements OnInit, OnChanges {
 
   }
 
- 
+
 
   showImage(e) {
 
@@ -296,7 +346,7 @@ export class EditingpanelComponent implements OnInit, OnChanges {
     else if (id.includes("richText")) {
       document.getElementById(id).style.display = 'none'
       this.richTextValue.splice(this.richTextValue.indexOf(id, 0), 1)
-      
+
     }
 
     else {
@@ -312,11 +362,11 @@ export class EditingpanelComponent implements OnInit, OnChanges {
   getRichTextValue(e, i) {
 
     this.flag = false
-    
+
     for (var j = 0; j < this.richTextValue.length; j++) {
 
       if (this.richTextValue[j].id == i) {
-        
+
         this.richTextValue[j].value = e.htmlValue
         this.flag = true
         break
@@ -327,7 +377,7 @@ export class EditingpanelComponent implements OnInit, OnChanges {
     }
 
     if (this.flag == false) {
-      
+
       this.richTextValue.push({
         id: i,
         value: e.htmlValue
@@ -336,7 +386,7 @@ export class EditingpanelComponent implements OnInit, OnChanges {
 
 
     this.setRichTextArray(this.richTextValue)
-    
+
 
   }
 
