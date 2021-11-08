@@ -25,7 +25,7 @@ export class EditingpanelComponent implements OnInit, OnChanges {
   @Input() richText: any[]
   @Output() richTextArray = new EventEmitter<any>();
 
-
+  sh = true;
   ipc: IpcRenderer
   data: any
   display = []
@@ -44,8 +44,12 @@ export class EditingpanelComponent implements OnInit, OnChanges {
   reduceScale: string = "1,1"
   richTextValue: any[] = []
   flag: boolean
+  mouseDown = false;
+  startX: any;
+  scrollLeft: any;
+  slider = document.querySelector<HTMLElement>('.parent');
 
-
+  
 
 
   ngOnInit() {
@@ -120,7 +124,6 @@ export class EditingpanelComponent implements OnInit, OnChanges {
       if (!this.display.includes(this.data[0].file)) {
 
         this.display.push(this.data[0].file)
-        document.getElementById('img' + "_" + this.data[0].file).style.transform = this.data[0].imgTransform
         document.getElementById('panel' + "_" + this.data[0].file).style.transform = this.data[0].containerTransform
         document.getElementById('img' + "_" + this.data[0].file).style.filter = this.data[0].filters
         var text;
@@ -195,25 +198,12 @@ export class EditingpanelComponent implements OnInit, OnChanges {
 
  
 
-  showImage(e) {
-
+  grabbingCursor(e) {
     if (e.target.id == this.overlay) {
-      document.getElementById('box').style.zIndex = "2"
-      document.getElementById('box').style.cursor = "grab"
-    }
-
-  }
-
-  showOverlay() {
-
-    document.getElementById('box').style.zIndex = "-1"
-
-  }
-
-  grabbingCursor() {
-
     document.getElementById(this.overlay).style.cursor = "grabbing"
+    }
   }
+
 
   defaultCursor(e) {
     if (e.target.id == this.overlay) {
@@ -221,7 +211,24 @@ export class EditingpanelComponent implements OnInit, OnChanges {
     }
   }
 
-
+  startDragging(e,el) {
+    this.mouseDown = true;
+    this.startX = e.pageX - el.offsetLeft;
+    this.scrollLeft = el.scrollLeft;
+  }
+  stopDragging() {
+    this.mouseDown = false;
+  }
+  moveEvent(e, el) {
+    e.preventDefault();
+    if (!this.mouseDown) {
+      return;
+    }
+    
+    const x = e.pageX - el.offsetLeft;
+    const scroll = x - this.startX;
+    el.scrollLeft = this.scrollLeft - scroll;
+  }
 
 
   setValue(e, i = "") {

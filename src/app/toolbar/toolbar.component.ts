@@ -86,9 +86,7 @@ export class ToolbarComponent implements OnInit,OnChanges {
       this.zone.run(() => {
         if (args != "No file" && args.length > 0) {
 
-          this.scale = Number(args[0].imgTransform.slice(args[0].imgTransform.indexOf('(') + 1, args[0].imgTransform.indexOf(')')))
           this.degree = Number(args[0].containerTransform.slice(args[0].containerTransform.lastIndexOf('(') + 1, args[0].containerTransform.lastIndexOf(')') - 3));
-          this.zoomScale.emit(this.scale);
           this.rotateDegree.emit(this.degree);
 
         }
@@ -295,9 +293,10 @@ this.btnID="btn_"+this.tabheader
 
 
   save() {
-
+    
     this.json = []
     this.inputElements = document.getElementsByClassName("input" + "_" + this.tabheader)
+    document.getElementById('overlay' + "_" + this.tabheader).style.transform='none'
     this.overlay = document.getElementById('overlay' + "_" + this.tabheader).getBoundingClientRect()
     this.l = this.inputElements.length;
     var today = new Date();
@@ -308,13 +307,14 @@ this.btnID="btn_"+this.tabheader
     this.json.push({
       file: this.tabheader,
       date: date,
-      imgTransform: document.getElementById('img' + "_" +this.tabheader).style.transform,
+
       containerTransform: document.getElementById('panel' + "_" + this.tabheader).style.transform,
       filters: document.getElementById('img' + "_" + this.tabheader).style.filter,
     })
     while (this.l--) {
 
       if(this.inputElements[this.l].value!="" && this.inputElements[this.l].style.display!="none" && !this.inputElements[this.l].id.includes("richText")){
+        
         this.json.push({
           file: this.tabheader,
           date: date,
@@ -338,7 +338,7 @@ this.btnID="btn_"+this.tabheader
       }
 
       else if(this.inputElements[this.l].style.display!="none" && this.inputElements[this.l].id.includes("richText")){
-        
+       
         for(var i=0;i<this.richTextArray.length;i++){
           if(this.richTextArray[i].id==this.inputElements[this.l].id){
             var richTextValue=this.richTextArray[i].value
@@ -351,12 +351,12 @@ this.btnID="btn_"+this.tabheader
           type: "richText",
           id: this.inputElements[this.l].id,
           class: this.inputElements[this.l].className,
-          value:richTextValue,
+          value:this.inputElements[this.l].nodeName=="DIV"?this.inputElements[this.l].innerHTML:richTextValue,
           width: "260",
           height: "100",
           position: {
-            left: (this.inputElements[this.l] as HTMLElement).getBoundingClientRect().left - this.overlay.left,
-            top: (this.inputElements[this.l] as HTMLElement).getBoundingClientRect().top - this.overlay.top + 40
+            left: this.inputElements[this.l].nodeName!="DIV"?(this.inputElements[this.l] as HTMLElement).getBoundingClientRect().left - this.overlay.left + 15:(this.inputElements[this.l] as HTMLElement).getBoundingClientRect().left - this.overlay.left,
+            top: this.inputElements[this.l].nodeName!="DIV"?(this.inputElements[this.l] as HTMLElement).getBoundingClientRect().top - this.overlay.top + 50:(this.inputElements[this.l] as HTMLElement).getBoundingClientRect().top - this.overlay.top
           }
 
         });
