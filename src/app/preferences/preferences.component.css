@@ -1,0 +1,26 @@
+body{
+    background-color: rgb(40, 42, 44);
+}
+
+#title{
+
+    width: 100%;
+    height: 50px; 
+    background-color: darkturquoise;
+    text-align: center;
+}
+
+#heading{
+
+    margin: auto;
+    font-weight: 100;
+    vertical-align: middle;
+    line-height:51px;
+}
+
+#container{
+    color: white;
+    display: inline-flex;
+    margin-top: 60px;
+    margin-left: 10px;
+}

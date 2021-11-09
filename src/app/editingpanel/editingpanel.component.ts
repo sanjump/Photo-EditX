@@ -12,8 +12,8 @@ import { Output, EventEmitter } from '@angular/core';
 
 export class EditingpanelComponent implements OnInit, OnChanges {
 
-  constructor(private zone: NgZone, private tabService: TabService, private sanitizer: DomSanitizer) { 
-   
+  constructor(private zone: NgZone, private tabService: TabService, private sanitizer: DomSanitizer) {
+
   }
 
   @Input() tabheader: string
@@ -46,10 +46,12 @@ export class EditingpanelComponent implements OnInit, OnChanges {
   flag: boolean
   mouseDown = false;
   startX: any;
+  startY: any;
   scrollLeft: any;
-  slider = document.querySelector<HTMLElement>('.parent');
+  scrollTop: any;
 
-  
+
+
 
 
   ngOnInit() {
@@ -78,6 +80,8 @@ export class EditingpanelComponent implements OnInit, OnChanges {
   ngOnChanges() {
 
 
+
+
     if (this.tabheader === undefined) {
 
       (document.querySelector(".container") as HTMLElement).style.marginLeft = "170px";
@@ -88,6 +92,7 @@ export class EditingpanelComponent implements OnInit, OnChanges {
       localStorage.removeItem('imgUrl');
 
     }
+
 
     this.scale = this.zoomScale
     this.degree = this.rotateDegree
@@ -108,6 +113,8 @@ export class EditingpanelComponent implements OnInit, OnChanges {
     this.panel = "panel" + "_" + this.tabheader
 
   }
+
+
 
   setRichTextArray(value: any) {
     this.richTextArray.emit(value);
@@ -147,7 +154,7 @@ export class EditingpanelComponent implements OnInit, OnChanges {
             text.id = this.data[i].id
             text.className = this.data[i].class
             text.innerHTML = this.data[i].value
-            text.contenteditable="true"
+            text.contenteditable = "true"
             text.style.width = this.data[i].width
             text.style.height = this.data[i].height
             text.style.position = 'absolute'
@@ -161,7 +168,7 @@ export class EditingpanelComponent implements OnInit, OnChanges {
           }
 
 
-          if(this.data[i].type == "text" || this.data[i].type == "textarea"){
+          if (this.data[i].type == "text" || this.data[i].type == "textarea") {
 
             text.id = this.data[i].id
             text.className = this.data[i].class
@@ -187,7 +194,7 @@ export class EditingpanelComponent implements OnInit, OnChanges {
           }
 
 
-         
+
 
 
         }
@@ -196,11 +203,11 @@ export class EditingpanelComponent implements OnInit, OnChanges {
 
   }
 
- 
+
 
   grabbingCursor(e) {
     if (e.target.id == this.overlay) {
-    document.getElementById(this.overlay).style.cursor = "grabbing"
+      document.getElementById(this.overlay).style.cursor = "grabbing"
     }
   }
 
@@ -211,10 +218,12 @@ export class EditingpanelComponent implements OnInit, OnChanges {
     }
   }
 
-  startDragging(e,el) {
+  startDragging(e, el) {
     this.mouseDown = true;
     this.startX = e.pageX - el.offsetLeft;
+    this.startY = e.pageY - el.offsetTop;
     this.scrollLeft = el.scrollLeft;
+    this.scrollTop = el.scrollTop;
   }
   stopDragging() {
     this.mouseDown = false;
@@ -224,10 +233,12 @@ export class EditingpanelComponent implements OnInit, OnChanges {
     if (!this.mouseDown) {
       return;
     }
-    
+    const y = e.pageY - el.offsetTop;
     const x = e.pageX - el.offsetLeft;
-    const scroll = x - this.startX;
-    el.scrollLeft = this.scrollLeft - scroll;
+    const scrollX = x - this.startX;
+    const scrollY = y - this.startY;
+    el.scrollLeft = this.scrollLeft - scrollX;
+    el.scrollTop = this.scrollTop - scrollY
   }
 
 
@@ -303,7 +314,7 @@ export class EditingpanelComponent implements OnInit, OnChanges {
     else if (id.includes("richText")) {
       document.getElementById(id).style.display = 'none'
       this.richTextValue.splice(this.richTextValue.indexOf(id, 0), 1)
-      
+
     }
 
     else {
@@ -319,11 +330,11 @@ export class EditingpanelComponent implements OnInit, OnChanges {
   getRichTextValue(e, i) {
 
     this.flag = false
-    
+
     for (var j = 0; j < this.richTextValue.length; j++) {
 
       if (this.richTextValue[j].id == i) {
-        
+
         this.richTextValue[j].value = e.htmlValue
         this.flag = true
         break
@@ -334,7 +345,7 @@ export class EditingpanelComponent implements OnInit, OnChanges {
     }
 
     if (this.flag == false) {
-      
+
       this.richTextValue.push({
         id: i,
         value: e.htmlValue
@@ -343,7 +354,7 @@ export class EditingpanelComponent implements OnInit, OnChanges {
 
 
     this.setRichTextArray(this.richTextValue)
-    
+
 
   }
 

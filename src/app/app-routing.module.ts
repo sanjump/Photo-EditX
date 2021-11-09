@@ -3,6 +3,7 @@ import { Routes, RouterModule } from '@angular/router';
 import { ContainerComponent } from './container/container.component';
 import { EditorComponent } from './editor/editor.component';
 import { ExportComponent } from './export/export.component';
+import { PreferencesComponent } from './preferences/preferences.component';
 
 
 const routes: Routes = [
@@ -19,6 +20,11 @@ const routes: Routes = [
   {
     path:'export',
     component:ExportComponent,
+   
+  },
+  {
+    path:'preferences',
+    component:PreferencesComponent,
    
   }
 ];

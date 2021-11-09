@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, NgZone,OnChanges } from '@angular/core';
+import { Component, OnInit, Input, NgZone, OnChanges } from '@angular/core';
 import { faCommentAlt } from '@fortawesome/free-solid-svg-icons';
 import { faExpandArrowsAlt } from '@fortawesome/free-solid-svg-icons';
 import { faSyncAlt } from '@fortawesome/free-solid-svg-icons';
@@ -12,24 +12,27 @@ import { faSearchPlus } from '@fortawesome/free-solid-svg-icons';
 import { faSearchMinus } from '@fortawesome/free-solid-svg-icons';
 import { faBold } from '@fortawesome/free-solid-svg-icons';
 import { faItalic } from '@fortawesome/free-solid-svg-icons';
-import {BtnPressedService} from '../btn-pressed.service'
+import { BtnPressedService } from '../btn-pressed.service'
 import { faFont } from '@fortawesome/free-solid-svg-icons';
 import { faEdit } from '@fortawesome/free-solid-svg-icons';
+import { faUndo } from '@fortawesome/free-solid-svg-icons';
+import { faRedo } from '@fortawesome/free-solid-svg-icons';
+
 @Component({
   selector: 'app-toolbar',
   templateUrl: './toolbar.component.html',
   styleUrls: ['./toolbar.component.css']
 })
 
-export class ToolbarComponent implements OnInit,OnChanges {
+export class ToolbarComponent implements OnInit, OnChanges {
 
-  constructor( private tabService: TabService,private btnPressedService:BtnPressedService, private zone: NgZone) {
-   
+  constructor(private tabService: TabService, private btnPressedService: BtnPressedService, private zone: NgZone) {
+
   }
 
   @Input() tabheader: string
   @Input() tabcontent: string
-  @Input() richTextArray:any[]
+  @Input() richTextArray: any[]
   @Output() textboxes = new EventEmitter<any>();
   @Output() paragraphs = new EventEmitter<any>();
   @Output() richText = new EventEmitter<any>();
@@ -49,6 +52,8 @@ export class ToolbarComponent implements OnInit,OnChanges {
   faParagraph = faParagraph
   faFont = faFont
   faExpandArrowsAlt = faExpandArrowsAlt;
+  faUndo = faUndo
+  faRedo = faRedo
   faEdit = faEdit
   json: any[] = [];
   countText: number = 0;
@@ -57,8 +62,8 @@ export class ToolbarComponent implements OnInit,OnChanges {
   l: number;
   inputElements: any
   inputTextboxes: any[] = []
-  inputParagraph:any[]=[]
-  inputRichText:any[]=[]
+  inputParagraph: any[] = []
+  inputRichText: any[] = []
   displaySave: boolean
   overlay: any;
   filterData: any = []
@@ -67,7 +72,7 @@ export class ToolbarComponent implements OnInit,OnChanges {
   url = ""
   scale: number = 1
   degree: number = 0
-  btnID:string=""
+  btnID: string = ""
 
   ngOnInit(): void {
 
@@ -98,12 +103,13 @@ export class ToolbarComponent implements OnInit,OnChanges {
       });
     });
 
+
   }
 
 
-  ngOnChanges(){
+  ngOnChanges() {
 
-this.btnID="btn_"+this.tabheader
+    this.btnID = "btn_" + this.tabheader
 
   }
 
@@ -140,28 +146,28 @@ this.btnID="btn_"+this.tabheader
 
   }
 
-  addParagraph(e){
+  addParagraph(e) {
 
-    this.inputParagraph.push("paragraph"+this.countTextArea + "_" + this.tabheader)
+    this.inputParagraph.push("paragraph" + this.countTextArea + "_" + this.tabheader)
     this.setParagraphs(this.inputParagraph)
     this.countTextArea += 1
-   
+
 
   }
 
-  addRichText(e){
+  addRichText(e) {
 
-    this.inputRichText.push("richText"+this.countRichText + "_" + this.tabheader)
+    this.inputRichText.push("richText" + this.countRichText + "_" + this.tabheader)
     this.setRichText(this.inputRichText)
     this.countRichText += 1
-   
+
 
   }
 
   openRightBar(e) {
-    
+
     this.btnPressedService.btnPressed.next(e.target.id)
-    document.getElementById("rightSidebar_"+this.tabheader).style.width = "300px";
+    document.getElementById("rightSidebar_" + this.tabheader).style.width = "300px";
     document.getElementById("main").style.marginRight = "300px";
     document.getElementById("leftSidebar").style.width = "0px";
     document.getElementById("main").style.marginLeft = "0px";
@@ -172,7 +178,7 @@ this.btnID="btn_"+this.tabheader
       (elements[i] as HTMLElement).style.marginRight = "40px";
     }
     localStorage.setItem('currentTab', this.tabheader)
-    
+
   }
 
   clearFind() {
@@ -205,33 +211,44 @@ this.btnID="btn_"+this.tabheader
     this.setrotateDegree(this.degree)
   }
 
-  makeBold(){
+  makeBold() {
 
-    if(document.getElementById(localStorage.getItem('selectedText')).style.fontWeight == "bold"){
+    if (document.getElementById(localStorage.getItem('selectedText')).style.fontWeight == "bold") {
       document.getElementById(localStorage.getItem('selectedText')).style.fontWeight = "normal"
     }
-    else{
+    else {
       document.getElementById(localStorage.getItem('selectedText')).style.fontWeight = "bold"
     }
-    
+
   }
 
-  makeItalic(){
+  makeItalic() {
 
-    if(document.getElementById(localStorage.getItem('selectedText')).style.fontStyle == "italic"){
+    if (document.getElementById(localStorage.getItem('selectedText')).style.fontStyle == "italic") {
       document.getElementById(localStorage.getItem('selectedText')).style.fontStyle = "normal"
     }
-    else{
+    else {
       document.getElementById(localStorage.getItem('selectedText')).style.fontStyle = "italic"
     }
+  }
+
+
+  undo() {
+
+  }
+
+
+  redo() {
+
+
   }
 
   search(comment) {
 
 
-      this.annotations = document.getElementsByClassName("input_"+this.tabheader)
-      for (var i = 0; i < this.annotations.length; i++) {
-        if(this.annotations[i].value!==undefined ){
+    this.annotations = document.getElementsByClassName("input_" + this.tabheader)
+    for (var i = 0; i < this.annotations.length; i++) {
+      if (this.annotations[i].value !== undefined) {
 
         if (this.annotations[i].value.includes(comment) && comment != "") {
           this.annotations[i].style.backgroundColor = "yellow"
@@ -243,29 +260,29 @@ this.btnID="btn_"+this.tabheader
     }
 
     for (var i = 0; i < this.annotations.length; i++) {
-      if(this.annotations[i].value===undefined && this.annotations[i].innerHTML!=""  ){
+      if (this.annotations[i].value === undefined && this.annotations[i].innerHTML != "") {
 
-      if ((this.annotations[i].innerHTML.includes(comment)) && comment != "") {
-        this.annotations[i].style.backgroundColor = "yellow"
-      }
-      else {
-        this.annotations[i].style.backgroundColor = "transparent"
+        if ((this.annotations[i].innerHTML.includes(comment)) && comment != "") {
+          this.annotations[i].style.backgroundColor = "yellow"
+        }
+        else {
+          this.annotations[i].style.backgroundColor = "transparent"
+        }
       }
     }
-  }
 
 
 
-      for(var i=0;i<this.richTextArray.length;i++){
-        if(this.richTextArray[i].value.includes(comment) && comment != "") {
-          document.getElementById(this.richTextArray[i].id).style.backgroundColor = "yellow"
-          
-        }
-        else{
-          document.getElementById(this.richTextArray[i].id).style.backgroundColor = "transparent"
+    for (var i = 0; i < this.richTextArray.length; i++) {
+      if (this.richTextArray[i].value.includes(comment) && comment != "") {
+        document.getElementById(this.richTextArray[i].id).style.backgroundColor = "yellow"
 
-        }
       }
+      else {
+        document.getElementById(this.richTextArray[i].id).style.backgroundColor = "transparent"
+
+      }
+    }
 
   }
 
@@ -293,10 +310,11 @@ this.btnID="btn_"+this.tabheader
 
 
   save() {
-    
+
     this.json = []
     this.inputElements = document.getElementsByClassName("input" + "_" + this.tabheader)
-    document.getElementById('overlay' + "_" + this.tabheader).style.transform='none'
+    document.getElementById('overlay' + "_" + this.tabheader).style.transform = 'none'
+    this.zoomScale.emit(1)
     this.overlay = document.getElementById('overlay' + "_" + this.tabheader).getBoundingClientRect()
     this.l = this.inputElements.length;
     var today = new Date();
@@ -313,8 +331,8 @@ this.btnID="btn_"+this.tabheader
     })
     while (this.l--) {
 
-      if(this.inputElements[this.l].value!="" && this.inputElements[this.l].style.display!="none" && !this.inputElements[this.l].id.includes("richText")){
-        
+      if (this.inputElements[this.l].value != "" && this.inputElements[this.l].style.display != "none" && !this.inputElements[this.l].id.includes("richText")) {
+
         this.json.push({
           file: this.tabheader,
           date: date,
@@ -322,11 +340,11 @@ this.btnID="btn_"+this.tabheader
           id: this.inputElements[this.l].id,
           class: this.inputElements[this.l].className,
           value: this.inputElements[this.l].value,
-          fontWeight:this.inputElements[this.l].style.fontWeight,
-          fontStyle:this.inputElements[this.l].style.fontStyle,
-          fontFamily:this.inputElements[this.l].style.fontFamily,
-          fontColor:this.inputElements[this.l].style.color,
-          fontSize:this.inputElements[this.l].style.fontSize,
+          fontWeight: this.inputElements[this.l].style.fontWeight,
+          fontStyle: this.inputElements[this.l].style.fontStyle,
+          fontFamily: this.inputElements[this.l].style.fontFamily,
+          fontColor: this.inputElements[this.l].style.color,
+          fontSize: this.inputElements[this.l].style.fontSize,
           width: this.inputElements[this.l].style.width,
           height: this.inputElements[this.l].style.height,
           position: {
@@ -337,42 +355,42 @@ this.btnID="btn_"+this.tabheader
 
       }
 
-      else if(this.inputElements[this.l].style.display!="none" && this.inputElements[this.l].id.includes("richText")){
-       
-        for(var i=0;i<this.richTextArray.length;i++){
-          if(this.richTextArray[i].id==this.inputElements[this.l].id){
-            var richTextValue=this.richTextArray[i].value
+      else if (this.inputElements[this.l].style.display != "none" && this.inputElements[this.l].id.includes("richText")) {
+
+        for (var i = 0; i < this.richTextArray.length; i++) {
+          if (this.richTextArray[i].id == this.inputElements[this.l].id) {
+            var richTextValue = this.richTextArray[i].value
           }
         }
-        if(richTextValue!=""){
-        this.json.push({
-          file: this.tabheader,
-          date: date,
-          type: "richText",
-          id: this.inputElements[this.l].id,
-          class: this.inputElements[this.l].className,
-          value:this.inputElements[this.l].nodeName=="DIV"?this.inputElements[this.l].innerHTML:richTextValue,
-          width: "260",
-          height: "100",
-          position: {
-            left: this.inputElements[this.l].nodeName!="DIV"?(this.inputElements[this.l] as HTMLElement).getBoundingClientRect().left - this.overlay.left + 15:(this.inputElements[this.l] as HTMLElement).getBoundingClientRect().left - this.overlay.left,
-            top: this.inputElements[this.l].nodeName!="DIV"?(this.inputElements[this.l] as HTMLElement).getBoundingClientRect().top - this.overlay.top + 50:(this.inputElements[this.l] as HTMLElement).getBoundingClientRect().top - this.overlay.top
-          }
+        if (richTextValue != "") {
+          this.json.push({
+            file: this.tabheader,
+            date: date,
+            type: "richText",
+            id: this.inputElements[this.l].id,
+            class: this.inputElements[this.l].className,
+            value: this.inputElements[this.l].nodeName == "DIV" ? this.inputElements[this.l].innerHTML : richTextValue,
+            width: "260",
+            height: "100",
+            position: {
+              left: this.inputElements[this.l].nodeName != "DIV" ? (this.inputElements[this.l] as HTMLElement).getBoundingClientRect().left - this.overlay.left + 15 : (this.inputElements[this.l] as HTMLElement).getBoundingClientRect().left - this.overlay.left,
+              top: this.inputElements[this.l].nodeName != "DIV" ? (this.inputElements[this.l] as HTMLElement).getBoundingClientRect().top - this.overlay.top + 50 : (this.inputElements[this.l] as HTMLElement).getBoundingClientRect().top - this.overlay.top
+            }
 
-        });
+          });
+        }
+
       }
-        
-      }
-      
+
 
     }
 
-   
 
-      this.ipc.send("file", this.json);
-      this.displaySave = true
 
-    
+    this.ipc.send("file", this.json);
+    this.displaySave = true
+
+
 
 
   }

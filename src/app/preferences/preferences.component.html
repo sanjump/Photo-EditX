@@ -1,0 +1,14 @@
+<body>
+    <div id="title">
+        <h2 id="heading">User Preferences</h2>
+    </div>
+    <div id="container" >
+        <h2 class="input">Theme</h2>
+    <span style="margin-left: 100px;">
+        <p-radioButton name="theme"  (onClick)="changeTheme()"  label="Dark" value="dark" [(ngModel)]="selectedValue"></p-radioButton>
+    </span>
+    <span style="margin-left: 30px;">
+        <p-radioButton name="theme"  (onClick)="changeTheme()"  label="Light" value="light" [(ngModel)]="selectedValue"></p-radioButton>
+    </span>
+    </div>
+</body>

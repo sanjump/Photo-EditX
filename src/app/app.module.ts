@@ -37,7 +37,8 @@ import { BtnPressedService } from './btn-pressed.service';
 import {ColorPickerModule} from 'primeng/colorpicker';
 import {InputTextareaModule} from 'primeng/inputtextarea';
 import {EditorModule} from 'primeng/editor';
-
+import { PreferencesComponent } from './preferences/preferences.component';
+import {RadioButtonModule} from 'primeng/radiobutton';
 @NgModule({
   declarations: [
     AppComponent,
@@ -50,7 +51,8 @@ import {EditorModule} from 'primeng/editor';
     ToolbarComponent,
     EditingpanelComponent,
     ExportComponent,
-    RightSidebarComponent
+    RightSidebarComponent,
+    PreferencesComponent
 
   ],
   imports: [
@@ -77,7 +79,8 @@ import {EditorModule} from 'primeng/editor';
     SliderModule,
     ColorPickerModule,
     InputTextareaModule,
-    EditorModule
+    EditorModule,
+    RadioButtonModule
 
 
   ],

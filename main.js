@@ -12,6 +12,7 @@ let mainWindow
 let overlayData
 let types = [{ name: 'Images', extensions: ['jpg', 'jpeg', 'png'] }]
 directory = app.getPath('documents') + "\\editor";
+
 if (!fs.existsSync(directory)) {
   fs.mkdirSync(directory, { recursive: true });
 }
@@ -120,6 +121,18 @@ const mainMenuTemplate = [
         }
       }
     ]
+   
+  },
+  {
+  label: 'Settings',
+  submenu: [
+    {
+      label: 'Preferences',
+      click() {
+        createPreferencesWindow();
+      }
+    }
+  ]
   }
 ];
 
@@ -185,6 +198,35 @@ function createExportWindow() {
 
 }
 
+function createPreferencesWindow(){
+  PreferencesScreen = new BrowserWindow({
+    width: 700,
+    height: 500,
+    center: true,
+    frame: true,
+    transparent: false,
+    resizable:false,
+
+    webPreferences: {
+      nodeIntegration: true,
+      contextIsolation: false,
+      enableRemoteModule: true,
+    },
+  });
+
+  PreferencesScreen.setMenu(null)
+  
+  PreferencesScreen.webContents.openDevTools()
+
+  PreferencesScreen.loadURL( url.format({
+    pathname: path.join(__dirname, 'dist/index.html'),
+    protocol: 'file:',
+    slashes: true,
+    hash: 'preferences'
+  }));
+}
+
+
 ipcMain.on('export', (event, arg) => {
  
   createExportWindow()
@@ -201,13 +243,17 @@ ipcMain.on('fullScreen', (event, arg) => {
     fullScreen.webContents.send('loadScreen', overlayData);
   })
 
-  
- 
 })
 
 
 ipcMain.on('file', (event, arg) => {
   saveFile(arg)
+})
+
+ipcMain.on('theme', (event, arg) => {
+  console.log(app.getPath('userData'))
+  console.log(app.getPath('appData'))
+  mainWindow.webContents.send("theme",arg)
 })
 
 function saveFile(arg) {

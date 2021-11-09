@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit,NgZone } from '@angular/core';
 
 @Component({
   selector: 'app-container',
@@ -13,7 +13,12 @@ export class ContainerComponent implements OnInit {
   tabs:any=[]
   node:any=[]
  
+
+
+
   ngOnInit(): void {
+
+    
   }
 
   setTabs(tabs: any) {
