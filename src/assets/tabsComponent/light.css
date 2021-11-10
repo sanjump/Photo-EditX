@@ -1,0 +1,20 @@
+
+
+
+.p-tabview .p-tabview-nav li.p-highlight .p-tabview-nav-link {
+    background: #0b0124;                
+    border:solid 3px rgb(0, 0, 0);
+    color: rgb(198, 198, 212);
+}
+
+/* #c1aeae */
+.p-tabview .p-tabview-panels {
+        background: rgb(216 201 203);  
+        border-color: black;
+}
+/* rgb(216 201 203) */
+
+.p-tabview {
+    border-color: black;
+    background-color: "#6a6a6b"
+}

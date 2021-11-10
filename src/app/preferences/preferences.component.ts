@@ -11,7 +11,7 @@ export class PreferencesComponent implements OnInit {
 
   selectedValue:string
   ipc: IpcRenderer
-
+  settings={}
 
   ngOnInit(): void {
     this.ipc = (<any>window).require('electron').ipcRenderer;
@@ -19,8 +19,14 @@ export class PreferencesComponent implements OnInit {
   }
 
   changeTheme(){
+
+      this.settings = 
+        {
+          'theme':this.selectedValue
+        }
       
-      this.ipc.send("theme", this.selectedValue);
+      
+      this.ipc.send("preferences", this.settings);
 
     
   }

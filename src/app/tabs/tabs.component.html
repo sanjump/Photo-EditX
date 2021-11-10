@@ -1,3 +1,4 @@
+
 <div class="card">
   <p-tabView id="closable" *ngIf="tabs.length!=0;else welcome" [controlClose]="true" (onChange)="closeRightBar($event)" (onClose)="close($event)" [(activeIndex)]="tabIndex" [style]="{'background-color':'#111'}">
     <p-tabPanel id="{{tab.header}}" [closable]="true" *ngFor="let tab of tabs; let i = index" [header]="tab.header">

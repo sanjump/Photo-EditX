@@ -9,9 +9,6 @@ import { IpcRenderer } from 'electron';
 export class MainbodyComponent implements OnInit {
 
 
-
-
-
   constructor(private zone: NgZone) {
     document.addEventListener("keydown", (event) => this.saveOnkeyPress(event))
   }
@@ -27,33 +24,52 @@ export class MainbodyComponent implements OnInit {
 
 
     this.ipc = (<any>window).require('electron').ipcRenderer;
-    this.ipc.on("theme", (event, args) => {
+    this.ipc.on("preferences", (event, args) => {
 
       this.zone.run(() => {
-
-        if (args == "light") {
+        localStorage.setItem('theme', args.theme)
+        if (args.theme == "light") {
           var elements = (document.querySelectorAll('.sidebar'))
           for (var i = 0; i < elements.length; i++) {
             (elements[i] as HTMLElement).style.backgroundColor = "#6a6a6b";
 
           }
 
-          (document.querySelector('.p-tabview') as HTMLElement).style.backgroundColor = "#6a6a6b";
-          (document.querySelector('.p-tabview .p-tabview-panels') as HTMLElement).style.backgroundColor = "rgb(216 201 203)";
+          (document.querySelector('.p-tree') as HTMLElement).style.backgroundColor = "#6a6a6b";
+          (document.querySelector('.p-tree') as HTMLElement).style.color = "black";
+          (document.querySelector('.p-tree') as HTMLElement).style.border = "#6a6a6b";
+
+
+          if (this.tabs.length > 0) {
+           
+            (document.querySelector('.p-tabview') as HTMLElement).style.backgroundColor = "#6a6a6b";
+            (document.querySelector('.p-tabview .p-tabview-panels') as HTMLElement).style.backgroundColor = "rgb(216 201 203)";
+          }
+
+
+
 
         }
         else {
           var elements = (document.querySelectorAll('.sidebar'))
           for (var i = 0; i < elements.length; i++) {
             (elements[i] as HTMLElement).style.backgroundColor = "#111";
-
           }
-          (document.querySelector('.p-tabview') as HTMLElement).style.backgroundColor = "#111";
-          (document.querySelector('.p-tabview .p-tabview-panels') as HTMLElement).style.backgroundColor = "rgb(51, 29, 32)";
+
+          (document.querySelector('.p-tree') as HTMLElement).style.backgroundColor = "#111";
+          (document.querySelector('.p-tree') as HTMLElement).style.color = "white";
+          (document.querySelector('.p-tree') as HTMLElement).style.border = "#111";
+
+
+          if (this.tabs.length > 0) {
+           
+            (document.querySelector('.p-tabview') as HTMLElement).style.backgroundColor = "#111";
+            (document.querySelector('.p-tabview .p-tabview-panels') as HTMLElement).style.backgroundColor = "rgb(51, 29, 32)";
+          }
+
+
 
         }
-
-
       });
     });
 
@@ -65,7 +81,7 @@ export class MainbodyComponent implements OnInit {
     document.getElementById("open").hidden = true;
     var elements = document.getElementsByClassName('container');
     for (var i = 0; i < elements.length; i++) {
-      (elements[i] as HTMLElement).style.margin = "15px";
+      (elements[i] as HTMLElement).style.margin = "25px";
       (elements[i] as HTMLElement).style.marginRight = "30px";
     }
     if (document.getElementById("rightSidebar_" + localStorage.getItem('currentTab'))) {

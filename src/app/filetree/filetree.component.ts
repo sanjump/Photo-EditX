@@ -146,7 +146,7 @@ export class FiletreeComponent implements OnInit {
             for (var j = 0; j < length; j++) {
 
               if (this.loadedTabs[k].header == this.fileTree[i].children[j].label) {
-                console.log("sd")
+               
                 this.loadedTabs.splice(k, 1)
                 this.getTabs(this.loadedTabs)
                 if (k != 0) {

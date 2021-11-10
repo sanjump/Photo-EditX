@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, NgZone, OnChanges } from '@angular/core';
+import { Component, OnInit, Input, NgZone, OnChanges, AfterContentInit } from '@angular/core';
 import { faCommentAlt } from '@fortawesome/free-solid-svg-icons';
 import { faExpandArrowsAlt } from '@fortawesome/free-solid-svg-icons';
 import { faSyncAlt } from '@fortawesome/free-solid-svg-icons';
@@ -24,7 +24,7 @@ import { faRedo } from '@fortawesome/free-solid-svg-icons';
   styleUrls: ['./toolbar.component.css']
 })
 
-export class ToolbarComponent implements OnInit, OnChanges {
+export class ToolbarComponent implements OnInit, OnChanges, AfterContentInit {
 
   constructor(private tabService: TabService, private btnPressedService: BtnPressedService, private zone: NgZone) {
 
@@ -39,6 +39,8 @@ export class ToolbarComponent implements OnInit, OnChanges {
   @Output() zoomScale = new EventEmitter<any>();
   @Output() rotateDegree = new EventEmitter<any>();
 
+
+  private changes: MutationObserver;
   ipc: IpcRenderer
   win: BrowserWindow
   comment: string = ""
@@ -56,6 +58,7 @@ export class ToolbarComponent implements OnInit, OnChanges {
   faRedo = faRedo
   faEdit = faEdit
   json: any[] = [];
+  changesArray: any[] = [];
   countText: number = 0;
   countTextArea: number = 0
   countRichText: number = 0
@@ -73,6 +76,9 @@ export class ToolbarComponent implements OnInit, OnChanges {
   scale: number = 1
   degree: number = 0
   btnID: string = ""
+  undoCount: number = 0
+  redoCount: number = 0
+
 
   ngOnInit(): void {
 
@@ -110,6 +116,21 @@ export class ToolbarComponent implements OnInit, OnChanges {
   ngOnChanges() {
 
     this.btnID = "btn_" + this.tabheader
+
+  }
+
+  ngAfterContentInit() {
+
+    setTimeout(() => {
+      const div = document.getElementById("overlay_" + this.tabheader);
+      const config = { attributes: true, childList: true, subtree: true };
+      this.changes = new MutationObserver((mutation) => {
+       
+        this.save('yes')
+        
+      })
+      this.changes.observe(div, config);
+    }, 1000);
 
   }
 
@@ -235,12 +256,24 @@ export class ToolbarComponent implements OnInit, OnChanges {
 
   undo() {
 
+    if(this.undoCount<this.changesArray.length-1){
+      this.undoCount += 1
+    }
+    
+    this.changesArray[this.changesArray.length - this.undoCount-1]
+    console.log(this.changesArray[this.changesArray.length - this.undoCount-1])
+
   }
 
 
   redo() {
 
+    if(this.undoCount>0){
+      this.undoCount-=1
+    }
 
+    console.log(this.changesArray[this.changesArray.length - this.undoCount-1])
+   
   }
 
   search(comment) {
@@ -309,7 +342,7 @@ export class ToolbarComponent implements OnInit, OnChanges {
 
 
 
-  save() {
+  save(change = "") {
 
     this.json = []
     this.inputElements = document.getElementsByClassName("input" + "_" + this.tabheader)
@@ -385,10 +418,17 @@ export class ToolbarComponent implements OnInit, OnChanges {
 
     }
 
+    if (change != 'yes') {
+      this.ipc.send("file", this.json);
+      this.displaySave = true
+    }
+
+    else {
+      this.changesArray.push(this.json)
+
+    }
 
 
-    this.ipc.send("file", this.json);
-    this.displaySave = true
 
 
 

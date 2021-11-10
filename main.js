@@ -8,13 +8,24 @@ const { ConnectionBuilder } = require('electron-cgi');
 let files = [];
 let folderFiles = [];
 let imgfiles = [];
+let settings = 
+  {
+    'theme':'dark'
+  }
+
 let mainWindow
 let overlayData
 let types = [{ name: 'Images', extensions: ['jpg', 'jpeg', 'png'] }]
 directory = app.getPath('documents') + "\\editor";
+settingsDirectory = app.getPath('userData') + "\\settings";
+
 
 if (!fs.existsSync(directory)) {
   fs.mkdirSync(directory, { recursive: true });
+}
+
+if (!fs.existsSync(settingsDirectory)) {
+  fs.mkdirSync(settingsDirectory, { recursive: true });
 }
 
 let connection = new ConnectionBuilder()
@@ -56,6 +67,28 @@ function createWindow() {
       slashes: true
     })
   );
+
+  mainWindow.webContents.on('did-finish-load', ()=>{
+
+    fs.access(settingsDirectory + "\\"  + "preferences.json", (err) => {
+      if (err) {
+        mainWindow.webContents.send('preferences', settings);
+      }
+  
+      else {
+        fs.readFile(settingsDirectory + "\\"  + "preferences.json", function (err, data) {
+          if (err) {
+            return console.log(err);
+          }
+          else {
+              mainWindow.webContents.send('preferences', JSON.parse(data));
+          }
+        });
+      }
+    })
+
+ 
+  })
 
 }
 
@@ -250,11 +283,32 @@ ipcMain.on('file', (event, arg) => {
   saveFile(arg)
 })
 
-ipcMain.on('theme', (event, arg) => {
-  console.log(app.getPath('userData'))
-  console.log(app.getPath('appData'))
-  mainWindow.webContents.send("theme",arg)
+ipcMain.on('preferences', (event, arg) => {
+
+ 
+  fs.access(settingsDirectory + "\\"  + "preferences.json", (err) => {
+    if (err) {
+      fs.writeFile(settingsDirectory + "\\"  + "preferences.json", JSON.stringify(arg), function (err) {
+        if (err) {
+          return console.log(err);
+        }
+      });
+    }
+
+    else {
+      fs.writeFile(settingsDirectory + "\\"  + "preferences.json", JSON.stringify(arg), function (err) {
+        if (err) {
+          return console.log(err);
+        }
+      });
+    }
+  })
+  mainWindow.webContents.send("preferences",arg)
 })
+
+
+
+
 
 function saveFile(arg) {
 
