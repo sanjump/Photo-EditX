@@ -68,8 +68,13 @@ export class RightSidebarComponent implements OnInit,OnChanges {
   }
 
   changeFont(type){
+
+    if(localStorage.getItem('selectedText')){
+
+      document.getElementById(localStorage.getItem('selectedText')).style.fontFamily = type.code
+    }
    
-    document.getElementById(localStorage.getItem('selectedText')).style.fontFamily = type.code
+    
   }
 
   changeColor(){

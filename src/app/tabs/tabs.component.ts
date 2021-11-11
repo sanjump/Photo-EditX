@@ -37,7 +37,7 @@ export class TabsComponent implements OnInit, OnChanges {
       }
 
       if (this.tabs.length > 0) {
-        console.log(localStorage.getItem('theme'))
+       
         if (localStorage.getItem('theme') == 'dark') {
 
           (document.querySelector('.p-tabview') as HTMLElement).style.backgroundColor = "#111";
@@ -45,7 +45,7 @@ export class TabsComponent implements OnInit, OnChanges {
         }
 
         else {
-          console.log(localStorage.getItem('theme'));
+         
           (document.querySelector('.p-tabview') as HTMLElement).style.backgroundColor = "#6a6a6b";
           (document.querySelector('.p-tabview .p-tabview-panels') as HTMLElement).style.backgroundColor = "rgb(216 201 203)";
         }
@@ -65,7 +65,7 @@ export class TabsComponent implements OnInit, OnChanges {
     if (localStorage.getItem('currentTab') != "") {
 
       if (document.getElementById("rightSidebar_" + localStorage.getItem('currentTab')).style.width != "0px") {
-        console.log(localStorage.getItem('currentTab'))
+       
         document.getElementById("rightSidebar_" + localStorage.getItem('currentTab')).style.width = "0px";
         document.getElementById("main").style.marginRight = "0px";
         var elements = document.getElementsByClassName('container');

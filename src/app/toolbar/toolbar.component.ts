@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, NgZone, OnChanges, AfterContentInit } from '@angular/core';
+import { Component, OnInit, Input, NgZone, OnChanges } from '@angular/core';
 import { faCommentAlt } from '@fortawesome/free-solid-svg-icons';
 import { faExpandArrowsAlt } from '@fortawesome/free-solid-svg-icons';
 import { faSyncAlt } from '@fortawesome/free-solid-svg-icons';
@@ -17,6 +17,7 @@ import { faFont } from '@fortawesome/free-solid-svg-icons';
 import { faEdit } from '@fortawesome/free-solid-svg-icons';
 import { faUndo } from '@fortawesome/free-solid-svg-icons';
 import { faRedo } from '@fortawesome/free-solid-svg-icons';
+import { copyFileSync } from 'fs';
 
 @Component({
   selector: 'app-toolbar',
@@ -24,7 +25,7 @@ import { faRedo } from '@fortawesome/free-solid-svg-icons';
   styleUrls: ['./toolbar.component.css']
 })
 
-export class ToolbarComponent implements OnInit, OnChanges, AfterContentInit {
+export class ToolbarComponent implements OnInit, OnChanges {
 
   constructor(private tabService: TabService, private btnPressedService: BtnPressedService, private zone: NgZone) {
 
@@ -78,6 +79,7 @@ export class ToolbarComponent implements OnInit, OnChanges, AfterContentInit {
   btnID: string = ""
   undoCount: number = 0
   redoCount: number = 0
+  commands: any[] = []
 
 
   ngOnInit(): void {
@@ -119,20 +121,6 @@ export class ToolbarComponent implements OnInit, OnChanges, AfterContentInit {
 
   }
 
-  ngAfterContentInit() {
-
-    setTimeout(() => {
-      const div = document.getElementById("overlay_" + this.tabheader);
-      const config = { attributes: true, childList: true, subtree: true };
-      this.changes = new MutationObserver((mutation) => {
-       
-        this.save('yes')
-        
-      })
-      this.changes.observe(div, config);
-    }, 1000);
-
-  }
 
   setTextboxes(value: any) {
     this.textboxes.emit(value);
@@ -163,6 +151,7 @@ export class ToolbarComponent implements OnInit, OnChanges, AfterContentInit {
   addTextbox() {
     this.inputTextboxes.push(this.countText + "_" + this.tabheader)
     this.setTextboxes(this.inputTextboxes)
+    this.commands.push({ type: 'text', value: this.countText + "_" + this.tabheader,text:"" })
     this.countText += 1
 
   }
@@ -171,6 +160,7 @@ export class ToolbarComponent implements OnInit, OnChanges, AfterContentInit {
 
     this.inputParagraph.push("paragraph" + this.countTextArea + "_" + this.tabheader)
     this.setParagraphs(this.inputParagraph)
+    this.commands.push({ type: 'textarea', value: "paragraph" + this.countTextArea + "_" + this.tabheader,text:"" })
     this.countTextArea += 1
 
 
@@ -180,6 +170,7 @@ export class ToolbarComponent implements OnInit, OnChanges, AfterContentInit {
 
     this.inputRichText.push("richText" + this.countRichText + "_" + this.tabheader)
     this.setRichText(this.inputRichText)
+    this.commands.push({ type: 'richText', value: "richText" + this.countRichText + "_" + this.tabheader })
     this.countRichText += 1
 
 
@@ -217,12 +208,14 @@ export class ToolbarComponent implements OnInit, OnChanges, AfterContentInit {
   zoomIn() {
     this.scale += .1
     this.setZoomScale(this.scale)
+    this.commands.push({ type: 'zoomIn', value: this.scale })
   }
 
   zoomOut() {
     if (this.scale > 1) {
       this.scale -= .1
       this.setZoomScale(this.scale)
+      this.commands.push({ type: 'zoomOut', value: this.scale })
     }
 
   }
@@ -230,50 +223,163 @@ export class ToolbarComponent implements OnInit, OnChanges, AfterContentInit {
   rotate() {
     this.degree += 90
     this.setrotateDegree(this.degree)
+    this.commands.push({ type: 'rotate', value: this.degree })
   }
 
   makeBold() {
 
-    if (document.getElementById(localStorage.getItem('selectedText')).style.fontWeight == "bold") {
-      document.getElementById(localStorage.getItem('selectedText')).style.fontWeight = "normal"
-    }
-    else {
-      document.getElementById(localStorage.getItem('selectedText')).style.fontWeight = "bold"
-    }
+    if (localStorage.getItem('selectedText')) {
 
+      if (document.getElementById(localStorage.getItem('selectedText')).style.fontWeight == "bold") {
+        document.getElementById(localStorage.getItem('selectedText')).style.fontWeight = "normal"
+        this.commands.push({ type: 'bold', value: localStorage.getItem('selectedText') })
+      }
+      else {
+        document.getElementById(localStorage.getItem('selectedText')).style.fontWeight = "bold"
+        this.commands.push({ type: 'bold', value: localStorage.getItem('selectedText') })
+      }
+
+    }
   }
 
   makeItalic() {
 
-    if (document.getElementById(localStorage.getItem('selectedText')).style.fontStyle == "italic") {
-      document.getElementById(localStorage.getItem('selectedText')).style.fontStyle = "normal"
-    }
-    else {
-      document.getElementById(localStorage.getItem('selectedText')).style.fontStyle = "italic"
+    if (localStorage.getItem('selectedText')) {
+
+      if (document.getElementById(localStorage.getItem('selectedText')).style.fontStyle == "italic") {
+        document.getElementById(localStorage.getItem('selectedText')).style.fontStyle = "normal"
+        this.commands.push({ type: 'italic', value: localStorage.getItem('selectedText') })
+      }
+      else {
+        document.getElementById(localStorage.getItem('selectedText')).style.fontStyle = "italic"
+        this.commands.push({ type: 'italic', value: localStorage.getItem('selectedText') })
+      }
     }
   }
 
 
   undo() {
 
-    if(this.undoCount<this.changesArray.length-1){
+    if (this.undoCount <= this.commands.length - 1) {
       this.undoCount += 1
+      var cmd = this.commands[this.commands.length - this.undoCount]
+
+      if (cmd.type == 'text' && (<HTMLInputElement>document.getElementById('text' + cmd.value)).value == "") {
+      
+        document.getElementById('text' + cmd.value).style.display = 'none'
+        document.getElementById('btn' + cmd.value).style.display = 'none'
+        document.getElementById('cont' + cmd.value).style.display = 'none'
+      }
+
+      else if (cmd.type == 'text' && (<HTMLInputElement>document.getElementById('text' + cmd.value)).value != "") {
+        
+        this.undoCount -= 1
+        cmd.text=(<HTMLInputElement>document.getElementById('text' + cmd.value)).value;
+        (<HTMLInputElement>document.getElementById('text' + cmd.value)).value=""
+      }
+
+      else if (cmd.type == 'textarea' && (<HTMLInputElement>document.getElementById(cmd.value)).value == "") {
+        document.getElementById(cmd.value).style.display = 'none'
+      }
+
+      else if (cmd.type == 'textarea' && (<HTMLInputElement>document.getElementById(cmd.value)).value != "") {
+        
+        this.undoCount -= 1
+        cmd.text=(<HTMLInputElement>document.getElementById(cmd.value)).value;
+        (<HTMLInputElement>document.getElementById(cmd.value)).value=""
+      }
+
+      else if (cmd.type == 'richText') {
+        document.getElementById(cmd.value).style.display = 'none'
+      }
+
+      else if (cmd.type == 'bold') {
+        document.getElementById(cmd.value).style.fontWeight = "normal"
+      }
+
+      else if (cmd.type == 'italic') {
+        document.getElementById(cmd.value).style.fontStyle = "normal"
+      }
+
+      else if (cmd.type == 'zoomIn') {
+        this.setZoomScale(cmd.value - 0.1)
+      }
+
+      else if (cmd.type == 'zoomOut') {
+        this.setZoomScale(cmd.value + 0.1)
+      }
+      else if (cmd.type == 'rotate') {
+
+        this.degree -= 90
+        this.setrotateDegree(this.degree)
+
+      }
     }
-    
-    this.changesArray[this.changesArray.length - this.undoCount-1]
-    console.log(this.changesArray[this.changesArray.length - this.undoCount-1])
+
+
+
 
   }
 
 
   redo() {
 
-    if(this.undoCount>0){
-      this.undoCount-=1
+
+    if (this.undoCount > 0) {
+      this.undoCount -= 1
+      var cmd = this.commands[this.commands.length - this.undoCount - 1]
+
+      if (cmd.type == 'text' && (<HTMLInputElement>document.getElementById('text' + cmd.value)).style.display == "none") {
+        this.undoCount += 1
+        document.getElementById('text' + cmd.value).style.display = ''
+        document.getElementById('btn' + cmd.value).style.display = ''
+        document.getElementById('cont' + cmd.value).style.display = 'flex'
+      }
+      else if (cmd.type == 'text' && (<HTMLInputElement>document.getElementById('text' + cmd.value)).style.display != "none") {
+        (<HTMLInputElement>document.getElementById('text' + cmd.value)).value = cmd.text
+      
+      }
+
+      else if (cmd.type == 'textarea' && (<HTMLInputElement>document.getElementById(cmd.value)).style.display == "none") {
+        this.undoCount += 1
+        document.getElementById(cmd.value).style.display = ''
+      }
+      else if (cmd.type == 'textarea' && (<HTMLInputElement>document.getElementById(cmd.value)).style.display != "none") {
+        (<HTMLInputElement>document.getElementById(cmd.value)).value = cmd.text
+      
+      }
+
+      else if (cmd.type == 'richText') {
+        document.getElementById(cmd.value).style.display = ''
+      }
+
+      else if (cmd.type == 'bold') {
+        document.getElementById(cmd.value).style.fontWeight = "bold"
+
+      }
+      else if (cmd.type == 'italic') {
+        document.getElementById(cmd.value).style.fontStyle = "italic"
+      }
+
+      else if (cmd.type == 'zoomIn') {
+        this.setZoomScale(cmd.value + 0.1)
+      }
+
+      else if (cmd.type == 'zoomOut') {
+        this.setZoomScale(cmd.value - 0.1)
+      }
+
+      else if (cmd.type == 'rotate') {
+        this.degree += 90
+        this.setrotateDegree(this.degree)
+      }
+
+
     }
 
-    console.log(this.changesArray[this.changesArray.length - this.undoCount-1])
-   
+
+
+
   }
 
   search(comment) {
@@ -418,19 +524,9 @@ export class ToolbarComponent implements OnInit, OnChanges, AfterContentInit {
 
     }
 
-    if (change != 'yes') {
-      this.ipc.send("file", this.json);
-      this.displaySave = true
-    }
 
-    else {
-      this.changesArray.push(this.json)
-
-    }
-
-
-
-
+    this.ipc.send("file", this.json);
+    this.displaySave = true
 
 
   }

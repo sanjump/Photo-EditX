@@ -18,6 +18,7 @@ export class EditorComponent implements OnInit,OnChanges {
     paragraphs:any[] = []
     richText:any[] = []
     richTextArray:any[] = []
+    
     ngOnInit() {
     }
 
@@ -26,7 +27,7 @@ export class EditorComponent implements OnInit,OnChanges {
       
     }
 
-
+  
     setRichTextArray(setRichTextArray: any) {
         this.richTextArray = setRichTextArray;
     }

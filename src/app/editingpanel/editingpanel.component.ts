@@ -1,4 +1,4 @@
-import { Component, OnInit, OnChanges, Input, NgZone,AfterViewInit } from '@angular/core';
+import { Component, OnInit, OnChanges, Input, NgZone } from '@angular/core';
 import { clipboard, IpcRenderer } from 'electron';
 import { TabService } from '../tab.service';
 import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
@@ -10,12 +10,12 @@ import { Output, EventEmitter } from '@angular/core';
   styleUrls: ['./editingpanel.component.css']
 })
 
-export class EditingpanelComponent implements OnInit, OnChanges,AfterViewInit {
+export class EditingpanelComponent implements OnInit, OnChanges {
 
   constructor(private zone: NgZone, private tabService: TabService, private sanitizer: DomSanitizer) {
 
 
-    
+
 
   }
 
@@ -26,9 +26,10 @@ export class EditingpanelComponent implements OnInit, OnChanges,AfterViewInit {
   @Input() paragraphs: any[]
   @Input() rotateDegree: any
   @Input() richText: any[]
+  
   @Output() richTextArray = new EventEmitter<any>();
 
-  
+
   ipc: IpcRenderer
   data: any
   display = []
@@ -55,14 +56,9 @@ export class EditingpanelComponent implements OnInit, OnChanges,AfterViewInit {
 
 
 
-ngAfterViewInit(){
-
- 
-}
-
   ngOnInit() {
 
-  
+
 
     this.ipc = (<any>window).require('electron').ipcRenderer;
 
@@ -86,7 +82,7 @@ ngAfterViewInit(){
 
   ngOnChanges() {
 
-    
+
 
     if (this.tabheader === undefined) {
 
@@ -118,6 +114,8 @@ ngAfterViewInit(){
     this.imgname = "img" + "_" + this.tabheader
     this.panel = "panel" + "_" + this.tabheader
 
+
+
   }
 
 
@@ -129,6 +127,7 @@ ngAfterViewInit(){
 
   formOverlay(args) {
 
+  
     this.data = args
 
     if (this.data != "No file" && this.data.length > 0) {
