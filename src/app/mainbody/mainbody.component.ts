@@ -10,7 +10,7 @@ export class MainbodyComponent implements OnInit {
 
 
   constructor(private zone: NgZone) {
-    document.addEventListener("keydown", (event) => this.saveOnkeyPress(event))
+    document.addEventListener("keydown", (event) => this.keyPress(event))
   }
 
   @Input() tabs: any[]
@@ -91,11 +91,22 @@ export class MainbodyComponent implements OnInit {
 
   }
 
-  saveOnkeyPress(event) {
+  keyPress(event) {
+
     if (event.ctrlKey && event.keyCode == 83) {
 
-      document.getElementById("btn_" + localStorage.getItem('tabSelected')).click();
+      document.getElementById("saveBtn_" + localStorage.getItem('tabSelected')).click();
 
+    }
+
+    else if(event.ctrlKey && event.keyCode == 90){
+      event.preventDefault();
+      document.getElementById("undoBtn_" + localStorage.getItem('tabSelected')).click();
+    }
+
+    else if(event.ctrlKey && event.keyCode == 89){
+      event.preventDefault();
+      document.getElementById("redoBtn_" + localStorage.getItem('tabSelected')).click();
     }
 
   }

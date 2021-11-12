@@ -17,7 +17,7 @@ import { faFont } from '@fortawesome/free-solid-svg-icons';
 import { faEdit } from '@fortawesome/free-solid-svg-icons';
 import { faUndo } from '@fortawesome/free-solid-svg-icons';
 import { faRedo } from '@fortawesome/free-solid-svg-icons';
-import { copyFileSync } from 'fs';
+
 
 @Component({
   selector: 'app-toolbar',
@@ -41,7 +41,7 @@ export class ToolbarComponent implements OnInit, OnChanges {
   @Output() rotateDegree = new EventEmitter<any>();
 
 
-  private changes: MutationObserver;
+
   ipc: IpcRenderer
   win: BrowserWindow
   comment: string = ""
@@ -77,6 +77,9 @@ export class ToolbarComponent implements OnInit, OnChanges {
   scale: number = 1
   degree: number = 0
   btnID: string = ""
+  undoBtnId: string = ""
+  redoBtnId: string = ""
+  removeInput: string = ""
   undoCount: number = 0
   redoCount: number = 0
   commands: any[] = []
@@ -117,8 +120,10 @@ export class ToolbarComponent implements OnInit, OnChanges {
 
   ngOnChanges() {
 
-    this.btnID = "btn_" + this.tabheader
-
+    this.btnID = "saveBtn_" + this.tabheader
+    this.undoBtnId = "undoBtn_" + this.tabheader
+    this.redoBtnId = "redoBtn_" + this.tabheader
+    this.removeInput = "inputRemoved_" + this.tabheader
   }
 
 
@@ -151,7 +156,8 @@ export class ToolbarComponent implements OnInit, OnChanges {
   addTextbox() {
     this.inputTextboxes.push(this.countText + "_" + this.tabheader)
     this.setTextboxes(this.inputTextboxes)
-    this.commands.push({ type: 'text', value: this.countText + "_" + this.tabheader,text:"" })
+    this.commands.push({ type: 'text', element: this.countText + "_" + this.tabheader, text: "" })
+
     this.countText += 1
 
   }
@@ -160,7 +166,9 @@ export class ToolbarComponent implements OnInit, OnChanges {
 
     this.inputParagraph.push("paragraph" + this.countTextArea + "_" + this.tabheader)
     this.setParagraphs(this.inputParagraph)
-    this.commands.push({ type: 'textarea', value: "paragraph" + this.countTextArea + "_" + this.tabheader,text:"" })
+
+    this.commands.push({ type: 'textarea', element: "paragraph" + this.countTextArea + "_" + this.tabheader, text: "" })
+
     this.countTextArea += 1
 
 
@@ -170,7 +178,7 @@ export class ToolbarComponent implements OnInit, OnChanges {
 
     this.inputRichText.push("richText" + this.countRichText + "_" + this.tabheader)
     this.setRichText(this.inputRichText)
-    this.commands.push({ type: 'richText', value: "richText" + this.countRichText + "_" + this.tabheader })
+    this.commands.push({ type: 'richText', element: "richText" + this.countRichText + "_" + this.tabheader })
     this.countRichText += 1
 
 
@@ -195,12 +203,16 @@ export class ToolbarComponent implements OnInit, OnChanges {
 
   clearFind() {
 
+    if (this.annotations) {
 
-    this.comment = "";
-    for (var i = 0; i < this.annotations.length; i++) {
+      this.comment = "";
+      for (var i = 0; i < this.annotations.length; i++) {
 
-      this.annotations[i].style.backgroundColor = "transparent"
+        this.annotations[i].style.backgroundColor = "transparent"
+      }
+
     }
+
 
   }
 
@@ -208,6 +220,7 @@ export class ToolbarComponent implements OnInit, OnChanges {
   zoomIn() {
     this.scale += .1
     this.setZoomScale(this.scale)
+
     this.commands.push({ type: 'zoomIn', value: this.scale })
   }
 
@@ -215,6 +228,7 @@ export class ToolbarComponent implements OnInit, OnChanges {
     if (this.scale > 1) {
       this.scale -= .1
       this.setZoomScale(this.scale)
+
       this.commands.push({ type: 'zoomOut', value: this.scale })
     }
 
@@ -223,6 +237,7 @@ export class ToolbarComponent implements OnInit, OnChanges {
   rotate() {
     this.degree += 90
     this.setrotateDegree(this.degree)
+
     this.commands.push({ type: 'rotate', value: this.degree })
   }
 
@@ -232,11 +247,13 @@ export class ToolbarComponent implements OnInit, OnChanges {
 
       if (document.getElementById(localStorage.getItem('selectedText')).style.fontWeight == "bold") {
         document.getElementById(localStorage.getItem('selectedText')).style.fontWeight = "normal"
-        this.commands.push({ type: 'bold', value: localStorage.getItem('selectedText') })
+
+        this.commands.push({ type: 'bold', element: localStorage.getItem('selectedText') })
       }
       else {
         document.getElementById(localStorage.getItem('selectedText')).style.fontWeight = "bold"
-        this.commands.push({ type: 'bold', value: localStorage.getItem('selectedText') })
+
+        this.commands.push({ type: 'bold', element: localStorage.getItem('selectedText') })
       }
 
     }
@@ -248,57 +265,111 @@ export class ToolbarComponent implements OnInit, OnChanges {
 
       if (document.getElementById(localStorage.getItem('selectedText')).style.fontStyle == "italic") {
         document.getElementById(localStorage.getItem('selectedText')).style.fontStyle = "normal"
-        this.commands.push({ type: 'italic', value: localStorage.getItem('selectedText') })
+
+        this.commands.push({ type: 'italic', element: localStorage.getItem('selectedText') })
       }
       else {
         document.getElementById(localStorage.getItem('selectedText')).style.fontStyle = "italic"
-        this.commands.push({ type: 'italic', value: localStorage.getItem('selectedText') })
+
+        this.commands.push({ type: 'italic', element: localStorage.getItem('selectedText') })
       }
     }
   }
 
 
+  onInputRemove() {
+
+    
+
+    var id = localStorage.getItem('removedItem')
+
+    if (id.includes("paragraph")) {
+
+      this.commands.push({ type: 'removeTextArea', element: id })
+
+    }
+
+    else if (id.includes("richText")) {
+
+      this.commands.push({ type: 'removeRichText', element: id })
+
+    }
+
+    else {
+
+      this.commands.push({ type: 'removeText', element: id })
+
+    }
+
+
+  }
+
+
   undo() {
 
+
+
     if (this.undoCount <= this.commands.length - 1) {
+     
       this.undoCount += 1
       var cmd = this.commands[this.commands.length - this.undoCount]
 
-      if (cmd.type == 'text' && (<HTMLInputElement>document.getElementById('text' + cmd.value)).value == "") {
-      
-        document.getElementById('text' + cmd.value).style.display = 'none'
-        document.getElementById('btn' + cmd.value).style.display = 'none'
-        document.getElementById('cont' + cmd.value).style.display = 'none'
+      if (cmd.type == 'text' && (<HTMLInputElement>document.getElementById('text' + cmd.element)).value == "") {
+
+        document.getElementById('text' + cmd.element).style.display = 'none'
+        document.getElementById('btn' + cmd.element).style.display = 'none'
+        document.getElementById('cont' + cmd.element).style.display = 'none'
       }
 
-      else if (cmd.type == 'text' && (<HTMLInputElement>document.getElementById('text' + cmd.value)).value != "") {
-        
+      else if (cmd.type == 'text' && (<HTMLInputElement>document.getElementById('text' + cmd.element)).value != "") {
+
         this.undoCount -= 1
-        cmd.text=(<HTMLInputElement>document.getElementById('text' + cmd.value)).value;
-        (<HTMLInputElement>document.getElementById('text' + cmd.value)).value=""
+        cmd.text = (<HTMLInputElement>document.getElementById('text' + cmd.element)).value;
+        (<HTMLInputElement>document.getElementById('text' + cmd.element)).value = ""
       }
 
-      else if (cmd.type == 'textarea' && (<HTMLInputElement>document.getElementById(cmd.value)).value == "") {
-        document.getElementById(cmd.value).style.display = 'none'
+      else if (cmd.type == 'removeText') {
+
+
+        document.getElementById('text' + cmd.element).style.display = ''
+        document.getElementById('btn' + cmd.element).style.display = ''
+        document.getElementById('cont' + cmd.element).style.display = 'flex'
       }
 
-      else if (cmd.type == 'textarea' && (<HTMLInputElement>document.getElementById(cmd.value)).value != "") {
-        
+
+      else if (cmd.type == 'textarea' && (<HTMLInputElement>document.getElementById(cmd.element)).value == "") {
+        document.getElementById(cmd.element).style.display = 'none'
+      }
+
+      else if (cmd.type == 'textarea' && (<HTMLInputElement>document.getElementById(cmd.element)).value != "") {
+
         this.undoCount -= 1
-        cmd.text=(<HTMLInputElement>document.getElementById(cmd.value)).value;
-        (<HTMLInputElement>document.getElementById(cmd.value)).value=""
+        cmd.text = (<HTMLInputElement>document.getElementById(cmd.element)).value;
+        (<HTMLInputElement>document.getElementById(cmd.element)).value = ""
+      }
+
+      else if (cmd.type == 'removeTextArea') {
+
+
+        document.getElementById(cmd.element).style.display = ''
       }
 
       else if (cmd.type == 'richText') {
-        document.getElementById(cmd.value).style.display = 'none'
+        document.getElementById(cmd.element).style.display = 'none'
+      }
+
+      else if (cmd.type == 'removeRichText') {
+
+
+        document.getElementById(cmd.element).style.display = ''
       }
 
       else if (cmd.type == 'bold') {
-        document.getElementById(cmd.value).style.fontWeight = "normal"
+        document.getElementById(cmd.element).style.fontWeight = "normal"
       }
 
       else if (cmd.type == 'italic') {
-        document.getElementById(cmd.value).style.fontStyle = "normal"
+        document.getElementById(cmd.element).style.fontStyle = "normal"
       }
 
       else if (cmd.type == 'zoomIn') {
@@ -325,40 +396,41 @@ export class ToolbarComponent implements OnInit, OnChanges {
   redo() {
 
 
+
     if (this.undoCount > 0) {
       this.undoCount -= 1
       var cmd = this.commands[this.commands.length - this.undoCount - 1]
 
-      if (cmd.type == 'text' && (<HTMLInputElement>document.getElementById('text' + cmd.value)).style.display == "none") {
+      if (cmd.type == 'text' && (<HTMLInputElement>document.getElementById('text' + cmd.element)).style.display == "none") {
         this.undoCount += 1
-        document.getElementById('text' + cmd.value).style.display = ''
-        document.getElementById('btn' + cmd.value).style.display = ''
-        document.getElementById('cont' + cmd.value).style.display = 'flex'
+        document.getElementById('text' + cmd.element).style.display = ''
+        document.getElementById('btn' + cmd.element).style.display = ''
+        document.getElementById('cont' + cmd.element).style.display = 'flex'
       }
-      else if (cmd.type == 'text' && (<HTMLInputElement>document.getElementById('text' + cmd.value)).style.display != "none") {
-        (<HTMLInputElement>document.getElementById('text' + cmd.value)).value = cmd.text
-      
+      else if (cmd.type == 'text' && (<HTMLInputElement>document.getElementById('text' + cmd.element)).style.display != "none") {
+        (<HTMLInputElement>document.getElementById('text' + cmd.element)).value = cmd.text
+
       }
 
-      else if (cmd.type == 'textarea' && (<HTMLInputElement>document.getElementById(cmd.value)).style.display == "none") {
+      else if (cmd.type == 'textarea' && (<HTMLInputElement>document.getElementById(cmd.element)).style.display == "none") {
         this.undoCount += 1
-        document.getElementById(cmd.value).style.display = ''
+        document.getElementById(cmd.element).style.display = ''
       }
-      else if (cmd.type == 'textarea' && (<HTMLInputElement>document.getElementById(cmd.value)).style.display != "none") {
-        (<HTMLInputElement>document.getElementById(cmd.value)).value = cmd.text
-      
+      else if (cmd.type == 'textarea' && (<HTMLInputElement>document.getElementById(cmd.element)).style.display != "none") {
+        (<HTMLInputElement>document.getElementById(cmd.element)).value = cmd.text
+
       }
 
       else if (cmd.type == 'richText') {
-        document.getElementById(cmd.value).style.display = ''
+        document.getElementById(cmd.element).style.display = ''
       }
 
       else if (cmd.type == 'bold') {
-        document.getElementById(cmd.value).style.fontWeight = "bold"
+        document.getElementById(cmd.element).style.fontWeight = "bold"
 
       }
       else if (cmd.type == 'italic') {
-        document.getElementById(cmd.value).style.fontStyle = "italic"
+        document.getElementById(cmd.element).style.fontStyle = "italic"
       }
 
       else if (cmd.type == 'zoomIn') {
@@ -448,7 +520,7 @@ export class ToolbarComponent implements OnInit, OnChanges {
 
 
 
-  save(change = "") {
+  save() {
 
     this.json = []
     this.inputElements = document.getElementsByClassName("input" + "_" + this.tabheader)
@@ -476,8 +548,8 @@ export class ToolbarComponent implements OnInit, OnChanges {
           file: this.tabheader,
           date: date,
           type: this.inputElements[this.l].type,
-          id: this.inputElements[this.l].id,
-          class: this.inputElements[this.l].className,
+          id: this.inputElements[this.l].id.includes("saved") ? this.inputElements[this.l].id : "saved_" + this.inputElements[this.l].id,
+          class: this.inputElements[this.l].type == 'textarea' ? "input_" + this.tabheader + " p-inputtextarea-resizable" : "input_" + this.tabheader,
           value: this.inputElements[this.l].value,
           fontWeight: this.inputElements[this.l].style.fontWeight,
           fontStyle: this.inputElements[this.l].style.fontStyle,
@@ -506,7 +578,7 @@ export class ToolbarComponent implements OnInit, OnChanges {
             file: this.tabheader,
             date: date,
             type: "richText",
-            id: this.inputElements[this.l].id,
+            id: this.inputElements[this.l].id.includes("saved") ? this.inputElements[this.l].id : "saved_" + this.inputElements[this.l].id,
             class: this.inputElements[this.l].className,
             value: this.inputElements[this.l].nodeName == "DIV" ? this.inputElements[this.l].innerHTML : richTextValue,
             width: "260",

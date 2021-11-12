@@ -31,7 +31,7 @@ export class RightSidebarComponent implements OnInit,OnChanges {
   currentBrightness:number
   btnPressed:string
   brightness: number = 0
-  fontSize:number=20
+  fontSize:number=16
   fonts:any
   type: string = ""
   color: string = '#000000';
@@ -65,6 +65,7 @@ export class RightSidebarComponent implements OnInit,OnChanges {
   changeBrightness(e) {
   
     document.getElementById("img"+"_"+this.tabheader).style.filter = "brightness("+(e.value+100)+"%)"
+    
   }
 
   changeFont(type){
@@ -85,8 +86,8 @@ export class RightSidebarComponent implements OnInit,OnChanges {
 
 
     if((<HTMLInputElement>(document.getElementById(localStorage.getItem('selectedText')))).type=="text"){
-      var size = document.getElementById(localStorage.getItem('selectedText')).style.fontSize.slice(0,-2)
-      if(Number(size)<=20){
+     
+      if(e.value<=20){
         document.getElementById(localStorage.getItem('selectedText')).style.fontSize = e.value + "px"
       }
     }

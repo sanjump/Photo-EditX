@@ -3,7 +3,7 @@ import { clipboard, IpcRenderer } from 'electron';
 import { TabService } from '../tab.service';
 import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 import { Output, EventEmitter } from '@angular/core';
-
+import { BtnPressedService } from '../btn-pressed.service'
 @Component({
   selector: 'app-editingpanel',
   templateUrl: './editingpanel.component.html',
@@ -12,7 +12,7 @@ import { Output, EventEmitter } from '@angular/core';
 
 export class EditingpanelComponent implements OnInit, OnChanges {
 
-  constructor(private zone: NgZone, private tabService: TabService, private sanitizer: DomSanitizer) {
+  constructor(private zone: NgZone, private tabService: TabService, private sanitizer: DomSanitizer,private btnPressedService: BtnPressedService) {
 
 
 
@@ -312,20 +312,27 @@ export class EditingpanelComponent implements OnInit, OnChanges {
 
   remove(id) {
 
+    localStorage.setItem('removedItem',id)
+
     if (id.includes("paragraph")) {
       document.getElementById(id).style.display = 'none'
+    
+      document.getElementById('inputRemoved_'+this.tabheader).click()
     }
 
     else if (id.includes("richText")) {
       document.getElementById(id).style.display = 'none'
       this.richTextValue.splice(this.richTextValue.indexOf(id, 0), 1)
-
+     
+      document.getElementById('inputRemoved_'+this.tabheader).click()
     }
 
     else {
       document.getElementById('text' + id).style.display = 'none'
       document.getElementById('btn' + id).style.display = 'none'
       document.getElementById('cont' + id).style.display = 'none'
+    
+      document.getElementById('inputRemoved_'+this.tabheader).click()
     }
 
 

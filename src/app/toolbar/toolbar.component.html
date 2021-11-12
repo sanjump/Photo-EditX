@@ -1,11 +1,12 @@
 <div>
+    <input type="hidden" [id]="removeInput" (click)="onInputRemove()"/>
     <p-toolbar>
         <div class="p-toolbar-group-left">
-            <button id="undo_btn" pTooltip="Undo" tooltipPosition="bottom" (click)="undo()"
+            <button [id]="undoBtnId" pTooltip="Undo" tooltipPosition="bottom" (click)="undo()"
                 style="margin: 5px;">
                 <fa-icon [icon]="faUndo"></fa-icon>
             </button>
-            <button id="redo_btn" pTooltip="Redo" tooltipPosition="bottom" (click)="redo()"
+            <button [id]="redoBtnId" pTooltip="Redo" tooltipPosition="bottom" (click)="redo()"
                 style="margin: 5px;">
                 <fa-icon [icon]="faRedo"></fa-icon>
             </button>
