@@ -32,6 +32,7 @@ export class FiletreeComponent implements OnInit {
 
   ngOnInit() {
 
+    console.log(localStorage.getItem('dad'))
 
     this.ipc = (<any>window).require('electron').ipcRenderer;
     this.ipc.on('getfile', (event, args) => {
@@ -63,6 +64,9 @@ export class FiletreeComponent implements OnInit {
     });
 
   }
+
+
+ 
 
   checkKeydown(e) {
 

@@ -39,6 +39,7 @@ import {InputTextareaModule} from 'primeng/inputtextarea';
 import {EditorModule} from 'primeng/editor';
 import { PreferencesComponent } from './preferences/preferences.component';
 import {RadioButtonModule} from 'primeng/radiobutton';
+import { RecentFilesComponent } from './recent-files/recent-files.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -52,7 +53,8 @@ import {RadioButtonModule} from 'primeng/radiobutton';
     EditingpanelComponent,
     ExportComponent,
     RightSidebarComponent,
-    PreferencesComponent
+    PreferencesComponent,
+    RecentFilesComponent
 
   ],
   imports: [

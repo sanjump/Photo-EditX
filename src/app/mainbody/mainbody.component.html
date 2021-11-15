@@ -1,5 +1,10 @@
 <div id="main">
     <button class="openbtn" id="open" (click)="openNav()">&#9776;</button>
-    <app-tabs [tabs]="tabs" [node]="node"></app-tabs>
+    <div *ngIf="showRecent;else tabss">
+        <app-recent-files></app-recent-files>
+    </div>
+    <ng-template #tabss>
+        <app-tabs [tabs]="tabs" [node]="node"></app-tabs>
+    </ng-template>
 </div>
 

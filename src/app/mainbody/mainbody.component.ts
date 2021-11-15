@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, NgZone } from '@angular/core';
+import { Component, OnInit, Input, NgZone, OnChanges } from '@angular/core';
 import { IpcRenderer } from 'electron';
 @Component({
   selector: 'app-mainbody',
@@ -6,7 +6,7 @@ import { IpcRenderer } from 'electron';
   styleUrls: ['./mainbody.component.css']
 })
 
-export class MainbodyComponent implements OnInit {
+export class MainbodyComponent implements OnInit,OnChanges {
 
 
   constructor(private zone: NgZone) {
@@ -18,11 +18,12 @@ export class MainbodyComponent implements OnInit {
 
 
   ipc: IpcRenderer
-
+  showRecent:boolean
 
   ngOnInit(): void {
 
-
+    this.showRecent=true
+    console.log("SDa")
     this.ipc = (<any>window).require('electron').ipcRenderer;
     this.ipc.on("preferences", (event, args) => {
 
@@ -73,6 +74,13 @@ export class MainbodyComponent implements OnInit {
       });
     });
 
+  }
+
+
+  ngOnChanges(){
+
+    this.showRecent=false
+    console.log("SDA")
   }
 
   openNav() {
