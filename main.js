@@ -12,7 +12,7 @@ let settings =
   {
     'theme':'dark'
   }
-
+let recent=[]
 let mainWindow
 let overlayData
 let types = [{ name: 'Images', extensions: ['jpg', 'jpeg', 'png'] }]
@@ -84,6 +84,23 @@ function createWindow() {
           }
           else {
               mainWindow.webContents.send('preferences', JSON.parse(data));
+          }
+        });
+      }
+    })
+
+    fs.access(settingsDirectory + "\\"  + "recent.json", (err) => {
+      if (err) {
+        mainWindow.webContents.send('recent', recent);
+      }
+  
+      else {
+        fs.readFile(settingsDirectory + "\\"  + "recent.json", function (err, data) {
+          if (err) {
+            return console.log(err);
+          }
+          else {
+              mainWindow.webContents.send('recent', JSON.parse(data));
           }
         });
       }
@@ -285,6 +302,15 @@ ipcMain.on('file', (event, arg) => {
   saveFile(arg)
 })
 
+
+
+ipcMain.on('selectedRecent', (event, arg) => {
+
+  
+  mainWindow.webContents.send('selectedRecent', arg)
+  
+})
+
 ipcMain.on('preferences', (event, arg) => {
 
  
@@ -307,6 +333,31 @@ ipcMain.on('preferences', (event, arg) => {
   })
   mainWindow.webContents.send("preferences",arg)
 })
+
+
+ipcMain.on('recent', (event, arg) => {
+
+ 
+  fs.access(settingsDirectory + "\\"  + "recent.json", (err) => {
+    if (err) {
+      fs.writeFile(settingsDirectory + "\\"  + "recent.json", JSON.stringify(arg), function (err) {
+        if (err) {
+          return console.log(err);
+        }
+      });
+    }
+
+    else {
+      fs.writeFile(settingsDirectory + "\\"  + "recent.json", JSON.stringify(arg), function (err) {
+        if (err) {
+          return console.log(err);
+        }
+      });
+    }
+  })
+  mainWindow.webContents.send("recent",arg)
+})
+
 
 
 

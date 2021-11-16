@@ -23,7 +23,6 @@ export class MainbodyComponent implements OnInit,OnChanges {
   ngOnInit(): void {
 
     this.showRecent=true
-    console.log("SDa")
     this.ipc = (<any>window).require('electron').ipcRenderer;
     this.ipc.on("preferences", (event, args) => {
 
@@ -80,7 +79,7 @@ export class MainbodyComponent implements OnInit,OnChanges {
   ngOnChanges(){
 
     this.showRecent=false
-    console.log("SDA")
+    
   }
 
   openNav() {

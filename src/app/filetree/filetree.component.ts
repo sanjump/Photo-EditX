@@ -28,20 +28,51 @@ export class FiletreeComponent implements OnInit {
   addedTabs: any[] = []
   loadedTabs: any[] = []
   myFiles: any[] = []
-
+  recentFiles: any[] = []
+  recentFolders: any[] = []
+  recent: any[] = []
 
   ngOnInit() {
 
-    console.log(localStorage.getItem('dad'))
+
 
     this.ipc = (<any>window).require('electron').ipcRenderer;
+
+    this.ipc.on("recent", (event, args) => {
+
+      this.zone.run(() => {
+
+        this.recent = args
+
+
+      });
+    });
+
     this.ipc.on('getfile', (event, args) => {
       this.zone.run(() => {
 
         for (var i = 0; i < args.length; i++) {
-          this.data.push(args[i].substring(args[i].lastIndexOf("\\") + 1, args[i].length));
-          this.myFiles.push(args[i])
+
+          if (!this.recentFiles.includes(args[i])) {
+
+            if (this.recent.length == 5) {
+              this.recent.splice(0, 1)
+            }
+            this.recentFiles.push(args[i])
+            this.recent.push({ type: 'file', value: args[i] })
+          }
+
+
+          if (!this.myFiles.includes(args[i])) {
+
+            this.data.push(args[i].substring(args[i].lastIndexOf("\\") + 1, args[i].length));
+            this.myFiles.push(args[i])
+          }
+
+
         }
+
+        this.ipc.send("recent", this.recent);
         this.fileTree = this.data.reduce(this.reducePath, [])
         this.fileService.setFiles(this.myFiles)
 
@@ -51,14 +82,58 @@ export class FiletreeComponent implements OnInit {
 
     this.ipc.on('getfolder', (event, args) => {
       this.zone.run(() => {
+        
+        if (!this.recentFolders.includes(args[0])) {
+
+          if (this.recent.length == 5) {
+            this.recent.splice(0, 1)
+          }
+          this.recentFolders.push(args[0])
+          this.recent.push({ type: 'folder', value: args })
+        }
+
 
         for (var i = 0; i < args[1].length; i++) {
 
           this.data.push(args[0].substring(args[0].lastIndexOf("\\") + 1, args[0].length) + "\\" + args[1][i])
           this.myFiles.push(args[0] + "\\" + args[1][i])
         }
+
+        this.ipc.send("recent", this.recent);
         this.fileTree = this.data.reduce(this.reducePath, [])
         this.fileService.setFiles(this.myFiles)
+      });
+
+    });
+
+
+    this.ipc.on('selectedRecent', (event, args) => {
+      this.zone.run(() => {
+
+
+        if (!this.myFiles.includes(args.value)) {
+
+          if (args.type == 'file') {
+           
+            this.data.push(args.value.substring(args.value.lastIndexOf("\\") + 1, args.value.length));
+            this.myFiles.push(args.value)
+            this.fileTree = this.data.reduce(this.reducePath, [])
+            this.fileService.setFiles(this.myFiles)
+          }
+          else {
+            
+            for (var i = 0; i < args.value[1].length; i++) {
+              this.data.push(args.value[0].substring(args.value[0].lastIndexOf("\\") + 1, args.value[0].length) + "\\" + args.value[1][i])
+              this.myFiles.push(args.value[0] + "\\" + args.value[1][i])
+            }
+            this.fileTree = this.data.reduce(this.reducePath, [])
+            this.fileService.setFiles(this.myFiles)
+          }
+
+        }
+
+
+
       });
 
     });
@@ -66,7 +141,7 @@ export class FiletreeComponent implements OnInit {
   }
 
 
- 
+
 
   checkKeydown(e) {
 
@@ -136,7 +211,7 @@ export class FiletreeComponent implements OnInit {
 
         else {
           var length = this.fileTree[i].children.length
-          console.log(this.loadedTabs.length)
+        
           for (var j = 0; j < length; j++) {
 
 
@@ -150,7 +225,7 @@ export class FiletreeComponent implements OnInit {
             for (var j = 0; j < length; j++) {
 
               if (this.loadedTabs[k].header == this.fileTree[i].children[j].label) {
-               
+
                 this.loadedTabs.splice(k, 1)
                 this.getTabs(this.loadedTabs)
                 if (k != 0) {
@@ -173,11 +248,9 @@ export class FiletreeComponent implements OnInit {
           this.data.splice(i, 1)
           this.myFiles.splice(i, 1)
           this.fileService.setFiles(this.myFiles)
-          console.log(this.data)
-          console.log(this.fileTree)
-          console.log(this.fileService.getFiles())
+      
 
-          
+
 
 
         }
@@ -190,8 +263,8 @@ export class FiletreeComponent implements OnInit {
   nodeSelect(e) {
 
     localStorage.setItem('selectedNode', e.node.label)
-    localStorage.setItem('tabSelected',e.node.label)
-    
+    localStorage.setItem('tabSelected', e.node.label)
+
     if (!(e.node.icon == "fa-folder")) {
 
       this.files = this.fileService.getFiles()
