@@ -8,9 +8,15 @@
 .p-tabview .p-tabview-panels {
         background: rgb(51, 29, 32);  
         border-color: black;
+        height: 90vh;
 }
 /* rgb(216 201 203) */
 
 .p-tabview {
     border-color: black;
+}
+
+
+.p-tabview-panel {
+    height: 70vh;
 }

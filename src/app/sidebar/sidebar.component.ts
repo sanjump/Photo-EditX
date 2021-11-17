@@ -27,7 +27,7 @@ export class SidebarComponent implements OnInit {
     document.getElementById("main").style.marginLeft = "0px";
     var elements = document.getElementsByClassName('container');
     for (var i = 0; i < elements.length; i++) {
-      (elements[i] as HTMLElement).style.marginLeft = "150px"
+      (elements[i] as HTMLElement).style.marginLeft = "70px"
     }
   }
 

@@ -86,8 +86,11 @@ export class EditingpanelComponent implements OnInit, OnChanges {
 
     if (this.tabheader === undefined) {
 
-      (document.querySelector(".container") as HTMLElement).style.marginLeft = "170px";
-      (document.querySelector(".container") as HTMLElement).style.marginTop = "90px";
+      (document.querySelector(".container") as HTMLElement).style.marginLeft = "";
+      (document.querySelector(".container") as HTMLElement).style.margin = "90px";
+      (document.querySelector(".container") as HTMLElement).style.width = localStorage.getItem('width');
+      (document.querySelector(".container") as HTMLElement).style.height = localStorage.getItem('height');
+      console.log(localStorage.getItem('width'))
       document.getElementById("fullScreen_btn").hidden = true
       this.url = this.sanitizer.bypassSecurityTrustUrl(localStorage.getItem('imgUrl'));
       this.tabheader = localStorage.getItem('tabheader')

@@ -192,11 +192,6 @@ export class ToolbarComponent implements OnInit, OnChanges {
     document.getElementById("leftSidebar").style.width = "0px";
     document.getElementById("main").style.marginLeft = "0px";
     document.getElementById("open").hidden = false;
-    var elements = document.getElementsByClassName('container');
-    for (var i = 0; i < elements.length; i++) {
-      (elements[i] as HTMLElement).style.margin = "15px";
-      (elements[i] as HTMLElement).style.marginRight = "40px";
-    }
     localStorage.setItem('currentTab', this.tabheader)
 
   }
@@ -515,6 +510,10 @@ export class ToolbarComponent implements OnInit, OnChanges {
     }
     localStorage.setItem('tabheader', this.tabheader)
     localStorage.setItem('imgUrl', this.url)
+    localStorage.setItem('width', (document.querySelector(".container") as HTMLElement).style.width)
+    localStorage.setItem('height', (document.querySelector(".container") as HTMLElement).style.height)
+    console.log((document.querySelector(".container") as HTMLElement).style.height)
+    console.log(localStorage.getItem('width'))
     this.ipc.send("fullScreen", this.tabheader)
   }
 

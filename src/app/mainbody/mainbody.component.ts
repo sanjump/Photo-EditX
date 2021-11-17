@@ -88,8 +88,8 @@ export class MainbodyComponent implements OnInit,OnChanges {
     document.getElementById("open").hidden = true;
     var elements = document.getElementsByClassName('container');
     for (var i = 0; i < elements.length; i++) {
-      (elements[i] as HTMLElement).style.margin = "25px";
-      (elements[i] as HTMLElement).style.marginRight = "30px";
+      
+      (elements[i] as HTMLElement).style.marginLeft = "";
     }
     if (document.getElementById("rightSidebar_" + localStorage.getItem('currentTab'))) {
       document.getElementById("rightSidebar_" + localStorage.getItem('currentTab')).style.width = "0px";
