@@ -495,6 +495,7 @@ export class ToolbarComponent implements OnInit, OnChanges {
   export() {
 
     localStorage.setItem('fileName', this.tabheader)
+    this.save("export")
     this.ipc.send("export", '');
   }
 
@@ -510,16 +511,14 @@ export class ToolbarComponent implements OnInit, OnChanges {
     }
     localStorage.setItem('tabheader', this.tabheader)
     localStorage.setItem('imgUrl', this.url)
-    localStorage.setItem('width', (document.querySelector(".container") as HTMLElement).style.width)
-    localStorage.setItem('height', (document.querySelector(".container") as HTMLElement).style.height)
-    console.log((document.querySelector(".container") as HTMLElement).style.height)
-    console.log(localStorage.getItem('width'))
+    localStorage.setItem('width',((document.querySelector(".container") as HTMLElement).clientWidth).toString())
+    localStorage.setItem('height',((document.querySelector(".container") as HTMLElement).clientHeight).toString())
     this.ipc.send("fullScreen", this.tabheader)
   }
 
 
 
-  save() {
+  save(source="") {
 
     this.json = []
     this.inputElements = document.getElementsByClassName("input" + "_" + this.tabheader)
@@ -594,10 +593,13 @@ export class ToolbarComponent implements OnInit, OnChanges {
 
 
     }
-
+    
 
     this.ipc.send("file", this.json);
-    this.displaySave = true
+    if(source!='export'){
+      this.displaySave = true
+    }
+    
 
 
   }

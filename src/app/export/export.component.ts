@@ -80,7 +80,7 @@ export class ExportComponent implements OnInit {
         setTimeout(() => {
 
 
-          for (var i = 0; i < this.json.length; i++) {
+          for (var i = 1; i < this.json.length; i++) {
 
             this.exportfile.push({
               file: this.json[i].file,
@@ -108,7 +108,7 @@ export class ExportComponent implements OnInit {
             });
 
             autoTable(doc, { columns: col, body: rows });
-
+console.log(name + date + type.code)
             doc.save(name + date + type.code);
           }
 

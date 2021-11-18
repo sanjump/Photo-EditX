@@ -29,7 +29,7 @@ if (!fs.existsSync(settingsDirectory)) {
 }
 
 let connection = new ConnectionBuilder()
-  .connectTo('dotnet', 'run', '--project', './EditorService/EditorService').build();
+  .connectTo('dotnet', 'run', '--project', './EditorService/EditorWebApi').build();
 
 
 connection.onDisconnect = () => {
@@ -56,6 +56,8 @@ function createWindow() {
  
     mainWindow = null
   })
+
+  mainWindow.maximize();
 
   const mainMenu = Menu.buildFromTemplate(mainMenuTemplate);
 
