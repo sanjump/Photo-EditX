@@ -1,48 +1,49 @@
 <div>
     <input type="hidden" [id]="removeInput" (click)="onInputRemove()"/>
+    <input type="hidden" [id]="tabClose" (click)="save('tabClose')"/>
     <p-toolbar>
         <div class="p-toolbar-group-left">
             <button [id]="undoBtnId" pTooltip="Undo" tooltipPosition="bottom" (click)="undo()"
-                style="margin: 5px;">
+                class="btnToolbarLeft">
                 <fa-icon [icon]="faUndo"></fa-icon>
             </button>
             <button [id]="redoBtnId" pTooltip="Redo" tooltipPosition="bottom" (click)="redo()"
-                style="margin: 5px;">
+            class="btnToolbarLeft">
                 <fa-icon [icon]="faRedo"></fa-icon>
             </button>
             <button id="fullScreen_btn" pTooltip="Full Screen" tooltipPosition="bottom" (click)="fullScreen()"
-                style="margin: 5px;">
+            class="btnToolbarLeft">
                 <fa-icon [icon]="faExpandArrowsAlt"></fa-icon>
             </button>
-            <button id="zoomIn_btn" pTooltip="Zoom In" tooltipPosition="bottom" (click)="zoomIn()" style="margin: 5px;">
+            <button id="zoomIn_btn" pTooltip="Zoom In" tooltipPosition="bottom" (click)="zoomIn()" class="btnToolbarLeft">
                 <fa-icon [icon]="faSearchPlus"></fa-icon>
             </button>
             <button id="zoomOut_btn" pTooltip="Zoom Out" tooltipPosition="bottom" (click)="zoomOut()"
-                style="margin: 5px;">
+            class="btnToolbarLeft">
                 <fa-icon [icon]="faSearchMinus"></fa-icon>
             </button>
-            <button id="rotate_btn" pTooltip="Rotate" tooltipPosition="bottom" (click)="rotate()" style="margin: 5px;">
+            <button id="rotate_btn" pTooltip="Rotate" tooltipPosition="bottom" (click)="rotate()" class="btnToolbarLeft">
                 <fa-icon [icon]="faSyncAlt"></fa-icon>
             </button>
-            <button pTooltip="Add comments" tooltipPosition="bottom" (click)="addTextbox()" style="margin: 5px;">
+            <button pTooltip="Add comments" tooltipPosition="bottom" (click)="addTextbox()" class="btnToolbarLeft">
                 <fa-icon [icon]="faCommentAlt"></fa-icon>
             </button>
-            <button id="paragraph_btn" pTooltip="Paragraph" tooltipPosition="bottom" (click)="addParagraph($event)" style="margin: 5px;">
+            <button id="paragraph_btn" pTooltip="Paragraph" tooltipPosition="bottom" (click)="addParagraph($event)" class="btnToolbarLeft">
                 <fa-icon [icon]="faParagraph"></fa-icon>
             </button>
-            <button id="paragraph_btn" pTooltip="Rich text" tooltipPosition="bottom" (click)="addRichText($event)" style="margin: 5px;">
+            <button id="paragraph_btn" pTooltip="Rich text" tooltipPosition="bottom" (click)="addRichText($event)" class="btnToolbarLeft">
                 <fa-icon [icon]="faEdit"></fa-icon>
             </button>
-            <button id="bold_btn" pTooltip="Bold" tooltipPosition="bottom" (click)="makeBold()" style="margin: 5px;">
+            <button id="bold_btn" pTooltip="Bold" tooltipPosition="bottom" (click)="makeBold()" class="btnToolbarLeft">
                 <fa-icon [icon]="faBold"></fa-icon>
             </button>
-            <button id="italic_btn" pTooltip="Italic" tooltipPosition="bottom" (click)="makeItalic()" style="margin: 5px;">
+            <button id="italic_btn" pTooltip="Italic" tooltipPosition="bottom" (click)="makeItalic()" class="btnToolbarLeft">
                 <fa-icon [icon]="faItalic"></fa-icon>
             </button>
-            <button id="font_btn" pTooltip="Font Styling" tooltipPosition="bottom" (click)="openRightBar($event)" style="margin: 5px;">
+            <button id="font_btn" pTooltip="Font Styling" tooltipPosition="bottom" (click)="openRightBar($event)" class="btnToolbarLeft">
                 <fa-icon [icon]="faFont"></fa-icon>
             </button>
-            <button id="adjust_btn" pTooltip="Adjustments" tooltipPosition="bottom" (click)="openRightBar($event)" style="margin: 5px;">
+            <button id="adjust_btn" pTooltip="Adjustments" tooltipPosition="bottom" (click)="openRightBar($event)" class="btnToolbarLeft">
                 <fa-icon [icon]="faAdjust"></fa-icon>
             </button>
 

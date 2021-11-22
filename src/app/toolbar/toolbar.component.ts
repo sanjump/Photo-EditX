@@ -80,6 +80,7 @@ export class ToolbarComponent implements OnInit, OnChanges {
   undoBtnId: string = ""
   redoBtnId: string = ""
   removeInput: string = ""
+  tabClose: string = ""
   undoCount: number = 0
   redoCount: number = 0
   commands: any[] = []
@@ -124,6 +125,7 @@ export class ToolbarComponent implements OnInit, OnChanges {
     this.undoBtnId = "undoBtn_" + this.tabheader
     this.redoBtnId = "redoBtn_" + this.tabheader
     this.removeInput = "inputRemoved_" + this.tabheader
+    this.tabClose = "tabclose_" + this.tabheader
   }
 
 
@@ -192,6 +194,13 @@ export class ToolbarComponent implements OnInit, OnChanges {
     document.getElementById("leftSidebar").style.width = "0px";
     document.getElementById("main").style.marginLeft = "0px";
     document.getElementById("open").hidden = false;
+
+    var elements = document.getElementsByClassName('container');
+    for (var i = 0; i < elements.length; i++) {
+
+      (elements[i] as HTMLElement).style.marginLeft = "";
+    }
+
     localStorage.setItem('currentTab', this.tabheader)
 
   }
@@ -274,7 +283,7 @@ export class ToolbarComponent implements OnInit, OnChanges {
 
   onInputRemove() {
 
-    
+
 
     var id = localStorage.getItem('removedItem')
 
@@ -305,7 +314,7 @@ export class ToolbarComponent implements OnInit, OnChanges {
 
 
     if (this.undoCount <= this.commands.length - 1) {
-     
+
       this.undoCount += 1
       var cmd = this.commands[this.commands.length - this.undoCount]
 
@@ -511,14 +520,14 @@ export class ToolbarComponent implements OnInit, OnChanges {
     }
     localStorage.setItem('tabheader', this.tabheader)
     localStorage.setItem('imgUrl', this.url)
-    localStorage.setItem('width',((document.querySelector(".container") as HTMLElement).clientWidth).toString())
-    localStorage.setItem('height',((document.querySelector(".container") as HTMLElement).clientHeight).toString())
+    localStorage.setItem('width', ((document.querySelector(".container") as HTMLElement).clientWidth).toString())
+    localStorage.setItem('height', ((document.querySelector(".container") as HTMLElement).clientHeight).toString())
     this.ipc.send("fullScreen", this.tabheader)
   }
 
 
 
-  save(source="") {
+  save(source = "") {
 
     this.json = []
     this.inputElements = document.getElementsByClassName("input" + "_" + this.tabheader)
@@ -593,13 +602,25 @@ export class ToolbarComponent implements OnInit, OnChanges {
 
 
     }
-    
 
-    this.ipc.send("file", this.json);
-    if(source!='export'){
-      this.displaySave = true
+    if (source == 'tabClose') {
+
+      // var j = []
+      // j.push(this.json[0])
+      // j.push(this.json.slice(1,this.json.length).reverse())
+      // console.log(j)
+      localStorage.setItem('currentFile', JSON.stringify(this.json))
+      
+    }
+
+    else{
+      this.ipc.send("file", this.json);
     }
     
+    if (source != 'export' && source != 'tabClose') {
+      this.displaySave = true
+    }
+
 
 
   }

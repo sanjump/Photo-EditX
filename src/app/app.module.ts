@@ -40,6 +40,10 @@ import {EditorModule} from 'primeng/editor';
 import { PreferencesComponent } from './preferences/preferences.component';
 import {RadioButtonModule} from 'primeng/radiobutton';
 import { RecentFilesComponent } from './recent-files/recent-files.component';
+import {ConfirmDialogModule} from 'primeng/confirmdialog';
+import {ConfirmationService} from 'primeng/api';
+
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -82,11 +86,12 @@ import { RecentFilesComponent } from './recent-files/recent-files.component';
     ColorPickerModule,
     InputTextareaModule,
     EditorModule,
-    RadioButtonModule
+    RadioButtonModule,
+    ConfirmDialogModule
 
 
   ],
-  providers: [TabService, FileService, ExportService,BtnPressedService],
+  providers: [TabService, FileService, ExportService,BtnPressedService,ConfirmationService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

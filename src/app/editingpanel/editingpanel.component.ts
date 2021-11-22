@@ -142,7 +142,7 @@ export class EditingpanelComponent implements OnInit, OnChanges {
         document.getElementById('img' + "_" + this.data[0].file).style.filter = this.data[0].filters
         var text;
 
-        for (var i = 1; i < this.data.length; i++) {
+        for (var i = this.data.length-1; i > 0; i--) {
 
           if (this.data[i].type == "text") {
 

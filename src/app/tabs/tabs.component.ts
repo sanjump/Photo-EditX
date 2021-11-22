@@ -1,5 +1,7 @@
-import { Component, OnInit, ViewEncapsulation, Input, OnChanges } from '@angular/core';
+import { Component, OnInit, ViewEncapsulation, Input, OnChanges ,NgZone } from '@angular/core';
 import { TabService } from '../tab.service';
+import { IpcRenderer } from 'electron';
+import {ConfirmationService} from 'primeng/api';
 
 @Component({
   selector: 'app-tabs',
@@ -10,14 +12,16 @@ import { TabService } from '../tab.service';
 
 export class TabsComponent implements OnInit, OnChanges {
 
-  constructor(private tabService: TabService) { }
+  constructor(private tabService: TabService,private zone: NgZone,private confirmationService: ConfirmationService) { }
 
   @Input() tabs: any[]
   @Input() node: any
 
+  ipc: IpcRenderer
   tabIndex = 0
 
   ngOnInit(): void {
+    this.ipc = (<any>window).require('electron').ipcRenderer;
   }
 
   ngOnChanges() {
@@ -57,7 +61,46 @@ export class TabsComponent implements OnInit, OnChanges {
   }
 
 
-  close(e) {
+  onClose(e) {
+
+    document.getElementById("tabclose_"+localStorage.getItem('tabSelected')).click()
+    this.ipc.send("selectedNode", localStorage.getItem('tabSelected'));
+    
+    this.ipc.once('data', (event, args) => {
+     
+      this.zone.run(() => {
+
+        if(JSON.parse(localStorage.getItem('currentFile')).length==1 || (JSON.stringify(args)==localStorage.getItem('currentFile') )) {
+
+                 this.close(e)
+        }
+
+      
+        else{
+
+          this.confirmationService.confirm({
+            message: 'Are you sure you want to close without saving?',
+            header: 'Confirmation',
+            icon: 'pi pi-exclamation-triangle',
+            accept: () => {
+              this.close(e)
+            },
+            reject: () => {
+              
+            }
+        });
+        }
+        
+        
+
+      });
+    });
+
+  
+
+  }
+
+  close(e){
 
     e.close()
     this.tabService.getTabs().splice(e.index, 1)
@@ -70,7 +113,7 @@ export class TabsComponent implements OnInit, OnChanges {
         document.getElementById("main").style.marginRight = "0px";
         var elements = document.getElementsByClassName('container');
         for (var i = 0; i < elements.length; i++) {
-          (elements[i] as HTMLElement).style.marginLeft = "150px"
+          (elements[i] as HTMLElement).style.marginLeft = "70px"
         }
 
       }

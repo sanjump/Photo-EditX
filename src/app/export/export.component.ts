@@ -108,7 +108,7 @@ export class ExportComponent implements OnInit {
             });
 
             autoTable(doc, { columns: col, body: rows });
-console.log(name + date + type.code)
+
             doc.save(name + date + type.code);
           }
 
