@@ -86,6 +86,13 @@ export class EditingpanelComponent implements OnInit, OnChanges {
 
     if (this.tabheader === undefined) {
 
+      if(localStorage.getItem('theme')=='light'){
+        document.body.style.backgroundColor = "rgb(216 201 203)"
+      }
+      else{
+        document.body.style.backgroundColor = "rgb(51, 29, 32)"
+      }
+
       (document.querySelector(".container") as HTMLElement).style.marginLeft = "";
       (document.querySelector(".container") as HTMLElement).style.margin = "100px auto";
       (document.querySelector(".container") as HTMLElement).style.height = localStorage.getItem('height')+"px";

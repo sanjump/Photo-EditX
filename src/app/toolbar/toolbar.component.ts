@@ -17,7 +17,8 @@ import { faFont } from '@fortawesome/free-solid-svg-icons';
 import { faEdit } from '@fortawesome/free-solid-svg-icons';
 import { faUndo } from '@fortawesome/free-solid-svg-icons';
 import { faRedo } from '@fortawesome/free-solid-svg-icons';
-
+import { ImageModel } from '../ImageModel';
+import { AnnotationModel } from '../AnnotationModel';
 
 @Component({
   selector: 'app-toolbar',
@@ -28,6 +29,8 @@ import { faRedo } from '@fortawesome/free-solid-svg-icons';
 export class ToolbarComponent implements OnInit, OnChanges {
 
   constructor(private tabService: TabService, private btnPressedService: BtnPressedService, private zone: NgZone) {
+
+    this.imageObj = new ImageModel()
 
   }
 
@@ -44,6 +47,8 @@ export class ToolbarComponent implements OnInit, OnChanges {
 
   ipc: IpcRenderer
   win: BrowserWindow
+  annotationObj: AnnotationModel
+  imageObj: ImageModel
   comment: string = ""
   faSearchPlus = faSearchPlus
   faSearchMinus = faSearchMinus
@@ -540,34 +545,61 @@ export class ToolbarComponent implements OnInit, OnChanges {
     var mm = String(today.getMonth() + 1).padStart(2, '0');
     var yyyy = today.getFullYear();
     var date = dd + '-' + mm + '-' + yyyy;
-    this.json.push({
-      file: this.tabheader,
-      date: date,
 
-      containerTransform: document.getElementById('panel' + "_" + this.tabheader).style.transform,
-      filters: document.getElementById('img' + "_" + this.tabheader).style.filter,
+    this.imageObj.file = this.tabheader
+    this.imageObj.date = date
+    this.imageObj.containerTransform = document.getElementById('panel' + "_" + this.tabheader).style.transform
+    this.imageObj.filters = document.getElementById('img' + "_" + this.tabheader).style.filter
+
+    this.json.push({
+
+      file: this.imageObj.file,
+      date: this.imageObj.date,
+      containerTransform: this.imageObj.containerTransform,
+      filters: this.imageObj.filters,
     })
+
+
     while (this.l--) {
+
+      this.annotationObj = new AnnotationModel()
 
       if (this.inputElements[this.l].value != "" && this.inputElements[this.l].style.display != "none" && !this.inputElements[this.l].id.includes("richText")) {
 
+   
+        this.annotationObj.file = this.tabheader
+        this.annotationObj.date = date
+        this.annotationObj.type = this.inputElements[this.l].type
+        this.annotationObj.id = this.inputElements[this.l].id.includes("saved") ? this.inputElements[this.l].id : "saved_" + this.inputElements[this.l].id
+        this.annotationObj.class = this.inputElements[this.l].type == 'textarea' ? "input_" + this.tabheader + " p-inputtextarea-resizable" : "input_" + this.tabheader
+        this.annotationObj.value = this.inputElements[this.l].value
+        this.annotationObj.fontWeight = this.inputElements[this.l].style.fontWeight
+        this.annotationObj.fontStyle = this.inputElements[this.l].style.fontStyle
+        this.annotationObj.fontFamily = this.inputElements[this.l].style.fontFamily
+        this.annotationObj.fontColor = this.inputElements[this.l].style.color
+        this.annotationObj.fontSize = this.inputElements[this.l].style.fontSize
+        this.annotationObj.width = this.inputElements[this.l].style.width
+        this.annotationObj.height = this.inputElements[this.l].style.height
+        this.annotationObj.position.left = (this.inputElements[this.l] as HTMLElement).getBoundingClientRect().left - this.overlay.left
+        this.annotationObj.position.top = (this.inputElements[this.l] as HTMLElement).getBoundingClientRect().top - this.overlay.top
+
         this.json.push({
-          file: this.tabheader,
-          date: date,
-          type: this.inputElements[this.l].type,
-          id: this.inputElements[this.l].id.includes("saved") ? this.inputElements[this.l].id : "saved_" + this.inputElements[this.l].id,
-          class: this.inputElements[this.l].type == 'textarea' ? "input_" + this.tabheader + " p-inputtextarea-resizable" : "input_" + this.tabheader,
-          value: this.inputElements[this.l].value,
-          fontWeight: this.inputElements[this.l].style.fontWeight,
-          fontStyle: this.inputElements[this.l].style.fontStyle,
-          fontFamily: this.inputElements[this.l].style.fontFamily,
-          fontColor: this.inputElements[this.l].style.color,
-          fontSize: this.inputElements[this.l].style.fontSize,
-          width: this.inputElements[this.l].style.width,
-          height: this.inputElements[this.l].style.height,
+          file: this.annotationObj.file,
+          date: this.annotationObj.date,
+          type: this.annotationObj.type,
+          id: this.annotationObj.id,
+          class: this.annotationObj.class,
+          value: this.annotationObj.value,
+          fontWeight: this.annotationObj.fontWeight,
+          fontStyle: this.annotationObj.fontStyle,
+          fontFamily: this.annotationObj.fontFamily,
+          fontColor: this.annotationObj.fontColor,
+          fontSize: this.annotationObj.fontSize,
+          width: this.annotationObj.width,
+          height: this.annotationObj.height,
           position: {
-            left: (this.inputElements[this.l] as HTMLElement).getBoundingClientRect().left - this.overlay.left,
-            top: (this.inputElements[this.l] as HTMLElement).getBoundingClientRect().top - this.overlay.top
+            left: this.annotationObj.position.left,
+            top: this.annotationObj.position.top
           }
         });
 
@@ -581,18 +613,30 @@ export class ToolbarComponent implements OnInit, OnChanges {
           }
         }
         if (richTextValue != "") {
+
+          this.annotationObj.file = this.tabheader
+          this.annotationObj.date = date
+          this.annotationObj.type = "richText"
+          this.annotationObj.id = this.inputElements[this.l].id.includes("saved") ? this.inputElements[this.l].id : "saved_" + this.inputElements[this.l].id
+          this.annotationObj.class = this.inputElements[this.l].className
+          this.annotationObj.value = this.inputElements[this.l].nodeName == "DIV" ? this.inputElements[this.l].innerHTML : richTextValue
+          this.annotationObj.width = this.inputElements[this.l].nodeName != "DIV" ? (document.querySelector('.p-editor-content') as HTMLElement).style.width : (this.inputElements[this.l] as HTMLElement).style.width
+          this.annotationObj.height = this.inputElements[this.l].nodeName != "DIV" ? (document.querySelector('.p-editor-content') as HTMLElement).style.height : (this.inputElements[this.l] as HTMLElement).style.height
+          this.annotationObj.position.left = this.inputElements[this.l].nodeName != "DIV" ? (this.inputElements[this.l] as HTMLElement).getBoundingClientRect().left - this.overlay.left + 15 : (this.inputElements[this.l] as HTMLElement).getBoundingClientRect().left - this.overlay.left
+          this.annotationObj.position.top = this.inputElements[this.l].nodeName != "DIV" ? (this.inputElements[this.l] as HTMLElement).getBoundingClientRect().top - this.overlay.top + 50 : (this.inputElements[this.l] as HTMLElement).getBoundingClientRect().top - this.overlay.top
+         
           this.json.push({
-            file: this.tabheader,
-            date: date,
-            type: "richText",
-            id: this.inputElements[this.l].id.includes("saved") ? this.inputElements[this.l].id : "saved_" + this.inputElements[this.l].id,
-            class: this.inputElements[this.l].className,
-            value: this.inputElements[this.l].nodeName == "DIV" ? this.inputElements[this.l].innerHTML : richTextValue,
-            width: "260",
-            height: "100",
+            file: this.annotationObj.file,
+            date: this.annotationObj.date,
+            type: this.annotationObj.type,
+            id: this.annotationObj.id,
+            class: this.annotationObj.class,
+            value: this.annotationObj.value,
+            width: this.annotationObj.width,
+            height: this.annotationObj.height,
             position: {
-              left: this.inputElements[this.l].nodeName != "DIV" ? (this.inputElements[this.l] as HTMLElement).getBoundingClientRect().left - this.overlay.left + 15 : (this.inputElements[this.l] as HTMLElement).getBoundingClientRect().left - this.overlay.left,
-              top: this.inputElements[this.l].nodeName != "DIV" ? (this.inputElements[this.l] as HTMLElement).getBoundingClientRect().top - this.overlay.top + 50 : (this.inputElements[this.l] as HTMLElement).getBoundingClientRect().top - this.overlay.top
+              left: this.annotationObj.position.left,
+              top: this.annotationObj.position.top
             }
 
           });
@@ -605,18 +649,15 @@ export class ToolbarComponent implements OnInit, OnChanges {
 
     if (source == 'tabClose') {
 
-      // var j = []
-      // j.push(this.json[0])
-      // j.push(this.json.slice(1,this.json.length).reverse())
-      // console.log(j)
+
       localStorage.setItem('currentFile', JSON.stringify(this.json))
-      
+
     }
 
-    else{
+    else {
       this.ipc.send("file", this.json);
     }
-    
+
     if (source != 'export' && source != 'tabClose') {
       this.displaySave = true
     }

@@ -26,9 +26,10 @@ export class TabsComponent implements OnInit, OnChanges {
 
   ngOnChanges() {
 
-
+    
 
     setTimeout(() => {
+      
 
       for (var i = 0; i < this.tabs.length; i++) {
 
@@ -41,6 +42,8 @@ export class TabsComponent implements OnInit, OnChanges {
       }
 
       if (this.tabs.length > 0) {
+
+        
        
         if (localStorage.getItem('theme') == 'dark') {
 

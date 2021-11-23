@@ -6,3 +6,10 @@ color: darkblue;
 border: 2px solid black;
 
 }
+
+
+.btnToolbarLeft:hover{
+
+    background: yellow;
+
+}

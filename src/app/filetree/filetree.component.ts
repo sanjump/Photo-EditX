@@ -55,7 +55,7 @@ export class FiletreeComponent implements OnInit {
 
           if (!this.recentFiles.includes(args[i])) {
 
-            if (this.recent.length == 5) {
+            if (this.recent.length == 5 && !this.recent.includes(args[i])) {
               this.recent.splice(0, 1)
             }
             this.recentFiles.push(args[i])
@@ -85,7 +85,7 @@ export class FiletreeComponent implements OnInit {
         
         if (!this.recentFolders.includes(args[0])) {
 
-          if (this.recent.length == 5) {
+          if (this.recent.length == 5 && !this.recent.includes(args[i])) {
             this.recent.splice(0, 1)
           }
           this.recentFolders.push(args[0])
@@ -269,6 +269,7 @@ export class FiletreeComponent implements OnInit {
 
       this.files = this.fileService.getFiles()
       this.loadedTabs = this.tabService.getTabs()
+     
       this.addedTabs = []
       for (var i = 0; i < this.loadedTabs.length; i++) {
         this.addedTabs.push(this.loadedTabs[i].header)
