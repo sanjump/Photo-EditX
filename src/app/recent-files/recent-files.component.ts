@@ -25,12 +25,12 @@ export class RecentFilesComponent implements OnInit {
 
 
         for (var i = 0; i < args.length; i++) {
-          if(args[i].type=='file' &&  !this.recent.includes(args[i].value.substring(args[i].value.lastIndexOf("\\") + 1, args[i].value.length))){
+          if(args[i].type=='file'){
             this.recent.push(args[i].value.substring(args[i].value.lastIndexOf("\\") + 1, args[i].value.length));
             this.recentFilePaths.push({type:args[i].type,value:args[i].value})
           }
 
-          else if(args[i].type=='folder' &&  !this.recent.includes(args[i].value[0].substring(args[i].value[0].lastIndexOf("\\") + 1, args[i].value[0].length))){
+          else if(args[i].type=='folder'){
             this.recent.push(args[i].value[0].substring(args[i].value[0].lastIndexOf("\\") + 1, args[i].value[0].length));
             this.recentFilePaths.push({type:args[i].type,value:args[i].value})
           }

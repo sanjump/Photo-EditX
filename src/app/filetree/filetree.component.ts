@@ -50,17 +50,40 @@ export class FiletreeComponent implements OnInit {
 
     this.ipc.on('getfile', (event, args) => {
       this.zone.run(() => {
-
+        
         for (var i = 0; i < args.length; i++) {
 
-          if (!this.recentFiles.includes(args[i])) {
+         
 
-            if (this.recent.length == 5 && !this.recent.includes(args[i])) {
-              this.recent.splice(0, 1)
+          if (this.recent.length == 5) {
+            var flag = false
+            for (var k = 0; k < this.recent.length; k++) {
+              if (this.recent[k].value == args[i]) {
+                flag = true
+              }
             }
-            this.recentFiles.push(args[i])
-            this.recent.push({ type: 'file', value: args[i] })
+            if (flag == false) {
+              this.recent.splice(0, 1)
+              this.recent.push({ type: 'file', value: args[i] })
+            }
+
           }
+
+          else{
+           
+            var flag = false
+            for (var k = 0; k < this.recent.length; k++) {
+              if (this.recent[k].value == args[i]) {
+                flag = true
+              }
+            }
+            if (flag == false) {
+             
+              this.recent.push({ type: 'file', value: args[i] })
+            }
+          }
+         
+         
 
 
           if (!this.myFiles.includes(args[i])) {
@@ -83,14 +106,38 @@ export class FiletreeComponent implements OnInit {
     this.ipc.on('getfolder', (event, args) => {
       this.zone.run(() => {
         
-        if (!this.recentFolders.includes(args[0])) {
 
-          if (this.recent.length == 5 && !this.recent.includes(args[i])) {
-            this.recent.splice(0, 1)
+    
+
+      if (this.recent.length == 5) {
+        var flag = false
+        for (var k = 0; k < this.recent.length; k++) {
+          if (this.recent[k].value[0] == args[0]) {
+            flag = true
           }
-          this.recentFolders.push(args[0])
+        }
+        if (flag == false) {
+          this.recent.splice(0, 1)
           this.recent.push({ type: 'folder', value: args })
         }
+
+      }
+
+      else{
+     
+        var flag = false
+        for (var k = 0; k < this.recent.length; k++) {
+          if (this.recent[k].value[0] == args[0]) {
+            flag = true
+          }
+        }
+        if (flag == false) {
+         
+          this.recent.push({ type: 'folder', value: args })
+        }
+      }
+
+
 
 
         for (var i = 0; i < args[1].length; i++) {
@@ -114,14 +161,14 @@ export class FiletreeComponent implements OnInit {
         if (!this.myFiles.includes(args.value)) {
 
           if (args.type == 'file') {
-           
+
             this.data.push(args.value.substring(args.value.lastIndexOf("\\") + 1, args.value.length));
             this.myFiles.push(args.value)
             this.fileTree = this.data.reduce(this.reducePath, [])
             this.fileService.setFiles(this.myFiles)
           }
           else {
-            
+
             for (var i = 0; i < args.value[1].length; i++) {
               this.data.push(args.value[0].substring(args.value[0].lastIndexOf("\\") + 1, args.value[0].length) + "\\" + args.value[1][i])
               this.myFiles.push(args.value[0] + "\\" + args.value[1][i])
@@ -211,7 +258,7 @@ export class FiletreeComponent implements OnInit {
 
         else {
           var length = this.fileTree[i].children.length
-        
+
           for (var j = 0; j < length; j++) {
 
 
@@ -248,7 +295,7 @@ export class FiletreeComponent implements OnInit {
           this.data.splice(i, 1)
           this.myFiles.splice(i, 1)
           this.fileService.setFiles(this.myFiles)
-      
+
 
 
 
@@ -269,7 +316,7 @@ export class FiletreeComponent implements OnInit {
 
       this.files = this.fileService.getFiles()
       this.loadedTabs = this.tabService.getTabs()
-     
+
       this.addedTabs = []
       for (var i = 0; i < this.loadedTabs.length; i++) {
         this.addedTabs.push(this.loadedTabs[i].header)
