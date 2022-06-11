@@ -1,22 +1,22 @@
 # Photo Editx
 
-Photo Editx is an Image Editor Software developed using Electron, Angular, and .Net Core. Users can load multiple files and folders for editing. There are multiple controls for editing such as adding comments, changing the font, changing brightness, and more. The users can also export the annotations as PDF/CSV, find comments, change theme and open in full-screen mode.
+Photo Editx is an Image Editor Software developed using Electron, Angular, and .Net Core. Users can load multiple files and folders for editing. There are multiple controls for editing such as adding comments, changing the font, changing brightness, and more. The users can also export the annotations as PDF/CSV, find comments, change theme and open in full-screen mode. To run the app, clone the repo and Run 'npm run start:electron'
 
 ## Opening Page
 
-![alt text](https://github.com/sanjump/Image_Editor/blob/master/opening.jpg)
+![alt text](https://github.com/sanjump/Photo-EditX/blob/master/Editor%20Screenshots/opening.JPG)
 
 ## Editor Page
 
-![alt text](https://github.com/sanjump/Image_Editor/blob/master/Editor.jpg)
+![alt text](https://github.com/sanjump/Photo-EditX/blob/master/Editor%20Screenshots/editor.JPG)
 
 ## Sidebars
 
-![alt text](https://github.com/sanjump/Image_Editor/blob/master/sidebar.jpg)
+![alt text](https://github.com/sanjump/Photo-EditX/blob/master/Editor%20Screenshots/sidebar.JPG)
 
 ## Fullscreen mode
 
-![alt text](https://github.com/sanjump/Image_Editor/blob/master/fullscreen.jpg)
+![alt text](https://github.com/sanjump/Photo-EditX/blob/master/Editor%20Screenshots/fullscreen.JPG)
 
 
 ## Development server
