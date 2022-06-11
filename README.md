@@ -1,6 +1,6 @@
-# Image Editor
+# Photo Editx
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 10.0.0.
+Photo Editx is an Image Editor Software developed using Electron, Angular, and .Net Core. Users can load multiple files and folders for editing. There are multiple controls for editing such as adding comments, changing the font, changing brightness, and more. The users can also export the annotations as PDF/CSV, find comments, change theme and open in full-screen mode.
 
 ## Opening Page
 
