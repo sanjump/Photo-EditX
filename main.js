@@ -50,8 +50,6 @@ function createWindow() {
     }
   })
 
-  mainWindow.webContents.openDevTools()
-
   mainWindow.on('closed', function () {
  
     mainWindow = null
@@ -208,7 +206,6 @@ function createFullScreenWindow() {
   });
 
   fullScreen.setMenu(null)
-  fullScreen.webContents.openDevTools()
 
   fullScreen.loadURL( url.format({
     pathname: path.join(__dirname, 'dist/index.html'),
@@ -241,8 +238,6 @@ function createExportWindow() {
 
   ExportScreen.setMenu(null)
   
-  ExportScreen.webContents.openDevTools()
-
   ExportScreen.loadURL( url.format({
     pathname: path.join(__dirname, 'dist/index.html'),
     protocol: 'file:',
@@ -255,7 +250,7 @@ function createExportWindow() {
 function createPreferencesWindow(){
   PreferencesScreen = new BrowserWindow({
     width: 700,
-    height: 500,
+    height: 300,
     center: true,
     frame: true,
     transparent: false,
@@ -270,8 +265,6 @@ function createPreferencesWindow(){
 
   PreferencesScreen.setMenu(null)
   
-  PreferencesScreen.webContents.openDevTools()
-
   PreferencesScreen.loadURL( url.format({
     pathname: path.join(__dirname, 'dist/index.html'),
     protocol: 'file:',
